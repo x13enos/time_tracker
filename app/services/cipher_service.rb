@@ -13,10 +13,10 @@ class CipherService
     private
 
     def crypt(method, data)
-      new_cipher = OpenSSL::Cipher.new(ALGORITHM)
-      new_cipher.send(method)
-      new_cipher.key = key
-      new_cipher.update(data) + new_cipher.final
+      cipher = OpenSSL::Cipher.new(ALGORITHM)
+      cipher.send(method)
+      cipher.key = key
+      cipher.update(data) + cipher.final
     end
 
     def key
