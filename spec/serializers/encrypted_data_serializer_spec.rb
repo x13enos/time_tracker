@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe EncryptedDataSerializer do
-  let(:user) { create(user)}
+  let(:user) { create(user) }
 
   describe "#load" do
     it "should return nil if value is nil" do
