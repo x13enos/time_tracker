@@ -6,6 +6,7 @@ class EncryptedDataSerializer
   end
 
   def dump(value)
+    return if value.blank?
     encrypted_value = CipherService.encrypt(value)
     Base64.encode64(encrypted_value)
   end

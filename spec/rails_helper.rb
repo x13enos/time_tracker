@@ -23,6 +23,8 @@ RSpec.configure do |config|
   # config.after { Telegram.bot.reset }
 end
 
+RSpec::Expectations.configuration.on_potential_false_positives = :nothing
+
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
