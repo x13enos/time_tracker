@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-  serialize :password, EncryptedDataSerializer.new
-
+  has_secure_password
+  
   validates :email, :password, presence: true
   validates :email, uniqueness: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
