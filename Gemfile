@@ -7,6 +7,7 @@ gem 'bcrypt'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails'
 gem 'graphql', '1.8.13'
+gem 'jwt'
 gem 'pg'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.2'

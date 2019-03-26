@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TimeTrackerSchema do
+RSpec.describe Mutations::Users::SignUp do
 
   let(:result) { TimeTrackerSchema.execute(query_string) }
 
