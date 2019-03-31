@@ -3,7 +3,7 @@ login: &login
   password:
   adapter: postgresql
   encoding: unicode
-  host: localhost
+  host: db  // it's a name of docker service
 
 development:
   <<: *login

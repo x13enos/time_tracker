@@ -1,24 +1,9 @@
-# README
+# Docker flow
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Launch application: `docker-compose up`
 
-Things you may want to cover:
+Attach to container for debugging code via Pry: `docker attach web`
 
-* Ruby version
+Launch console: `docker-compose run web rails console`
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Launch Rspec: `docker-compose run web rspec spec`
