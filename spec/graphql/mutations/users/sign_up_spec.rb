@@ -10,7 +10,8 @@ RSpec.describe Mutations::Users::SignUp do
           createUser(
             signUpData: {
               email: "user@gmail.com",
-              password: "#{password}"
+              password: "#{password}",
+              role: "admin"
             }
           ) {
             id
@@ -27,7 +28,6 @@ RSpec.describe Mutations::Users::SignUp do
 
       it "shouldn't raised validation record" do
         expect{ result }.to_not raise_error(ActiveRecord::RecordInvalid)
-
       end
     end
 

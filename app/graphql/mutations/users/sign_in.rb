@@ -1,7 +1,7 @@
 module Mutations
   module Users
     class SignIn < Mutations::BaseMutation
-      argument :sign_in_data, Types::Users::AuthInput, required: true
+      argument :sign_in_data, Types::Users::SignInInput, required: true
 
       field :token, String, null: true
       field :user, Types::Users::Object, null: true
