@@ -24,7 +24,7 @@ RSpec.describe Mutations::Users::SignIn do
       let!(:user) { create(:user, email: 'example@user.com', password: '11111111') }
 
       it "should return token" do
-        allow(TokenCryptService).to receive(:encode).with(user.id) { 'secret_token' }
+        allow(TokenCryptService).to receive(:encode).with(user.email) { 'secret_token' }
         expect(result['data']['signInUser']['token']).to eq('secret_token')
       end
 

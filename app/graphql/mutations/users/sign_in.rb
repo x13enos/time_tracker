@@ -19,13 +19,13 @@ module Mutations
       attr_reader :user
 
       def get_token
-        TokenCryptService.encode(user.id)
+        TokenCryptService.encode(user.email)
       end
 
       def authenticate_user(auth_data)
         not_auth_user = User.find_by(email: auth_data[:email])
         return unless not_auth_user
-        
+
         @user = not_auth_user.authenticate(auth_data[:password])
       end
 
