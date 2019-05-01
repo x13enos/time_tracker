@@ -1,10 +1,10 @@
 module Mutations
   module Users
     class SignIn < Mutations::BaseMutation
-      argument :sign_in_data, Types::Users::SignInInput, required: true
+      argument :sign_in_data, Types::Inputs::SignIn, required: true
 
       field :token, String, null: true
-      field :user, Types::Users::Object, null: true
+      field :user, Types::Models::User, null: true
 
       def resolve(sign_in_data:)
         authenticate_user(sign_in_data)

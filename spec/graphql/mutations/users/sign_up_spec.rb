@@ -1,4 +1,5 @@
 require "rails_helper"
+require "base64"
 
 RSpec.describe Mutations::Users::SignUp do
 
@@ -36,7 +37,8 @@ RSpec.describe Mutations::Users::SignUp do
 
       it "should create new user" do
         user_name = result["data"]["createUser"]["id"]
-        expect(user_name).to eq(User.last.id.to_s)
+        id = Base64.encode64("User-#{User.last.id.to_s}").squish
+        expect(user_name).to eq(id)
       end
     end
 

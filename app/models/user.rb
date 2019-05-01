@@ -7,4 +7,6 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, length: { in: 8..32 }
+
+  has_and_belongs_to_many :projects, -> { distinct }
 end

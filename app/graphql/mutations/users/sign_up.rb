@@ -1,9 +1,9 @@
 module Mutations
   module Users
     class SignUp < Mutations::BaseMutation
-      argument :sign_up_data, Types::Users::SignUpInput, required: true
+      argument :sign_up_data, Types::Inputs::SignUp, required: true
 
-      type Types::Users::Object
+      type Types::Models::User
 
       def resolve(sign_up_data:)
         User.create!(

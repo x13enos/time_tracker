@@ -1,7 +1,7 @@
 module Types
-  module Users
-    class Object < Types::BaseObject
-      field :id, ID, null: false
+  module Models
+    class User < Types::BaseObject
+      global_id_field :id
       field :name, String, null: true
       field :email, String, null: false
       field :password, String, null: false

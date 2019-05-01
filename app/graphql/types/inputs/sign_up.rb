@@ -1,6 +1,6 @@
 module Types
-  module Users
-    class SignUpInput < BaseInputObject
+  module Inputs
+    class SignUp < BaseInputObject
       description "Attributes for sign up"
       argument :email, String, required: true
       argument :password, String, required: true

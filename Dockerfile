@@ -2,6 +2,7 @@ FROM ruby:2.6.1-alpine
 
 ENV PATH /root/.yarn/bin:$PATH
 
+RUN apk --update add less
 RUN apk add --no-cache bash git openssh build-base tzdata postgresql-dev
 
 ENV RAILS_ROOT /var/www/time_tracker
