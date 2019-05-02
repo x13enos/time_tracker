@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Mutations::Projects::Create do
 
-  let(:result) { TimeTrackerSchema.execute(query_string) }
+  let!(:current_user) { create(:user, :admin) }
+  let!(:context) { { current_user: current_user } }
+  let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
   let(:query_string) do
     %|mutation{
         createProject(
@@ -19,6 +21,14 @@ RSpec.describe Mutations::Projects::Create do
   describe "resolve" do
     context "when passed data is correct" do
       let!(:name) { 'New project' }
+
+      context "not authorized" do
+        let!(:current_user) { create(:user, :staff) }
+
+        it "should return error" do
+          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
+        end
+      end
 
       it "should create new project" do
         expect { result }.to change{ Project.count }.from(0).to(1)

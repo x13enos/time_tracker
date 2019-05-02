@@ -3,7 +3,9 @@ require "base64"
 
 RSpec.describe Mutations::Users::SignUp do
 
-  let(:result) { TimeTrackerSchema.execute(query_string) }
+  let!(:current_user) { create(:user, :admin) }
+  let!(:context) { { current_user: current_user } }
+  let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
 
   describe "a specific query" do
     let(:query_string) do
@@ -35,9 +37,18 @@ RSpec.describe Mutations::Users::SignUp do
     context "when user can be created" do
       let(:password) { '11111111' }
 
+      context "not authorized" do
+        let!(:current_user) { create(:user, :staff) }
+
+        it "should return error" do
+          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
+        end
+      end
+
       it "should create new user" do
         user_name = result["data"]["createUser"]["id"]
-        id = Base64.encode64("User-#{User.last.id.to_s}").squish
+        last_user = User.order("created_at DESC").first
+        id = Base64.encode64("User-#{last_user.id.to_s}").squish
         expect(user_name).to eq(id)
       end
     end

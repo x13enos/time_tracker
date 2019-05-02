@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Mutations::Projects::Update do
 
-  let(:result) { TimeTrackerSchema.execute(query_string) }
+  let!(:current_user) { create(:user, :admin) }
+  let!(:context) { { current_user: current_user } }
+  let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
   let(:query_string) do
     %|mutation{
         updateProject(
@@ -22,6 +24,14 @@ RSpec.describe Mutations::Projects::Update do
       let!(:project) { create(:project, id: 1, name: 'old project') }
       let!(:project_id) { "UHJvamVjdC0x" }
       let!(:name) { "New project" }
+
+      context "not authorized" do
+        let!(:current_user) { create(:user, :staff) }
+
+        it "should return error" do
+          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
+        end
+      end
 
       it "should update  project" do
         expect { result }.to change { project.reload.name }.from("old project").to("New project")

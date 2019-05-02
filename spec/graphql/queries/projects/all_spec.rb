@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Queries::Projects::All do
 
-  let(:result) { TimeTrackerSchema.execute(query_string) }
+  let!(:current_user) { create(:user, :admin) }
+  let!(:context) { { current_user: current_user } }
+  let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
   let(:query_string) do
     %|query{
       allProjects  {
@@ -16,6 +18,14 @@ RSpec.describe Queries::Projects::All do
     context "when passed data is correct" do
       let!(:project) { create(:project, id: 1) }
       let!(:project_id) { "UHJvamVjdC0x" }
+
+      context "not authorized" do
+        let!(:current_user) { create(:user, :staff) }
+
+        it "should return error" do
+          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
+        end
+      end
 
       it "should return projects data" do
         expect(result['data']['allProjects']).to eq([{

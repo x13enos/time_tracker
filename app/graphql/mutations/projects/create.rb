@@ -7,6 +7,7 @@ module Mutations
       field :project, Types::Models::Project, null: false
 
       def resolve(name:)
+        authorize('project')
         project = Project.create!(name: name)
         return { project: project }
       rescue ActiveRecord::RecordInvalid => e

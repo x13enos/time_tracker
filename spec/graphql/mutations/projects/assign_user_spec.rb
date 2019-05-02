@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Mutations::Projects::AssignUser do
 
-  let(:result) { TimeTrackerSchema.execute(query_string) }
+  let!(:current_user) { create(:user, :admin) }
+  let!(:context) { { current_user: current_user } }
+  let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
   let(:query_string) do
     %|mutation{
         assignUserToProject(
@@ -22,6 +24,14 @@ RSpec.describe Mutations::Projects::AssignUser do
       let!(:user) { create(:user, id: 1) }
       let!(:project_id) { "UHJvamVjdC0x" }
       let!(:user_id) { "VXNlci0x" }
+
+      context "not authorized" do
+        let!(:current_user) { create(:user, :staff) }
+
+        it "should return error" do
+          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
+        end
+      end
 
       it "should assign user to project" do
         expect { result }.to change { project.users.count }.from(0).to(1)

@@ -6,6 +6,7 @@ module Queries
       type Types::Models::Project, null: false
 
       def resolve(project:)
+        authorize(project)
         return project
       end
     end

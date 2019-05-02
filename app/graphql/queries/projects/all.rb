@@ -5,6 +5,7 @@ module Queries
       type [Types::Models::Project], null: false
 
       def resolve
+        authorize('project')
         Project.order(created_at: :desc)
       end
 

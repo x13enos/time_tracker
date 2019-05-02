@@ -6,9 +6,10 @@ module Mutations
       field :project, Types::Models::Project, null: true
 
       def resolve(project:)
-        project.delete
+        authorize(project)
+        project.destroy
         return { project: project }
-      rescue e
+      rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e)
       end
 

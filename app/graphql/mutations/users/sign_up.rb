@@ -6,6 +6,7 @@ module Mutations
       type Types::Models::User
 
       def resolve(sign_up_data:)
+        authorize('user')
         User.create!(
           email: sign_up_data.email,
           password: sign_up_data.password,

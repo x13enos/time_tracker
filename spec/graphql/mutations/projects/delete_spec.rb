@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Mutations::Projects::Delete do
 
-  let(:result) { TimeTrackerSchema.execute(query_string) }
+  let!(:current_user) { create(:user, :admin) }
+  let!(:context) { { current_user: current_user } }
+  let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
   let(:query_string) do
     %|mutation{
         deleteProject(
@@ -20,7 +22,15 @@ RSpec.describe Mutations::Projects::Delete do
       let!(:project) { create(:project, id: 1) }
       let!(:project_id) { "UHJvamVjdC0x" }
 
-      it "should update  project" do
+      context "not authorized" do
+        let!(:current_user) { create(:user, :staff) }
+
+        it "should return error" do
+          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
+        end
+      end
+
+      it "should delete project" do
         expect { result }.to change { Project.count }.from(1).to(0)
       end
 

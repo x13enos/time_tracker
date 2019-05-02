@@ -9,6 +9,7 @@ module Mutations
       field :project, Types::Models::Project, null: true
 
       def resolve(project:, user:)
+        authorize(project)
         project.users << user
         return { user: user, project: project }
       rescue ActiveRecord::RecordNotFound => e
