@@ -1,6 +1,7 @@
 module Mutations
   module Projects
     class Update < Mutations::BaseMutation
+      graphql_name 'ProjectUpdate'
 
       argument :name, String, required: true
       argument :project_id, ID, required: true, loads: Types::Models::Project
