@@ -10,7 +10,6 @@
 
 /app/graphql/*/.keep
 .env.*.local
-/db/schema.rb
 
 # Ignore the default SQLite database.
 

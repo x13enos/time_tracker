@@ -29,6 +29,7 @@ RSpec.describe Mutations::Users::SignIn do
       end
 
       it "should return user data" do
+        allow(TokenCryptService).to receive(:encode) { 'secret_token' }
         expect(result['data']['signInUser']['user']).to_not be_empty
       end
     end
