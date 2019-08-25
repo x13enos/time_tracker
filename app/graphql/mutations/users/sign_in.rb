@@ -1,6 +1,8 @@
 module Mutations
   module Users
     class SignIn < Mutations::BaseMutation
+      graphql_name 'UserSignIn'
+
       argument :sign_in_data, Types::Inputs::SignIn, required: true
 
       field :token, String, null: true

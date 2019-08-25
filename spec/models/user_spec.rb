@@ -13,6 +13,6 @@ RSpec.describe User, type: :model do
     it { should validate_length_of(:password).is_at_least(8).is_at_most(32) }
 
     it { should have_and_belong_to_many(:projects) }
-
+    it { should have_many(:time_records).dependent(:destroy) }
   end
 end

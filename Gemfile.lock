@@ -93,7 +93,7 @@ GEM
     minitest (5.11.3)
     msgpack (1.2.6)
     nio4r (2.3.1)
-    nokogiri (1.10.1)
+    nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     pg (1.1.4)
     pry (0.12.2)
@@ -104,6 +104,8 @@ GEM
     puma (3.12.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
+    pundit-matchers (1.6.0)
+      rspec-rails (>= 3.0.0)
     rack (2.0.6)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -195,6 +197,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.11)
   pundit
+  pundit-matchers (~> 1.6.0)
   rails (~> 5.2.2)
   rspec-rails
   rspec_junit_formatter

@@ -1,6 +1,7 @@
 module Mutations
   module Projects
     class Create < Mutations::BaseMutation
+      graphql_name 'ProjectCreate'
 
       argument :name, String, required: true
 

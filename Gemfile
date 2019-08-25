@@ -33,6 +33,7 @@ group :test do
   gem 'faker'
   gem 'rspec-rails'
   gem 'shoulda-matchers', '~> 3.1'
+  gem 'pundit-matchers', '~> 1.6.0'
   gem 'rspec_junit_formatter'
 end
 
