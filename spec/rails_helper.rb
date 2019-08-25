@@ -6,9 +6,9 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'support/factory_bot'
-# require 'active_support/testing/time_helpers'
+require 'pundit/rspec'
+require 'pundit/matchers'
 require 'spec_helper'
-# require 'telegram/bot/rspec/integration'
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -21,9 +21,7 @@ RSpec.configure do |config|
     mocks.allow_message_expectations_on_nil = true
   end
 
-  # config.include ActiveSupport::Testing::TimeHelpers
-
-  # config.after { Telegram.bot.reset }
+  config.include ActiveSupport::Testing::TimeHelpers
 end
 
 RSpec::Expectations.configuration.on_potential_false_positives = :nothing

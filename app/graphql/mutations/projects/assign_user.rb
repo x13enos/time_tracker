@@ -1,6 +1,7 @@
 module Mutations
   module Projects
     class AssignUser < Mutations::BaseMutation
+      graphql_name 'ProjectAssignUser'
 
       argument :project_id, ID, required: true, loads: Types::Models::Project
       argument :user_id, ID, required: true, loads: Types::Models::User

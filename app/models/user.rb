@@ -9,4 +9,5 @@ class User < ApplicationRecord
   validates :password, length: { in: 8..32 }
 
   has_and_belongs_to_many :projects, -> { distinct }
+  has_many :time_records, dependent: :destroy
 end

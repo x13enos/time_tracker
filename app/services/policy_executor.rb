@@ -13,7 +13,7 @@ class PolicyExecutor
   end
 
   private
-  attr_reader :object, :current_user, :path, :policy, :result
+  attr_reader :object, :current_user, :path, :policy, :result, :object_name
 
   def select_policy_class
     name = select_name_from_object
@@ -21,15 +21,19 @@ class PolicyExecutor
   end
 
   def select_name_from_object
-    if object.is_a?(String)
-      object.to_s.camelcase
-    else
-      object.class.to_s
-    end
+    @object_name = if object.is_a?(String)
+                    object.to_s.camelcase
+                  else
+                    object.class.to_s
+                  end
   end
 
   def action
-    path.underscore + "?"
+    pure_action.underscore + "?"
+  end
+
+  def pure_action
+    path.gsub(/#{object_name}/, "")
   end
 
   def check_if_action_can_be_authorized

@@ -9,5 +9,8 @@ module Types
     field :update_project, mutation: Mutations::Projects::Update
     field :delete_project, mutation: Mutations::Projects::Delete
     field :assign_user_to_project, mutation: Mutations::Projects::AssignUser
+
+    #Time records
+    field :create_time_record, mutation: Mutations::TimeRecords::Create
   end
 end
