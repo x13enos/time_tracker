@@ -1,20 +1,20 @@
 require "rails_helper"
 
-RSpec.describe Mutations::TimeRecords::Create do
+RSpec.describe Mutations::TimeRecords::Update do
 
   let!(:current_user) { create(:user) }
-  let!(:project) { create(:project) }
+  let!(:time_record) { create(:time_record, user: current_user, id: 101) }
   let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
-  let(:start_task) { false }
 
   let(:query_string) do
     %|mutation {
-      createTimeRecord(
+      updateTimeRecord(
         startTask: #{start_task},
+        timeRecordId: "VGltZVJlY29yZC0xMDE"
         data: {
           description: "#{ description }",
           spentTime: 0.75,
-          projectId: #{ project.id }
+          projectId: #{ time_record.project_id }
         }
       ) {
         timeRecord {
@@ -28,10 +28,11 @@ RSpec.describe Mutations::TimeRecords::Create do
 
   describe "resolve" do
     context "when passed data is correct" do
-      let!(:description) { 'New task' }
+      let(:description) { 'updated task' }
 
       context "user isn't authorized" do
-        let!(:context) { { current_user: nil } }
+        let(:context) { { current_user: nil } }
+        let(:start_task) { false }
 
         it "should return error" do
           expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
@@ -42,18 +43,19 @@ RSpec.describe Mutations::TimeRecords::Create do
         let!(:context) { { current_user: current_user } }
         let(:start_task) { true }
 
-        it "should create new time record" do
-          expect { result }.to change{ TimeRecord.count }.from(0).to(1)
+        it "should update time record" do
+          result
+          expect(time_record.reload.description).to eq(description)
         end
 
         it "should return project's data" do
-          expect(result['data']['createTimeRecord']['timeRecord']['description']).to eq('New task')
+          expect(result['data']['updateTimeRecord']['timeRecord']['description']).to eq(description)
         end
 
         it "should set current time as started" do
           freeze_time do
             result
-            expect(TimeRecord.last.time_start).to eq(Time.now)
+            expect(time_record.reload.time_start).to eq(Time.now)
           end
         end
       end
@@ -62,6 +64,7 @@ RSpec.describe Mutations::TimeRecords::Create do
     context "when passed data is wrong" do
       let!(:description) { nil }
       let!(:context) { { current_user: current_user } }
+      let(:start_task) { false }
 
       it "should return error if description wasn't passed" do
         expect(result['errors'][0]['message']).to_not be_empty

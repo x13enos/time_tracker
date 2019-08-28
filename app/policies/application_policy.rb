@@ -6,4 +6,10 @@ class ApplicationPolicy
     @record = record
   end
 
+  private
+
+  def record_belongs_to_user?
+    record.user_id == user.id
+  end
+
 end
