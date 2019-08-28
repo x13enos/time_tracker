@@ -34,6 +34,7 @@ group :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers', '~> 3.1'
   gem 'pundit-matchers', '~> 1.6.0'
+  gem 'rspec_junit_formatter'
 end
 
 gem 'tzinfo-data', platforms: %I[mingw mswin x64_mingw jruby]
