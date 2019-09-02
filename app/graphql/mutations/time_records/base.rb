@@ -11,7 +11,8 @@ module Mutations
 
       def prepared_params(data, start_task)
         params = data.to_h
-        params.merge!({ time_start: Time.now }) if start_task
+        time_start_value = start_task ? Time.now : nil
+        params.merge!({ time_start: time_start_value })
         return params
       end
     end

@@ -58,6 +58,16 @@ RSpec.describe Mutations::TimeRecords::Update do
             expect(time_record.reload.time_start).to eq(Time.now)
           end
         end
+
+        context "when passed start_time flag is false" do
+          let(:start_task) { false }
+
+          it "should drop time_start" do
+            time_record.update(time_start: Time.now)
+            result
+            expect(time_record.reload.time_start).to be_nil
+          end
+        end
       end
     end
 

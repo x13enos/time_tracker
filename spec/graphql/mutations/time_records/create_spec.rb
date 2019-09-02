@@ -56,6 +56,15 @@ RSpec.describe Mutations::TimeRecords::Create do
             expect(TimeRecord.last.time_start).to eq(Time.now)
           end
         end
+
+        context "when passed start_time flag is false" do
+          let(:start_task) { false }
+
+          it "shouldn't set time_start" do
+            result
+            expect(TimeRecord.last.time_start).to be_nil
+          end
+        end
       end
     end
 
