@@ -4,7 +4,7 @@ class TokenCryptService
 
   class << self
     def encode(data)
-      payload = { data: data, exp: expiration_time.to_s  }
+      payload = { data: data, exp: expiration_time.to_s.to_i  }
       JWT.encode(payload, secret_key, ALGORITHM_TYPE)
     end
 

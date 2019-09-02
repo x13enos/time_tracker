@@ -1,15 +1,12 @@
 module Mutations
   module TimeRecords
-    class Create < Mutations::BaseMutation
+    class Create < Mutations::TimeRecords::Base
       graphql_name 'TimeRecordCreate'
 
-      argument :data, Types::Inputs::TimeRecordData, required: true
-
-      field :time_record, Types::Models::TimeRecord, null: false
-
-      def resolve(data:)
+      def resolve(data:, start_task:)
         authorize('time_record')
-        time_record = create_record(data)
+        params = prepared_params(data, start_task)
+        time_record = create_record(params)
         return { time_record: time_record }
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e)
@@ -17,9 +14,8 @@ module Mutations
 
       private
 
-      def create_record(data)
-        record_params = data.to_h.merge(time_start: Time.now)
-        context[:current_user].time_records.create!(record_params)
+      def create_record(params)
+        context[:current_user].time_records.create!(params)
       end
     end
   end
