@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Mutations::TimeRecords::Create do
 
   let!(:current_user) { create(:user) }
-  let!(:project) { create(:project) }
+  let!(:project) { create(:project, id: 1) }
   let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
   let(:start_task) { false }
 
@@ -11,10 +11,10 @@ RSpec.describe Mutations::TimeRecords::Create do
     %|mutation {
       createTimeRecord(
         startTask: #{start_task},
+        projectId: "#{ encode_id(project) }",
         data: {
           description: "#{ description }",
-          spentTime: 0.75,
-          projectId: #{ project.id }
+          spentTime: 0.75
         }
       ) {
         timeRecord {

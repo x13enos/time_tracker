@@ -10,11 +10,11 @@ RSpec.describe Mutations::TimeRecords::Update do
     %|mutation {
       updateTimeRecord(
         startTask: #{start_task},
-        timeRecordId: "VGltZVJlY29yZC0xMDE"
+        timeRecordId: "VGltZVJlY29yZC0xMDE",
+        projectId: #{ encode_id(time_record.project) }
         data: {
           description: "#{ description }",
-          spentTime: 0.75,
-          projectId: #{ time_record.project_id }
+          spentTime: 0.75
         }
       ) {
         timeRecord {
