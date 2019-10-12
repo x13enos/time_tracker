@@ -3,15 +3,15 @@ require "rails_helper"
 RSpec.describe Mutations::TimeRecords::Update do
 
   let!(:current_user) { create(:user) }
-  let!(:time_record) { create(:time_record, user: current_user, id: 101) }
+  let!(:time_record) { create(:time_record, user: current_user) }
   let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
 
   let(:query_string) do
     %|mutation {
       updateTimeRecord(
         startTask: #{start_task},
-        timeRecordId: "VGltZVJlY29yZC0xMDE",
-        projectId: #{ encode_id(time_record.project) }
+        timeRecordId: "#{ encode_id(time_record) }",
+        projectId: "#{ encode_id(time_record.project) }",
         data: {
           description: "#{ description }",
           spentTime: 0.75

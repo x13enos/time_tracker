@@ -11,14 +11,16 @@ module Mutations
 
       private
 
-      def prepared_params(data, start_task, project)
+      def prepared_params(data:, start_task:, project:)
         params = data.to_h
-        time_start_value = start_task ? Time.now : nil
-        params.merge!({
-          time_start: time_start_value,
-          project_id: project.id 
+        params.merge({
+          time_start: time_start_value(start_task),
+          project_id: project.id
         })
-        return params
+      end
+
+      def time_start_value(start_task)
+        start_task ? Time.now : nil
       end
     end
   end
