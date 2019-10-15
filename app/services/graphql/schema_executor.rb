@@ -1,8 +1,8 @@
 class Graphql::SchemaExecutor
 
-  def initialize(params, headers)
+  def initialize(params, current_user)
     @params = params
-    @headers = headers
+    @current_user = current_user
   end
 
   def perform
@@ -10,7 +10,7 @@ class Graphql::SchemaExecutor
   end
 
   private
-  attr_reader :params, :headers
+  attr_reader :params, :current_user
 
   def handle_graphql_request
     TimeTrackerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
@@ -29,7 +29,7 @@ class Graphql::SchemaExecutor
   end
 
   def context
-    { current_user: Graphql::UserFinder.new(headers).perform }
+    { current_user: current_user}
   end
 
 end
