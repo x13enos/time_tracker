@@ -1,7 +1,7 @@
 class GraphqlController < ApplicationController
   def execute
-    result = Graphql::SchemaExecutor.new(params, request.headers).perform
-    render json: result
+    dataset = Graphql::SchemaExecutor.new(params, request.headers).perform
+    render json: dataset
   rescue => e
     raise e unless Rails.env.development?
     handle_error_in_development(e)

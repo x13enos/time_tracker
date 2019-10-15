@@ -1,5 +1,4 @@
 class TimeRecordPolicy < ApplicationPolicy
-
   def create?
     user.present?
   end
@@ -12,4 +11,7 @@ class TimeRecordPolicy < ApplicationPolicy
     update?
   end
 
+  def all?
+    create?
+  end
 end
