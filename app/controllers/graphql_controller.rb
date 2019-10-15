@@ -3,9 +3,9 @@ include ActionController::Cookies
 class GraphqlController < ApplicationController
   def execute
     find_user
-    result = Graphql::SchemaExecutor.new(params, @user).perform
-    set_new_token_to_cookies(result)
-    render json: result
+    dataset = Graphql::SchemaExecutor.new(params, @user).perform
+    set_new_token_to_cookies(dataset)
+    render json: dataset
   rescue => e
     raise e unless Rails.env.development?
     handle_error_in_development(e)
@@ -17,8 +17,8 @@ class GraphqlController < ApplicationController
     @user = Graphql::UserFinder.new(cookies[:token]).perform
   end
 
-  def set_new_token_to_cookies(result)
-    token = Graphql::TokenSelector.new(@user, result).perform
+  def set_new_token_to_cookies(dataset)
+    token = Graphql::TokenSelector.new(@user, dataset).perform
     return unless token
     cookies[:token] = {
       value: token,
