@@ -25,6 +25,14 @@ RSpec.describe Mutations::Projects::AssignUser do
       let!(:project_id) { "UHJvamVjdC0x" }
       let!(:user_id) { "VXNlci0x" }
 
+      context "user wasn't passed" do
+        let!(:current_user) { nil }
+
+        it "should return error" do
+          expect(result["errors"][0]["message"]).to eq("User must be logged in")
+        end
+      end
+
       context "not authorized" do
         let!(:current_user) { create(:user, :staff) }
 

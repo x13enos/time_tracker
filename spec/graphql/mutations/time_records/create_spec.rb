@@ -30,11 +30,11 @@ RSpec.describe Mutations::TimeRecords::Create do
     context "when passed data is correct" do
       let!(:description) { 'New task' }
 
-      context "user isn't authorized" do
+      context "user wasn't passed" do
         let!(:context) { { current_user: nil } }
 
         it "should return error" do
-          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
+          expect(result["errors"][0]["message"]).to eq("User must be logged in")
         end
       end
 

@@ -13,11 +13,9 @@ class Graphql::UserFinder
   attr_reader :token
 
   def find_user_by_decoded_token
-    begin
-      email = TokenCryptService.decode(token)
-      User.find_by(email: email)
-    rescue ActiveSupport::MessageVerifier::InvalidSignature
-      nil
-    end
+    email = TokenCryptService.decode(token)
+    User.find_by(email: email)
+  rescue
+    return nil
   end
 end

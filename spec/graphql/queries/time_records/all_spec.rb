@@ -25,11 +25,11 @@ RSpec.describe Queries::TimeRecords::All do
   describe "resolve" do
     context "when passed data is correct" do
 
-      context "not authorized" do
+      context "user wasn't passed" do
         let!(:context) { { current_user: nil } }
 
         it "should return error" do
-          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
+          expect(result["errors"][0]["message"]).to eq("User must be logged in")
         end
       end
 

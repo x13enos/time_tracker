@@ -35,7 +35,7 @@ RSpec.describe Mutations::TimeRecords::Update do
         let(:start_task) { false }
 
         it "should return error" do
-          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
+          expect(result["errors"][0]["message"]).to eq("User must be logged in")
         end
       end
 
