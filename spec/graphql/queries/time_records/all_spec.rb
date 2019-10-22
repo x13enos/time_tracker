@@ -31,7 +31,11 @@ RSpec.describe Queries::TimeRecords::All do
         let!(:context) { { current_user: nil } }
 
         it "should return error" do
-          expect(result["errors"][0]["message"]).to eq("User must be logged in")
+          expect(result["errors"][0]["message"]).to eq(I18n.t('graphql.errors.not_authorized'))
+        end
+
+        it "should return error code" do
+          expect(result["errors"][0]["extensions"]["code"]).to eq("401")
         end
       end
 
