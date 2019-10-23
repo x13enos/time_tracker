@@ -19,6 +19,18 @@ RSpec.describe Queries::Projects::All do
       let!(:project) { create(:project, id: 1) }
       let!(:project_id) { "UHJvamVjdC0x" }
 
+      context "user wasn't passed" do
+        let!(:current_user) { nil }
+
+        it "should return error" do
+          expect(result["errors"][0]["message"]).to eq(I18n.t('graphql.errors.not_authorized'))
+        end
+
+        it "should return error code" do
+          expect(result["errors"][0]["extensions"]["code"]).to eq("401")
+        end
+      end
+
       context "not authorized" do
         let!(:current_user) { create(:user, :staff) }
 
