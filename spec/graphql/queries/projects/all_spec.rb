@@ -31,14 +31,6 @@ RSpec.describe Queries::Projects::All do
         end
       end
 
-      context "not authorized" do
-        let!(:current_user) { create(:user, :staff) }
-
-        it "should return error" do
-          expect(result["errors"][0]["message"]).to eq("You are not authorized to perform this action.")
-        end
-      end
-
       it "should return projects data" do
         expect(result['data']['allProjects']).to eq([{
           "id" => project_id,

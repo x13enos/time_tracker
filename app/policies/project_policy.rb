@@ -1,7 +1,7 @@
 class ProjectPolicy < ApplicationPolicy
 
   def create?
-    user.try(:admin?)
+    user? && user.try(:admin?)
   end
 
   def update?
@@ -21,7 +21,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def all?
-    create?
+    user?
   end
 
 end
