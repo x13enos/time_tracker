@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe Queries::TimeRecords::All do
 
   let!(:current_user) { create(:user, :admin) }
-  let!(:time_record) { create(:time_record, user: current_user) }
+  let!(:time) { Time.now }
+  let!(:epoch_time) { time.utc.iso8601.to_time.to_i }
+  let!(:time_record) { create(:time_record, user: current_user, time_start: time) }
   let!(:time_record_2) { create(:time_record, user: current_user, created_at: Time.now - 1.hour) }
   let!(:time_record_3) { create(:time_record) }
   let!(:context) { { current_user: current_user } }
@@ -53,7 +55,7 @@ RSpec.describe Queries::TimeRecords::All do
             "id" => encode_id(time_record),
             "description" => time_record.description,
             "spentTime" => time_record.spent_time,
-            "timeStart" => time_record.time_start,
+            "timeStart" => epoch_time,
             "project" => {
               "id" => encode_id(time_record.project)
             }
