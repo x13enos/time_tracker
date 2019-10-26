@@ -1,7 +1,7 @@
 class UserPolicy < ApplicationPolicy
 
   def sign_up?
-    user.admin?
+    user? && user.admin?
   end
 
 end

@@ -1,6 +1,6 @@
 class TimeRecordPolicy < ApplicationPolicy
   def create?
-    user.present?
+    user?
   end
 
   def update?
