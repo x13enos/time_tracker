@@ -14,7 +14,8 @@ RSpec.describe Mutations::TimeRecords::Create do
         projectId: "#{ encode_id(project) }",
         data: {
           description: "#{ description }",
-          spentTime: 0.75
+          spentTime: 0.75,
+          assignedDate: 1572289845
         }
       ) {
         timeRecord {
@@ -58,6 +59,13 @@ RSpec.describe Mutations::TimeRecords::Create do
           freeze_time do
             result
             expect(TimeRecord.last.time_start).to eq(Time.now)
+          end
+        end
+
+        it "should keep assigned date" do
+          freeze_time do
+            result
+            expect(TimeRecord.last.assigned_date).to eq(Date.new(2019,10,28))
           end
         end
 
