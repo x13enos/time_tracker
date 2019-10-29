@@ -1,13 +1,17 @@
 module Queries
   module TimeRecords
     class All < Queries::BaseQuery
+      argument :date, Types::DateType, required: true
+
       type [Types::Models::TimeRecord], null: false
 
-      def resolve
+      def resolve(date:)
         authorize('time_record')
-        context[:current_user].time_records.order(created_at: :asc)
+        context[:current_user].
+          time_records.
+          where(assigned_date: date).
+          order(created_at: :asc)
       end
-
     end
   end
 end
