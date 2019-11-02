@@ -9,6 +9,7 @@ module Mutations
         authorize(time_record)
         params = prepared_params(data: data, start_task: start_task, project: project)
         time_record.update!(params)
+        stop_other_launched_time_records(time_record)
         return { time_record: time_record }
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e)

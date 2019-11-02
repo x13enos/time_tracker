@@ -22,6 +22,13 @@ module Mutations
       def time_start_value(start_task)
         start_task ? Time.now : nil
       end
+
+      def stop_other_launched_time_records(time_record)
+        return if time_record.time_start.nil?
+        active_time_records = context[:current_user].time_records.active.
+                                where("id <> ?", time_record.id)
+        active_time_records.each(&:stop)
+      end
     end
   end
 end
