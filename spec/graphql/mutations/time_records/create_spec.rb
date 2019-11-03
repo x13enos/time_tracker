@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Mutations::TimeRecords::Create do
 
   let!(:current_user) { create(:user) }
-  let!(:project) { create(:project, id: 1) }
+  let!(:project) { create(:project) }
   let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
   let(:start_task) { false }
 
@@ -69,12 +69,24 @@ RSpec.describe Mutations::TimeRecords::Create do
           end
         end
 
+        it "should stop other active tasks" do
+          active_time_record = create(:time_record, time_start: Time.now, user: current_user)
+          expect_any_instance_of(TimeRecord).to receive(:stop).once
+          result
+        end
+
         context "when passed start_time flag is false" do
           let(:start_task) { false }
 
           it "shouldn't set time_start" do
             result
             expect(TimeRecord.last.time_start).to be_nil
+          end
+
+          it "shouldn't stop other active tasks" do
+            active_time_record = create(:time_record, time_start: Time.now, user: current_user)
+            expect_any_instance_of(TimeRecord).to_not receive(:stop)
+            result
           end
         end
       end

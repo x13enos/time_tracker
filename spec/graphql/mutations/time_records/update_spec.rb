@@ -59,6 +59,12 @@ RSpec.describe Mutations::TimeRecords::Update do
           end
         end
 
+        it "should stop other active tasks" do
+          active_time_record = create(:time_record, time_start: Time.now, user: current_user)
+          expect_any_instance_of(TimeRecord).to receive(:stop).once
+          result
+        end
+
         context "when passed start_time flag is false" do
           let(:start_task) { false }
 
@@ -66,6 +72,12 @@ RSpec.describe Mutations::TimeRecords::Update do
             time_record.update(time_start: Time.now)
             result
             expect(time_record.reload.time_start).to be_nil
+          end
+
+          it "shouldn't stop other active tasks" do
+            active_time_record = create(:time_record, time_start: Time.now, user: current_user)
+            expect_any_instance_of(TimeRecord).to_not receive(:stop)
+            result
           end
         end
       end
