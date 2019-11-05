@@ -9,6 +9,35 @@ RSpec.describe TimeRecord, type: :model do
 
     it { should belong_to(:user) }
     it { should belong_to(:project) }
+
+    context "active_task_launched_today" do
+      it "should add error if user tries to launch task that wasn't assigned to today" do
+        freeze_time do
+          time_record = create(:time_record, assigned_date: Date.today - 1.days)
+
+          time_record.update(time_start: Time.now)
+          expect(time_record.errors[:time_start]).to_not be_empty
+        end
+      end
+
+      it "should not add error if user tries to launch today's task" do
+        freeze_time do
+          time_record = create(:time_record, assigned_date: Date.today)
+
+          time_record.update(time_start: Time.now)
+          expect(time_record.errors[:time_start]).to be_empty
+        end
+      end
+
+      it "should not add error if user tries to change data for not today's task" do
+        freeze_time do
+          time_record = create(:time_record, assigned_date: Date.today - 1.days)
+
+          time_record.update(description: "text")
+          expect(time_record.errors[:time_start]).to be_empty
+        end
+      end
+    end
   end
 
   describe '.active' do
