@@ -1,9 +1,19 @@
-version: 2
+version: 2.1
 jobs:
+  build_image:
+    docker:
+      - image: circleci/ruby:2.6.1-node-browsers
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: |
+          IMAGE=x3enos/time_tracker:$CIRCLE_SHA1
+          LATEST=x3enos/time_tracker:latest
+          docker build -t $IMAGE -t $LATEST .
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker push $IMAGE
+          docker push $LATEST
   build:
-    branches:
-      only:
-        - /TT-.*/
     docker:
       - image: circleci/ruby:2.6.1-node-browsers
         environment:
@@ -63,3 +73,14 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+
+workflows:
+  build_and_deploy:
+    jobs:
+      - build
+      - build_image:
+          requires:
+            - build
+          filters:
+            branches:
+              only: development
