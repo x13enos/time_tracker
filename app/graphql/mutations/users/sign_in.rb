@@ -11,6 +11,7 @@ module Mutations
       def resolve(sign_in_data:)
         authenticate_user(sign_in_data)
         if user
+          update_user_timezone(sign_in_data[:timezone_offset])
           { user: user, token: get_token }
         else
           GraphQL::ExecutionError.new("Email or Password are wrong.")
@@ -24,11 +25,16 @@ module Mutations
         TokenCryptService.encode(user.email)
       end
 
-      def authenticate_user(auth_data)
-        not_auth_user = User.find_by(email: auth_data[:email])
+      def authenticate_user(sign_in_data)
+        not_auth_user = User.find_by(email: sign_in_data[:email])
         return unless not_auth_user
 
-        @user = not_auth_user.authenticate(auth_data[:password])
+        @user = not_auth_user.authenticate(sign_in_data[:password])
+      end
+
+      def update_user_timezone(timezone_offset)
+        return if user.timezone
+        user.update(timezone: ActiveSupport::TimeZone[timezone_offset].name)
       end
 
     end

@@ -20,7 +20,7 @@ module Mutations
       end
 
       def time_start_value(start_task)
-        start_task ? Time.now : nil
+        start_task ? Time.zone.now : nil
       end
 
       def stop_other_launched_time_records(time_record)

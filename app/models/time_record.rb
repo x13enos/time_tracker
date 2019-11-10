@@ -7,7 +7,7 @@ class TimeRecord < ApplicationRecord
   belongs_to :project
 
   def stop
-    time_passed = ((Time.now - self.time_start) / 3600).round(2)
+    time_passed = ((Time.zone.now - self.time_start) / 3600).round(2)
     self.update!(
       time_start: nil,
       spent_time: self.spent_time + time_passed

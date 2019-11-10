@@ -8,7 +8,8 @@ RSpec.describe Mutations::Users::SignIn do
         signInUser(
         signInData: {
           email: "example@user.com",
-          password: "11111111"
+          password: "11111111",
+          timezoneOffset: 2
         }
       ) {
         	token
@@ -31,6 +32,17 @@ RSpec.describe Mutations::Users::SignIn do
       it "should return user data" do
         allow(TokenCryptService).to receive(:encode) { 'secret_token' }
         expect(result['data']['signInUser']['user']).to_not be_empty
+      end
+
+      it "should keep timezone if user doesn't have that" do
+        allow(TokenCryptService).to receive(:encode) { 'secret_token' }
+        expect { result }.to change{ user.reload.timezone }.from(nil).to(ActiveSupport::TimeZone[2].name)
+      end
+
+      it "should not update timezone if user already has that" do
+        allow(TokenCryptService).to receive(:encode) { 'secret_token' }
+        user.update(timezone: ActiveSupport::TimeZone[5].name)
+        expect { result }.to_not change{ user.reload.timezone }
       end
     end
 

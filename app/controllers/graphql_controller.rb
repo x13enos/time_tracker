@@ -1,8 +1,10 @@
 include ActionController::Cookies
 
 class GraphqlController < ApplicationController
+  before_action :find_user
+  around_action :set_time_zone
+
   def execute
-    find_user
     dataset = Graphql::SchemaExecutor.new(params, @user).perform
     set_new_token_to_cookies(dataset)
     render json: dataset
@@ -13,7 +15,7 @@ class GraphqlController < ApplicationController
 
   private
 
-  def find_user 
+  def find_user
     @user = Graphql::UserFinder.new(cookies[:token]).perform
   end
 
@@ -25,6 +27,11 @@ class GraphqlController < ApplicationController
       secure: Rails.env.production?,
       httponly: true
     }
+  end
+
+  def set_time_zone
+    timezone = @user.try(:timezone) || "UTC"
+    Time.use_zone(timezone) { yield }
   end
 
   def handle_error_in_development(e)
