@@ -6,6 +6,7 @@ RSpec.describe Mutations::TimeRecords::Create do
   let!(:project) { create(:project) }
   let(:result) { TimeTrackerSchema.execute(query_string, context: context) }
   let(:start_task) { false }
+  let(:current_day) { Date.new(2019,10,28) }
 
   let(:query_string) do
     %|mutation {
@@ -48,31 +49,37 @@ RSpec.describe Mutations::TimeRecords::Create do
         let(:start_task) { true }
 
         it "should create new time record" do
-          expect { result }.to change{ TimeRecord.count }.from(0).to(1)
+          travel_to current_day do
+            expect { result }.to change{ TimeRecord.count }.from(0).to(1)
+          end
         end
 
         it "should return project's data" do
-          expect(result['data']['createTimeRecord']['timeRecord']['description']).to eq('New task')
+          travel_to current_day do
+            expect(result['data']['createTimeRecord']['timeRecord']['description']).to eq('New task')
+          end
         end
 
         it "should set current time as started" do
-          freeze_time do
+          travel_to current_day do
             result
             expect(TimeRecord.last.time_start).to eq(Time.now)
           end
         end
 
         it "should keep assigned date" do
-          freeze_time do
+          travel_to current_day do
             result
-            expect(TimeRecord.last.assigned_date).to eq(Date.new(2019,10,28))
+            expect(TimeRecord.last.assigned_date).to eq(current_day)
           end
         end
 
         it "should stop other active tasks" do
-          active_time_record = create(:time_record, time_start: Time.now, user: current_user)
-          expect_any_instance_of(TimeRecord).to receive(:stop).once
-          result
+          travel_to current_day do
+            active_time_record = create(:time_record, time_start: Time.now, user: current_user)
+            expect_any_instance_of(TimeRecord).to receive(:stop).once
+            result
+          end
         end
 
         context "when passed start_time flag is false" do
@@ -93,12 +100,14 @@ RSpec.describe Mutations::TimeRecords::Create do
     end
 
     context "when passed data is wrong" do
+
       let!(:description) { nil }
       let!(:context) { { current_user: current_user } }
 
       it "should return error if description wasn't passed" do
         expect(result['errors'][0]['message']).to_not be_empty
       end
+      
     end
   end
 end
