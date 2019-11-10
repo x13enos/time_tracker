@@ -51,9 +51,9 @@ RSpec.describe TimeRecord, type: :model do
 
   describe '.stop' do
     it "should set nil for time_start to stopped time record" do
-        time_record = create(:time_record, spent_time: 0.5, time_start: Time.now)
-        time_record.stop
-        expect(time_record.time_start).to be_nil
+      time_record = create(:time_record, spent_time: 0.5, time_start: Time.now)
+      time_record.stop
+      expect(time_record.time_start).to be_nil
     end
 
     it "should set spent time to stopped time record" do

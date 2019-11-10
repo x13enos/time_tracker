@@ -62,5 +62,26 @@ RSpec.describe GraphqlController, type: :controller do
         expect(cookies[:token]).to be_nil
       end
     end
+
+    context "set timezone" do
+      before do
+        allow_any_instance_of(Graphql::SchemaExecutor).to receive(:perform)
+        allow(controller).to receive(:set_new_token_to_cookies)
+      end
+
+      it "should user user's timezone if user was found" do
+        timezone = ActiveSupport::TimeZone[2].name
+        user = create(:user, timezone: timezone)
+        allow(Graphql::UserFinder).to receive(:new) { double(perform: user) }
+        expect(Time).to receive(:use_zone).with(timezone)
+        post :execute, params: { format: :json }
+      end
+
+      it "should user UTC if user wasn't found" do
+        allow(Graphql::UserFinder).to receive(:new) { double(perform: nil) }
+        expect(Time).to receive(:use_zone).with("UTC")
+        post :execute, params: { format: :json }
+      end
+    end
   end
 end

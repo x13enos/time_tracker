@@ -40,11 +40,11 @@ RSpec.describe Queries::TimeRecords::All do
       end
 
       it "should return time only current user's time recors in the right order" do
-        travel_to Time.local(2019, 10, 29)
+        travel_to Time.zone.local(2019, 10, 29)
 
-        time_record = create(:time_record, user: current_user, time_start: time, assigned_date: Date.today)
-        time_record_2 = create(:time_record, user: current_user, created_at: Time.now - 1.hour, assigned_date: Date.today)
-        time_record_3 = create(:time_record, assigned_date: Date.today)
+        time_record = create(:time_record, user: current_user, time_start: time, assigned_date: Time.zone.today)
+        time_record_2 = create(:time_record, user: current_user, created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today)
+        time_record_3 = create(:time_record, assigned_date: Time.zone.today)
 
         expect(result['data']['allTimeRecords']).to eq([
           {
@@ -72,11 +72,11 @@ RSpec.describe Queries::TimeRecords::All do
       end
 
       it "should return none of time records if all of them were created in other days" do
-        travel_to Time.local(2019, 10, 30)
+        travel_to Time.zone.local(2019, 10, 30)
 
-        time_record = create(:time_record, user: current_user, time_start: time, assigned_date: Date.today)
-        time_record_2 = create(:time_record, user: current_user, created_at: Time.now - 1.hour, assigned_date: Date.today)
-        time_record_3 = create(:time_record, assigned_date: Date.today)
+        time_record = create(:time_record, user: current_user, time_start: time, assigned_date: Time.zone.today)
+        time_record_2 = create(:time_record, user: current_user, created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today)
+        time_record_3 = create(:time_record, assigned_date: Time.zone.today)
 
         expect(result['data']['allTimeRecords']).to be_empty
 
