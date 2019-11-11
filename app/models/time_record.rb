@@ -15,6 +15,10 @@ class TimeRecord < ApplicationRecord
     )
   end
 
+  def active?
+    time_start.present?
+  end
+
   private
 
   def only_todays_task_could_be_activated
