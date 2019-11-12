@@ -5,9 +5,10 @@ class GraphqlController < ApplicationController
   around_action :set_time_zone
 
   def execute
-    dataset = Graphql::SchemaExecutor.new(params, @user).perform
-    set_new_token_to_cookies(dataset)
-    render json: dataset
+    @dataset = Graphql::SchemaExecutor.new(params, @user).perform
+
+    manage_user_session
+    render json: @dataset
   rescue => e
     raise e unless Rails.env.development?
     handle_error_in_development(e)
@@ -19,8 +20,20 @@ class GraphqlController < ApplicationController
     @user = Graphql::UserFinder.new(cookies[:token]).perform
   end
 
-  def set_new_token_to_cookies(dataset)
-    token = Graphql::TokenSelector.new(@user, dataset).perform
+  def manage_user_session
+    if should_user_be_signed_out?
+      cookies.delete(:token)
+    else
+      create_or_update_user_session
+    end
+  end
+
+  def should_user_be_signed_out?
+    @dataset.dig("data", "signOutUser").present?
+  end
+
+  def create_or_update_user_session
+    token = Graphql::TokenSelector.new(@user, @dataset).perform
     return unless token
     cookies[:token] = {
       value: token,

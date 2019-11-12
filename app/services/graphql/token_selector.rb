@@ -21,7 +21,7 @@ class Graphql::TokenSelector
     if user
       TokenCryptService.encode(@user.email)
     else
-      result["data"]["signInUser"]["token"]
+      result.dig("data", "signInUser", "token")
     end
   end
 end

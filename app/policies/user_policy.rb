@@ -4,4 +4,8 @@ class UserPolicy < ApplicationPolicy
     user? && user.admin?
   end
 
+  def sign_out?
+    user?
+  end
+
 end
