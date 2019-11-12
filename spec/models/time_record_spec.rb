@@ -49,6 +49,18 @@ RSpec.describe TimeRecord, type: :model do
     end
   end
 
+  describe '#active?' do
+    it "should return true for task with time_start" do
+      time_record = create(:time_record, time_start: Time.now)
+      expect(time_record.active?).to be_truthy
+    end
+
+    it "should return false for task without time_start" do
+      time_record = create(:time_record, time_start: nil)
+      expect(time_record.active?).to be_falsey
+    end
+  end
+
   describe '.stop' do
     it "should set nil for time_start to stopped time record" do
       time_record = create(:time_record, spent_time: 0.5, time_start: Time.now)

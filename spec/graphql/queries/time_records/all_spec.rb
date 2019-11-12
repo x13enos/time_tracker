@@ -41,8 +41,9 @@ RSpec.describe Queries::TimeRecords::All do
 
       it "should return time only current user's time recors in the right order" do
         travel_to Time.zone.local(2019, 10, 29)
+        time_start = Time.zone.now - 1.hour
 
-        time_record = create(:time_record, user: current_user, time_start: time, assigned_date: Time.zone.today)
+        time_record = create(:time_record, user: current_user, time_start: time_start, assigned_date: Time.zone.today)
         time_record_2 = create(:time_record, user: current_user, created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today)
         time_record_3 = create(:time_record, assigned_date: Time.zone.today)
 
@@ -60,8 +61,8 @@ RSpec.describe Queries::TimeRecords::All do
           {
             "id" => encode_id(time_record),
             "description" => time_record.description,
-            "spentTime" => time_record.spent_time,
-            "timeStart" => epoch_time,
+            "spentTime" => time_record.spent_time + 1.0,
+            "timeStart" => time_start.utc.iso8601.to_time.to_i,
             "project" => {
               "id" => encode_id(time_record.project)
             }

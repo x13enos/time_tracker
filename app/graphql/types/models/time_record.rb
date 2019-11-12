@@ -7,6 +7,17 @@ module Types
       field :spent_time, Float, null: false
       field :user, Types::Models::User, null: false
       field :project, Types::Models::Project, null: false
+
+      def spent_time
+        object.active? ? calculated_actual_time : object.spent_time
+      end
+
+      private
+
+      def calculated_actual_time
+        passed_time_from_start = (Time.zone.now - object.time_start) / 3600
+        (passed_time_from_start + object.spent_time).round(2)
+      end
     end
   end
 end
