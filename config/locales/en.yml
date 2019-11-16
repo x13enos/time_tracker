@@ -32,6 +32,7 @@
 en:
   time_records:
     errors:
+      should_be_less_than_24_hours: "The total amount of spent time cannot exceed 24 hours per day"
       only_todays_taks: "You can only launch tasks which assigned to today"
   graphql:
     errors:

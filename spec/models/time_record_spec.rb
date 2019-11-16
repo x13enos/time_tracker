@@ -38,6 +38,34 @@ RSpec.describe TimeRecord, type: :model do
         end
       end
     end
+
+    def value_of_spent_time
+      days_tasks = TimeRecord.where(assigned_date: assigned_date)
+      days_tasks = days_tasks.where.not(id: id) if id
+      if days_tasks.sum(:spent_time) > 24.0
+        errors.add(:time_spent, I18n.t("time_records.errors.should_be_less_than_24_hours"))
+      end
+    end
+
+    context "value_of_spent_time" do
+      let!(:time_record) { create(:time_record, spent_time: 23.0) }
+      let!(:time_record2) { create(:time_record, spent_time: 0.25) }
+
+      it "should add error if user exceed limit of spent time" do
+        freeze_time do
+          time_record2.update(spent_time: 1.25)
+          expect(time_record2.errors[:spent_time]).to_not be_empty
+        end
+      end
+
+      it "should add error if user didn't reach the limit of spent time" do
+        freeze_time do
+          time_record2.update(spent_time:0.75)
+          expect(time_record2.errors[:spent_time]).to be_empty
+        end
+      end
+
+    end
   end
 
   describe '.active' do

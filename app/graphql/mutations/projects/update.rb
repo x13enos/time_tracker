@@ -13,7 +13,7 @@ module Mutations
         project.update!(name: name)
         return { project: project }
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new(e)
+        GraphQL::ExecutionError.new(handle_invalid_record_message(e))
       end
 
     end

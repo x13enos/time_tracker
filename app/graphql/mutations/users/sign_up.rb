@@ -15,7 +15,7 @@ module Mutations
           role: sign_up_data.role
         )
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new(e)
+        GraphQL::ExecutionError.new(handle_invalid_record_message(e))
       end
     end
   end
