@@ -48,53 +48,30 @@ RSpec.describe Mutations::TimeRecords::Create do
         let!(:context) { { current_user: current_user } }
         let(:start_task) { true }
 
-        it "should create new time record" do
-          travel_to current_day do
-            expect { result }.to change{ TimeRecord.count }.from(0).to(1)
-          end
-        end
-
         it "should return project's data" do
           travel_to current_day do
             expect(result['data']['createTimeRecord']['timeRecord']['description']).to eq('New task')
           end
         end
 
-        it "should set current time as started" do
+        it "should build object form of creating" do
+          form = double(save: true, time_record: create(:time_record))
           travel_to current_day do
-            result
-            expect(TimeRecord.last.time_start).to eq(Time.now)
-          end
-        end
-
-        it "should keep assigned date" do
-          travel_to current_day do
-            result
-            expect(TimeRecord.last.assigned_date).to eq(current_day)
-          end
-        end
-
-        it "should stop other active tasks" do
-          travel_to current_day do
-            active_time_record = create(:time_record, time_start: Time.now, user: current_user)
-            expect_any_instance_of(TimeRecord).to receive(:stop).once
+            params = {
+              assigned_date: Date.today,
+              description: "New task",
+              project_id: project.id,
+              spent_time: 0.75,
+              time_start: Time.now
+            }
+            expect(TimeRecords::CreateForm).to receive(:new).with(params, current_user) { form }
             result
           end
         end
 
-        context "when passed start_time flag is false" do
-          let(:start_task) { false }
-
-          it "shouldn't set time_start" do
-            result
-            expect(TimeRecord.last.time_start).to be_nil
-          end
-
-          it "shouldn't stop other active tasks" do
-            active_time_record = create(:time_record, time_start: Time.now, user: current_user)
-            expect_any_instance_of(TimeRecord).to_not receive(:stop)
-            result
-          end
+        it "should call save for form object" do
+          expect_any_instance_of(TimeRecords::CreateForm).to receive(:save)
+          result
         end
       end
     end
@@ -107,7 +84,7 @@ RSpec.describe Mutations::TimeRecords::Create do
       it "should return error if description wasn't passed" do
         expect(result['errors'][0]['message']).to_not be_empty
       end
-      
+
     end
   end
 end
