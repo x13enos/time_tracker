@@ -48,37 +48,27 @@ RSpec.describe Mutations::TimeRecords::Update do
           expect(time_record.reload.description).to eq(description)
         end
 
-        it "should return project's data" do
-          expect(result['data']['updateTimeRecord']['timeRecord']['description']).to eq(description)
-        end
-
-        it "should set current time as started" do
+        it "should build object form of updating" do
+          form = double(save: true, time_record: create(:time_record))
           freeze_time do
+            params = {
+              description: "updated task",
+              project_id: time_record.project.id,
+              spent_time: 0.75,
+              time_start: Time.now
+            }
+            expect(TimeRecords::UpdateForm).to receive(:new).with(params, current_user, time_record) { form }
             result
-            expect(time_record.reload.time_start).to eq(Time.now)
           end
         end
 
-        it "should stop other active tasks" do
-          active_time_record = create(:time_record, time_start: Time.now, user: current_user)
-          expect_any_instance_of(TimeRecord).to receive(:stop).once
+        it "should call save for form object" do
+          expect_any_instance_of(TimeRecords::UpdateForm).to receive(:save)
           result
         end
 
-        context "when passed start_time flag is false" do
-          let(:start_task) { false }
-
-          it "should drop time_start" do
-            time_record.update(time_start: Time.now)
-            result
-            expect(time_record.reload.time_start).to be_nil
-          end
-
-          it "shouldn't stop other active tasks" do
-            active_time_record = create(:time_record, time_start: Time.now, user: current_user)
-            expect_any_instance_of(TimeRecord).to_not receive(:stop)
-            result
-          end
+        it "should return project's data" do
+          expect(result['data']['updateTimeRecord']['timeRecord']['description']).to eq(description)
         end
       end
     end

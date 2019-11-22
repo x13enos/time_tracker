@@ -14,7 +14,7 @@ module Mutations
         project.users << user
         return { user: user, project: project }
       rescue ActiveRecord::RecordNotFound => e
-        GraphQL::ExecutionError.new(e)
+        GraphQL::ExecutionError.new(handle_invalid_record_message(e))
       end
 
     end
