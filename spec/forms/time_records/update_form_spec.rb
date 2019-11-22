@@ -34,6 +34,15 @@ RSpec.describe TimeRecords::UpdateForm, type: :model do
     end
 
     describe "value_of_spent_time" do
+      it "should not call this validation if it is stop action" do
+        freeze_time do
+          time_record = create(:time_record, spent_time: 1.5, time_start: Time.now)
+          time_record_form = TimeRecords::UpdateForm.new({ time_start: nil }, user, time_record)
+          expect(time_record_form).to_not receive(:value_of_spent_time)
+          time_record_form.valid?
+        end
+      end
+
       it "should raise error if sum of spent time for task's day is more than 24 hours" do
         freeze_time do
           create(:time_record, spent_time: 1.5)
