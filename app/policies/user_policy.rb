@@ -8,4 +8,12 @@ class UserPolicy < ApplicationPolicy
     user?
   end
 
+  def personal_info?
+    user?
+  end
+
+  def update_profile?
+    user?
+  end
+
 end

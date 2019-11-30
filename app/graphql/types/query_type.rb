@@ -1,6 +1,7 @@
 module Types
   class QueryType < Types::BaseObject
     #Users
+    field :personal_info, resolver: Queries::Users::PersonalInfo
 
     #Projects
     field :all_projects, resolver: Queries::Projects::All
