@@ -7,7 +7,12 @@ describe UserPolicy do
 
     subject { described_class.new(user, 'user') }
 
-    it { is_expected.to permit_actions([:sign_up, :sign_out]) }
+    it { is_expected.to permit_actions([
+      :sign_up,
+      :sign_out,
+      :personal_info,
+      :update_profile
+    ]) }
   end
 
   context 'user is staff' do
@@ -16,6 +21,6 @@ describe UserPolicy do
     subject { described_class.new(user, 'user') }
 
     it { is_expected.to forbid_action(:sign_up) }
-    it { is_expected.to permit_action(:sign_out) }
+    it { is_expected.to permit_actions([:sign_out, :personal_info, :update_profile]) }
   end
 end
