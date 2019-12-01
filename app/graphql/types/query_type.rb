@@ -7,6 +7,7 @@ module Types
     field :project, resolver: Queries::Projects::Single
 
     #Time records
-    field :all_time_records, resolver: Queries::TimeRecords::All
+    field :daily_time_records, resolver: Queries::TimeRecords::Daily
+    field :all_time_records, resolver: Queries::TimeRecords::All, connection: true 
   end
 end

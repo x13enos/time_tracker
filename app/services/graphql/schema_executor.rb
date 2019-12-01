@@ -29,7 +29,7 @@ class Graphql::SchemaExecutor
   end
 
   def context
-    { current_user: current_user}
+    { current_user: current_user }
   end
 
 end

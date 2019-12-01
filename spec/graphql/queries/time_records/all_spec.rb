@@ -11,14 +11,15 @@ RSpec.describe Queries::TimeRecords::All do
   let(:query_string) do
     %|query{
       allTimeRecords(
-        date: 1572372039
+        fromDate: 1571153533,
+        toDate: 1572372039,
+        userId: "#{ user_id }"
       ){
-        id,
-        description,
-        spentTime,
-        timeStart,
-        project{
-          id
+        totalSpentTime,
+        edges{
+          node{
+            id
+          }
         }
       }
     }|
@@ -28,6 +29,7 @@ RSpec.describe Queries::TimeRecords::All do
     context "when passed data is correct" do
 
       context "user wasn't passed" do
+        let!(:user_id) { encode_id(current_user) }
         let!(:context) { { current_user: nil } }
 
         it "should return error" do
@@ -39,49 +41,74 @@ RSpec.describe Queries::TimeRecords::All do
         end
       end
 
-      it "should return time only current user's time recors in the right order" do
-        travel_to Time.zone.local(2019, 10, 29)
-        time_start = Time.zone.now - 1.hour
+      context "specific user was passed" do
+        let!(:user) { create(:user) }
+        let!(:specific_user) { create(:user) }
+        let!(:user_id) { encode_id(specific_user) }
+        let!(:context) { { current_user: user } }
 
-        time_record = create(:time_record, user: current_user, time_start: time_start, assigned_date: Time.zone.today)
-        time_record_2 = create(:time_record, user: current_user, created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today)
-        time_record_3 = create(:time_record, assigned_date: Time.zone.today)
+        before do
+          travel_to Time.zone.local(2019, 10, 29)
 
-        expect(result['data']['allTimeRecords']).to eq([
-          {
-            "id" => encode_id(time_record_2),
-            "description" => time_record_2.description,
-            "spentTime" => time_record_2.spent_time,
-            "timeStart" => time_record_2.time_start,
-            "project" => {
-              "id" => encode_id(time_record_2.project)
-            }
-          },
+          @time_record = create(:time_record, user: specific_user, assigned_date: Time.zone.today, spent_time: 0.45)
+          @time_record_2 = create(:time_record, user: specific_user, created_at: Time.zone.now - 2.hour, assigned_date: Time.zone.today, spent_time: 1.44)
+          @time_record_3 = create(:time_record, user: user, assigned_date: Time.zone.today)
+          @time_record_4 = create(:time_record, user: specific_user, created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today - 10.days, spent_time: 3.5)
+          @time_record_5 = create(:time_record, user: specific_user, assigned_date: Time.zone.today - 25.days)
 
-          {
-            "id" => encode_id(time_record),
-            "description" => time_record.description,
-            "spentTime" => time_record.spent_time + 1.0,
-            "timeStart" => time_start.utc.iso8601.to_time.to_i,
-            "project" => {
-              "id" => encode_id(time_record.project)
-            }
-          }
-        ])
+          travel_back
+        end
 
-        travel_back
+        it "should return total spent time" do
+          expect(result['data']['allTimeRecords']["totalSpentTime"]).to eq(5.39)
+        end
+
+        it "should return only specified user's time records by the period" do
+          expect(result["data"]["allTimeRecords"]["edges"]).to eq([
+            { "node" => { "id" => encode_id(@time_record) } },
+            { "node" => { "id" => encode_id(@time_record_4) } },
+            { "node" => { "id" => encode_id(@time_record_2) } }
+          ])
+        end
       end
 
-      it "should return none of time records if all of them were created in other days" do
-        travel_to Time.zone.local(2019, 10, 30)
+      context "specific user was not passed" do
+        let!(:user) { create(:user) }
+        let!(:specific_user) { create(:user) }
+        let!(:context) { { current_user: user } }
 
-        time_record = create(:time_record, user: current_user, time_start: time, assigned_date: Time.zone.today)
-        time_record_2 = create(:time_record, user: current_user, created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today)
-        time_record_3 = create(:time_record, assigned_date: Time.zone.today)
+        let(:query_string) do
+          %|query{
+            allTimeRecords(
+              fromDate: 1571153533,
+              toDate: 1572372039,
+              userId: null
+            ){
+              totalSpentTime,
+              edges{
+                node{
+                  id
+                }
+              }
+            }
+          }|
+        end
 
-        expect(result['data']['allTimeRecords']).to be_empty
+        it "should return only current user's time records by the period" do
+          travel_to Time.zone.local(2019, 10, 29)
 
-        travel_back
+          time_record = create(:time_record, user: specific_user, assigned_date: Time.zone.today)
+          time_record_2 = create(:time_record, user: specific_user, created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today)
+          time_record_3 = create(:time_record, user: user, assigned_date: Time.zone.today)
+          time_record_4 = create(:time_record, user: specific_user, assigned_date: Time.zone.today - 10.days)
+          time_record_5 = create(:time_record, user: specific_user, assigned_date: Time.zone.today - 25.days)
+          
+          expect(result["data"]["allTimeRecords"]["edges"]).to eq([
+            { "node" => { "id" => encode_id(time_record_3) } }
+          ])
+
+          travel_back
+        end
       end
     end
   end
