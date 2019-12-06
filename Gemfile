@@ -9,7 +9,7 @@ gem 'dotenv-rails'
 gem 'graphql', '1.9.15'
 gem 'jwt'
 gem 'pg'
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.2.2'
 gem 'pundit'
 
