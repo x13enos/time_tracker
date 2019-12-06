@@ -11,6 +11,10 @@ class TimeRecordPolicy < ApplicationPolicy
     update?
   end
 
+  def daily?
+    create?
+  end
+
   def all?
     create?
   end
