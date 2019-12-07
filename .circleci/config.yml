@@ -8,11 +8,11 @@ jobs:
       - setup_remote_docker
       - run: |
           IMAGE=x3enos/time_tracker:$CIRCLE_SHA1
-          LATEST=x3enos/time_tracker:latest
-          docker build -t $IMAGE -t $LATEST .
+          DEVELOPMENT=x3enos/time_tracker:development
+          docker build -t $IMAGE -t $DEVELOPMENT .
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker push $IMAGE
-          docker push $LATEST
+          docker push $DEVELOPMENT
   build:
     docker:
       - image: circleci/ruby:2.6.1-node-browsers

@@ -16,4 +16,8 @@ class UserPolicy < ApplicationPolicy
     user?
   end
 
+  def all?
+    sign_up?
+  end
+
 end
