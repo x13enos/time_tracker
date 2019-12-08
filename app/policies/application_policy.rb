@@ -19,6 +19,10 @@ class ApplicationPolicy
     end
   end
 
+  def user_is_admin?
+    user? && user.try(:admin?)
+  end
+
   def record_belongs_to_user?
     record.user_id == user.id
   end

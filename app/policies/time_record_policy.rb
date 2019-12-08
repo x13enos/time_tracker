@@ -4,18 +4,18 @@ class TimeRecordPolicy < ApplicationPolicy
   end
 
   def update?
-    create? && record_belongs_to_user?
+    user? && record_belongs_to_user?
   end
 
   def delete?
-    update?
+    user? && record_belongs_to_user?
   end
 
   def daily?
-    create?
+    user?
   end
 
   def all?
-    create?
+    user?
   end
 end
