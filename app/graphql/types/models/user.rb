@@ -6,6 +6,7 @@ module Types
       field :email, String, null: false
       field :password, String, null: false
       field :timezone, String, null: true
+      field :role, String, null: false
     end
   end
 end

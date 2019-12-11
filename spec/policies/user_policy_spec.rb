@@ -11,7 +11,8 @@ describe UserPolicy do
       :sign_up,
       :sign_out,
       :personal_info,
-      :update_profile
+      :update_profile,
+      :all
     ]) }
   end
 
@@ -20,7 +21,7 @@ describe UserPolicy do
 
     subject { described_class.new(user, 'user') }
 
-    it { is_expected.to forbid_action(:sign_up) }
+    it { is_expected.to forbid_actions([:sign_up, :all]) }
     it { is_expected.to permit_actions([:sign_out, :personal_info, :update_profile]) }
   end
 end

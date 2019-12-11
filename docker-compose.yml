@@ -5,7 +5,7 @@ services:
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
   web:
-    image: x3enos/time_tracker:latest
+    image: x3enos/time_tracker:development
     container_name: web
     tty: true
     stdin_open: true

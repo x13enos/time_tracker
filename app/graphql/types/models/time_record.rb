@@ -7,6 +7,7 @@ module Types
       field :spent_time, Float, null: false
       field :user, Types::Models::User, null: false
       field :project, Types::Models::Project, null: false
+      field :assigned_date, String, null: true
 
       def spent_time
         object.active? ? calculated_actual_time : object.spent_time

@@ -1,23 +1,23 @@
 class ProjectPolicy < ApplicationPolicy
 
   def create?
-    user? && user.try(:admin?)
+    user_is_admin?
   end
 
   def update?
-    create?
+    user_is_admin?
   end
 
   def delete?
-    create?
+    user_is_admin?
   end
 
   def assign_user?
-    create?
+    user_is_admin?
   end
 
   def single?
-    create?
+    user_is_admin?
   end
 
   def all?

@@ -1,6 +1,7 @@
 module Types
   class QueryType < Types::BaseObject
     #Users
+    field :all_users, resolver: Queries::Users::All
     field :personal_info, resolver: Queries::Users::PersonalInfo
 
     #Projects
@@ -9,6 +10,6 @@ module Types
 
     #Time records
     field :daily_time_records, resolver: Queries::TimeRecords::Daily
-    field :all_time_records, resolver: Queries::TimeRecords::All, connection: true 
+    field :all_time_records, resolver: Queries::TimeRecords::All, connection: true
   end
 end
