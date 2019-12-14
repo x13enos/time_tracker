@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Report</title>
+    <style>
+      .clearfix:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      body {
+        position: relative;
+        width: 21cm;
+        height: 29.7cm;
+        margin: 0 auto;
+        color: #001028;
+        background: #FFFFFF;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-family: Arial;
+      }
+
+      header {
+        padding: 10px 0;
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        border-top: 1px solid  #5D6975;
+        border-bottom: 1px solid  #5D6975;
+        color: #5D6975;
+        font-size: 2.4em;
+        line-height: 1.4em;
+        font-weight: normal;
+        text-align: center;
+        margin: 0 0 20px 0;
+        background: url(dimension.png);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-bottom: 20px;
+      }
+
+      table tr:nth-child(2n-1) td {
+        background: #F5F5F5;
+      }
+
+      table td{
+        padding: 20px;
+        text-align: left;
+      }
+
+      table th{
+        text-align: left;
+      }
+
+      table th {
+        padding: 5px 20px;
+        color: #5D6975;
+        border-bottom: 1px solid #C1CED9;
+        white-space: nowrap;
+        font-weight: normal;
+      }
+
+      table .spent_time{
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="clearfix">
+      <h1>Report</h1>
+    </header>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Date</th>
+            <th>Employee</th>
+            <th>Description</th>
+            <th class='spent_time'>TOTAL <%= time_records.pluck(:spent_time).inject(0){|sum,x| sum + x } %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% time_records.each do |time_record| %>
+            <tr>
+              <td><%= time_record.project.name %></td>
+              <td><%= time_record.assigned_date %></td>
+              <td><%= time_record.user.name %></td>
+              <td><%= time_record.description %></td>
+              <td class='spent_time'><%= time_record.spent_time %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

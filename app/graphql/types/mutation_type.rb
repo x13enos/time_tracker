@@ -16,5 +16,8 @@ module Types
     field :create_time_record, mutation: Mutations::TimeRecords::Create
     field :update_time_record, mutation: Mutations::TimeRecords::Update
     field :delete_time_record, mutation: Mutations::TimeRecords::Delete
+
+    #Reports
+    field :generate_report, mutation: Mutations::Reports::Generate
   end
 end

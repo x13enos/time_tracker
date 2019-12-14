@@ -9,6 +9,13 @@ development:
   database: time_tracker_development
   host: db
 
+staging:
+  <<: *login
+  database: <%= ENV.fetch("POSTGRES_DB") %>
+  username: <%= ENV.fetch("POSTGRES_USER") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD") %>
+  host: <%= ENV.fetch("POSTGRES_URL") %>
+
 test:
   <<: *login
   database: time_tracker_test
