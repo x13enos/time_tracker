@@ -12,6 +12,7 @@ gem 'pg'
 gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.2.2'
 gem 'pundit'
+gem 'wicked_pdf'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'

@@ -71,45 +71,6 @@ RSpec.describe Queries::TimeRecords::All do
           ])
         end
       end
-
-      context "specific user was not passed" do
-        let!(:user) { create(:user) }
-        let!(:specific_user) { create(:user) }
-        let!(:context) { { current_user: user } }
-
-        let(:query_string) do
-          %|query{
-            allTimeRecords(
-              fromDate: 1571153533,
-              toDate: 1572372039,
-              userId: null
-            ){
-              totalSpentTime,
-              edges{
-                node{
-                  id
-                }
-              }
-            }
-          }|
-        end
-
-        it "should return only current user's time records by the period" do
-          travel_to Time.zone.local(2019, 10, 29)
-
-          time_record = create(:time_record, user: specific_user, assigned_date: Time.zone.today)
-          time_record_2 = create(:time_record, user: specific_user, created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today)
-          time_record_3 = create(:time_record, user: user, assigned_date: Time.zone.today)
-          time_record_4 = create(:time_record, user: specific_user, assigned_date: Time.zone.today - 10.days)
-          time_record_5 = create(:time_record, user: specific_user, assigned_date: Time.zone.today - 25.days)
-
-          expect(result["data"]["allTimeRecords"]["edges"]).to eq([
-            { "node" => { "id" => encode_id(time_record_3) } }
-          ])
-
-          travel_back
-        end
-      end
     end
   end
 end

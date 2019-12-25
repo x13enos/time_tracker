@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build_image:
     docker:
-      - image: circleci/ruby:2.6.1-node-browsers
+      - image: circleci/ruby:2.6.1
     steps:
       - checkout
       - setup_remote_docker
@@ -15,7 +15,7 @@ jobs:
           docker push $DEVELOPMENT
   build:
     docker:
-      - image: circleci/ruby:2.6.1-node-browsers
+      - image: circleci/ruby:2.6.1
         environment:
           RAILS_ENV: test
       - image: postgres:9.5
@@ -48,8 +48,13 @@ jobs:
 
       - run: cp config/database.yml.example config/database.yml
 
+      - run: sudo apt-get update
+      - run: sudo apt-get install xvfb libfontconfig wkhtmltopdf
+
+      - run: mkdir ./public/reports
+
       # Database setup
-      - run: bundle exec rake db:create
+      - run: POSTGRES_DB="test_db" bundle exec rake db:create
       - run: bundle exec rake db:migrate
 
       # run tests!
