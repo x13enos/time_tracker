@@ -9,7 +9,8 @@ RSpec.describe Mutations::Users::UpdateProfile do
         userData: {
           email: "new_example@user.com",
           name: "new name",
-          timezone: "Athens"
+          timezone: "Athens",
+          password: "22222222"
         }
       ) {
         user{

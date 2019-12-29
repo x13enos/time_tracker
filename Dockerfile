@@ -21,5 +21,7 @@ RUN gem install bundler && bundle install
 
 ADD . $RAILS_ROOT
 
+RUN cp config/database.yml.example config/database.yml
+
 COPY docker-entrypoint.sh /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
