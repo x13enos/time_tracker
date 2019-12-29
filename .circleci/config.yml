@@ -51,8 +51,6 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install xvfb libfontconfig wkhtmltopdf
 
-      - run: mkdir ./public/reports
-
       # Database setup
       - run: POSTGRES_DB="test_db" bundle exec rake db:create
       - run: bundle exec rake db:migrate

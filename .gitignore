@@ -19,7 +19,7 @@
 !/log/.keep
 !/tmp/.keep
 
-/public/reports/*
+/public/reports/*.pdf
 
 # Ignore uploaded files in development
 /storage/*
