@@ -34,7 +34,7 @@ module Mutations
 
       def update_user_timezone(timezone_offset)
         return if user.timezone
-        user.update(timezone: ActiveSupport::TimeZone[timezone_offset].name)
+        user.update(timezone: ActiveSupport::TimeZone[timezone_offset].tzinfo.name)
       end
 
     end

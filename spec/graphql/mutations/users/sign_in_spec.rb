@@ -36,7 +36,7 @@ RSpec.describe Mutations::Users::SignIn do
 
       it "should keep timezone if user doesn't have that" do
         allow(TokenCryptService).to receive(:encode) { 'secret_token' }
-        expect { result }.to change{ user.reload.timezone }.from(nil).to(ActiveSupport::TimeZone[2].name)
+        expect { result }.to change{ user.reload.timezone }.from(nil).to(ActiveSupport::TimeZone[2].tzinfo.name)
       end
 
       it "should not update timezone if user already has that" do
