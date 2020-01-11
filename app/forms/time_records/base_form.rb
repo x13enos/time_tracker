@@ -19,7 +19,7 @@ module TimeRecords
     end
 
     def raise_error
-      raise GraphQL::ExecutionError.new(errors.messages.values.flatten.join(", "))
+      raise GraphQL::ExecutionError.new(errors.full_messages.join(". "))
     end
 
     def only_todays_task_could_be_activated
