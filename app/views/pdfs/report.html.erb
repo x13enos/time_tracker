@@ -74,7 +74,12 @@
   </head>
   <body>
     <header class="clearfix">
-      <h1>Report</h1>
+      <h1>Summary report</h1>
+      <h2>For <%= user.name || user.email %> by next period: <%= from_date.strftime("%d-%m-%Y") %> - <%= to_date.strftime("%d-%m-%Y") %></h2>
+      <p>
+        Projects:
+        <%= projects.pluck(:name).join(", ") %>
+      </p>
     </header>
     <main>
       <table>
