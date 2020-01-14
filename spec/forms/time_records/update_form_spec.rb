@@ -43,9 +43,17 @@ RSpec.describe TimeRecords::UpdateForm, type: :model do
         end
       end
 
+      it "should not sum time records for all users and send error in case of having time more is than 24 hours" do
+        freeze_time do
+          create(:time_record, user: create(:user), spent_time: 1.5)
+          time_record_form.spent_time = 23
+          expect{ time_record_form.valid? }.to_not raise_error(GraphQL::ExecutionError, I18n.t("time_records.errors.should_be_less_than_24_hours"))
+        end
+      end
+
       it "should raise error if sum of spent time for task's day is more than 24 hours" do
         freeze_time do
-          create(:time_record, spent_time: 1.5)
+          create(:time_record, user: user, spent_time: 1.5)
           time_record_form.spent_time = 23
           expect{ time_record_form.valid? }.to raise_error(GraphQL::ExecutionError, I18n.t("time_records.errors.should_be_less_than_24_hours"))
         end
