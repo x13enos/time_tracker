@@ -29,7 +29,7 @@ module TimeRecords
     end
 
     def value_of_spent_time
-      day_tasks = TimeRecord.where(assigned_date: assigned_date)
+      day_tasks = user.time_records.where(assigned_date: assigned_date)
       day_tasks = day_tasks.where.not(id: id) if id
       if (day_tasks.sum(:spent_time) + spent_time) > 24.0
         raise GraphQL::ExecutionError.new(I18n.t("time_records.errors.should_be_less_than_24_hours"))
