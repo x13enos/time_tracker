@@ -39,7 +39,7 @@ class V1::BaseController < ApplicationController
 
   def update_token
     cookies[:token] = {
-      value: TokenCryptService.encode(current_user.location),
+      value: TokenCryptService.encode(current_user.email),
       secure: Rails.env.production?,
       httponly: true
     }
