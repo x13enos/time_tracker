@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     resources :auth, only: :create do
       delete :destroy, on: :collection
     end
-    resources :time_records, only: :index
+    resources :time_records, only: [:index, :create, :update, :destroy]
     put "/users", controller: :users, action: :update
   end
 

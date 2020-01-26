@@ -17,8 +17,9 @@ module TimeRecords
       if valid?
         update_time_record
         stop_other_launched_time_records
+        true
       else
-        raise_error
+        false
       end
     end
 

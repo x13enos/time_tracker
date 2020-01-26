@@ -18,21 +18,17 @@ module TimeRecords
       active_time_records.each(&:stop)
     end
 
-    def raise_error
-      raise GraphQL::ExecutionError.new(errors.full_messages.join(". "))
-    end
-
     def only_todays_task_could_be_activated
       if assigned_date != Time.zone.today
-        raise GraphQL::ExecutionError.new(I18n.t("time_records.errors.only_todays_taks"))
+        self.errors.add(:assigned_date, I18n.t("time_records.errors.only_todays_taks"))
       end
     end
 
     def value_of_spent_time
       day_tasks = user.time_records.where(assigned_date: assigned_date)
       day_tasks = day_tasks.where.not(id: id) if id
-      if (day_tasks.sum(:spent_time) + spent_time) > 24.0
-        raise GraphQL::ExecutionError.new(I18n.t("time_records.errors.should_be_less_than_24_hours"))
+      if (day_tasks.sum(:spent_time) + spent_time.to_f) > 24.0
+        self.errors.add(:spent_time, I18n.t("time_records.errors.should_be_less_than_24_hours"))
       end
     end
   end
