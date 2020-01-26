@@ -13,6 +13,7 @@ gem 'rails', '~> 5.2.2'
 gem 'pundit'
 gem 'wicked_pdf'
 gem 'jbuilder'
+gem 'graphql'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'

@@ -12,8 +12,13 @@ module Helpers
      allow(controller).to receive(:current_user) { @current_user }
     end
   end
+
+  def encode_id(object)
+    GraphQL::Schema::UniqueWithinType.encode(object.class.to_s, object.id)
+  end
 end
 
 RSpec.configure do |config|
   config.extend Helpers, type: :controller
+  config.include Helpers
 end
