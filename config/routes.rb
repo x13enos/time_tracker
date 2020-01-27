@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       delete :destroy, on: :collection
     end
     resources :time_records, only: [:index, :create, :update, :destroy]
+    resources :reports, only: :index
     put "/users", controller: :users, action: :update
   end
 
