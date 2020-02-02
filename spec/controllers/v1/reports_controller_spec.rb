@@ -17,13 +17,16 @@ RSpec.describe V1::ReportsController, type: :controller do
     end
 
     it "should return only specified user's time records by the period" do
-      get :index, params: { from_date: "1571153533", to_date: "1572372039", user_id: @current_user.id, format: :json }
+      get :index, params: { from_date: 1571153533, to_date: 1572372039, user_id: @current_user.id, format: :json }
       expect(response.body).to eql({
         "time_records" => [
           {
             "id" => @time_record.id,
             "description" => @time_record.description,
             "project_id" => @time_record.project_id,
+            "project_name" => @time_record.project.name,
+            "user_name" => @time_record.user.name,
+            "assigned_date" => @time_record.assigned_date,
             "time_start" => @time_record.time_start_as_epoch,
             "spent_time" => @time_record.spent_time
           },
@@ -31,6 +34,9 @@ RSpec.describe V1::ReportsController, type: :controller do
             "id" => @time_record_4.id,
             "description" => @time_record_4.description,
             "project_id" => @time_record_4.project_id,
+            "project_name" => @time_record_4.project.name,
+            "user_name" => @time_record_4.user.name,
+            "assigned_date" => @time_record_4.assigned_date,
             "time_start" => @time_record_4.time_start_as_epoch,
             "spent_time" => @time_record_4.spent_time
           },
@@ -38,6 +44,9 @@ RSpec.describe V1::ReportsController, type: :controller do
             "id" => @time_record_2.id,
             "description" => @time_record_2.description,
             "project_id" => @time_record_2.project_id,
+            "project_name" => @time_record_2.project.name,
+            "user_name" => @time_record_2.user.name,
+            "assigned_date" => @time_record_2.assigned_date,
             "time_start" => @time_record_2.time_start_as_epoch,
             "spent_time" => @time_record_2.spent_time
           }
@@ -49,10 +58,10 @@ RSpec.describe V1::ReportsController, type: :controller do
     context "when pdf flag was passed in params" do
       it "should generate build report instance" do
         converted_dates = {
-          from: "1571153533".convert_to_date_time,
-          to: "1572372039".convert_to_date_time
+          from: 1571153533.convert_to_date_time,
+          to: 1572372039.convert_to_date_time
         }
-        allow(@current_user).to receive_message_chain(:time_records, :where, :order) { [@time_record] }
+        allow(@current_user).to receive_message_chain(:time_records, :joins, :joins, :where, :order) { [@time_record] }
         expect(ReportGenerator).to receive(:new).with([@time_record], converted_dates, @current_user) { double({ perform: true }) }
         get :index, params: { from_date: "1571153533", to_date: "1572372039", pdf: true, user_id: @current_user.id, format: :json }
       end

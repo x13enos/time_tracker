@@ -13,7 +13,7 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
         time_record_form.assigned_date = Date.today - 2.days
         time_record_form.time_start = Time.now
         time_record_form.valid?
-        expect(time_record_form.errors[:assigned_date]).to include(I18n.t("time_records.errors.only_todays_taks"))
+        expect(time_record_form.errors[:base]).to include(I18n.t("time_records.errors.only_todays_taks"))
       end
 
       it "shouldn't raise error if assigned date is today" do
@@ -21,7 +21,7 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
           time_record_form.assigned_date = Date.today
           time_record_form.time_start = Time.now
           time_record_form.valid?
-          expect(time_record_form.errors[:assigned_date]).to_not include(I18n.t("time_records.errors.only_todays_taks"))
+          expect(time_record_form.errors[:base]).to_not include(I18n.t("time_records.errors.only_todays_taks"))
         end
       end
 
@@ -30,7 +30,7 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
           time_record_form.assigned_date = Date.today - 2.days
           time_record_form.time_start = nil
           time_record_form.valid?
-          expect(time_record_form.errors[:assigned_date]).to_not include(I18n.t("time_records.errors.only_todays_taks"))
+          expect(time_record_form.errors[:base]).to_not include(I18n.t("time_records.errors.only_todays_taks"))
         end
       end
     end
@@ -41,7 +41,7 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
           create(:time_record, user: create(:user), spent_time: 1.5)
           time_record_form.spent_time = 23
           time_record_form.valid?
-          expect(time_record_form.errors[:spent_time]).to_not eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
+          expect(time_record_form.errors[:base]).to_not eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
         end
       end
 
@@ -50,7 +50,7 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
           create(:time_record, user: user, spent_time: 1.5)
           time_record_form.spent_time = 23
           time_record_form.valid?
-          expect(time_record_form.errors[:spent_time]).to eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
+          expect(time_record_form.errors[:base]).to eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
         end
       end
 
@@ -59,7 +59,7 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
           create(:time_record, spent_time: 1.5)
           time_record_form.spent_time = 22
           time_record_form.valid?
-          expect(time_record_form.errors[:spent_time]).to_not include(I18n.t("time_records.errors.should_be_less_than_24_hours"))
+          expect(time_record_form.errors[:base]).to_not include(I18n.t("time_records.errors.should_be_less_than_24_hours"))
         end
       end
     end

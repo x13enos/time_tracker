@@ -1,6 +1,9 @@
 include ActionController::Cookies
 
 class V1::BaseController < ApplicationController
+  include Pundit
+  rescue_from Pundit::NotAuthorizedError, with: :authentication_error
+
   before_action :authenticate
   around_action :set_time_zone
   after_action :update_token, if: :logged_in?
@@ -25,8 +28,9 @@ class V1::BaseController < ApplicationController
     authentication_error unless logged_in?
   end
 
+
   def authentication_error
-    render json: { error: "Unauthorized" }, status: 401
+    render json: { error: I18n.t("unathorized") }, status: 401
   end
 
   def decoded_token

@@ -9,14 +9,7 @@ class ApplicationPolicy
   private
 
   def user?
-    if user
-      true
-    else
-      raise GraphQL::ExecutionError.new(
-        I18n.t('graphql.errors.not_authorized'),
-        extensions: { "code" => "401" }
-      )
-    end
+    user.present?
   end
 
   def user_is_admin?

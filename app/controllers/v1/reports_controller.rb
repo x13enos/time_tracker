@@ -1,5 +1,6 @@
 class V1::ReportsController < V1::BaseController
   def index
+    authorize :report
     select_user
     select_time_records
     if params[:pdf].present?
@@ -14,17 +15,23 @@ class V1::ReportsController < V1::BaseController
 
   def converted_dates
     @converted_dates ||= {
-      from: params[:from_date].convert_to_date_time,
-      to: params[:to_date].convert_to_date_time
+      from: params[:from_date].to_i.convert_to_date_time,
+      to: params[:to_date].to_i.convert_to_date_time
     }
   end
 
   def select_user
-    @user = current_user.admin? ? User.find(params[:user_id]) : current_user
+    @user = if current_user.admin? && params[:user_id].present?
+      User.find(params[:user_id])
+    else
+      current_user
+    end
   end
 
   def select_time_records
     @time_records = @user.time_records
+      .joins(:project)
+      .joins(:user)
       .where("assigned_date BETWEEN ? AND ?", converted_dates[:from], converted_dates[:to])
       .order(created_at: :desc)
   end

@@ -2,6 +2,14 @@ class V1::AuthController < V1::BaseController
   skip_before_action :authenticate
   skip_after_action :update_token
 
+  def index
+    if current_user
+      render partial: '/v1/users/show.json.jbuilder', locals: { user: current_user }
+    else
+      render json: {}
+    end
+  end
+
   def create
     not_auth_user = User.find_by(email: auth_params[:email])
     user = not_auth_user&.authenticate(auth_params[:password])
@@ -9,11 +17,12 @@ class V1::AuthController < V1::BaseController
       set_token(user)
       render partial: '/v1/users/show.json.jbuilder', locals: { user: user }
     else
-      render json: { error: "Unauthorized" }, status: 401
+      render json: { error: I18n.t("auth.errors.unathorized") }, status: 401
     end
   end
 
   def destroy
+    authorize :auth
     cookies.delete(:token)
     render partial: '/v1/users/show.json.jbuilder', locals: { user: current_user }
   end

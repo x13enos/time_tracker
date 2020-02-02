@@ -1,5 +1,11 @@
 class V1::UsersController < V1::BaseController
+  def index
+    authorize User
+    @users = User.all
+  end
+
   def update
+    authorize User
     if current_user.update(user_params)
       render partial: '/v1/users/show.json.jbuilder', locals: { user: current_user.reload }
     else

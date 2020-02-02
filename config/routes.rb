@@ -1,12 +1,15 @@
 Rails.application.routes.draw do
 
   namespace :v1 do
-    resources :auth, only: :create do
+    resources :auth, only: [:create, :index] do
       delete :destroy, on: :collection
     end
     resources :time_records, only: [:index, :create, :update, :destroy]
     resources :reports, only: :index
-    put "/users", controller: :users, action: :update
+    resources :projects, only: :index
+    resources :users, only: :index do
+      put :update, on: :collection
+    end
   end
 
   post "/graphql", to: "graphql#execute"
