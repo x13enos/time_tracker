@@ -6,7 +6,7 @@ class V1::BaseController < ApplicationController
 
   before_action :authenticate
   around_action :set_time_zone
-  after_action :update_token, if: :logged_in?
+  after_action :set_token
 
   def current_user
     @current_user ||= if token.present? && decoded_token
@@ -41,16 +41,16 @@ class V1::BaseController < ApplicationController
                       end
   end
 
-  def update_token
+  def set_token(user=current_user)
     cookies[:token] = {
-      value: TokenCryptService.encode(current_user.email),
+      value: TokenCryptService.encode(user.email),
       secure: Rails.env.production?,
       httponly: true
     }
   end
 
   def set_time_zone
-    timezone = current_user.try(:timezone) || "UTC"
+    timezone = current_user.try(:timezone) || Time.zone.tzinfo.name
     Time.use_zone(timezone) { yield }
   end
 end

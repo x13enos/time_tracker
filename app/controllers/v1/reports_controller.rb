@@ -22,14 +22,18 @@ class V1::ReportsController < V1::BaseController
 
   def select_user
     @user = if current_user.admin? && params[:user_id].present?
-      User.find(params[:user_id])
+      User.find_by(id: params[:user_id])
     else
       current_user
     end
   end
 
   def select_time_records
-    @time_records = @user.time_records
+    @time_records = @user.nil? ? [] : get_users_time_records
+  end
+
+  def get_users_time_records
+    @user.time_records
       .joins(:project)
       .joins(:user)
       .where("assigned_date BETWEEN ? AND ?", converted_dates[:from], converted_dates[:to])

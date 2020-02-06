@@ -1,6 +1,6 @@
 class V1::AuthController < V1::BaseController
   skip_before_action :authenticate
-  skip_after_action :update_token
+  skip_after_action :set_token
 
   def index
     if current_user
@@ -28,14 +28,6 @@ class V1::AuthController < V1::BaseController
   end
 
   private
-
-  def set_token(user)
-    cookies[:token] = {
-      value: TokenCryptService.encode(user.email),
-      secure: Rails.env.production?,
-      httponly: true
-    }
-  end
 
   def auth_params
     params.permit(:email, :password)

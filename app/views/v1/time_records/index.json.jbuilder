@@ -10,5 +10,5 @@ json.time_records @time_records do |time_record|
 end
 
 if params[:from_date]
-  json.total_spent_time @time_records.sum(:spent_time)
+  json.total_spent_time @time_records.empty? ? 0.0 : @time_records.sum(:spent_time)
 end
