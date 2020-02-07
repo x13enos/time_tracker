@@ -5,15 +5,9 @@ describe UserPolicy do
   context "user is admin" do
     let(:user) { build(:user, role: :admin) }
 
-    subject { described_class.new(user, 'user') }
+    subject { described_class.new(user, User) }
 
-    it { is_expected.to permit_actions([
-      :sign_up,
-      :sign_out,
-      :personal_info,
-      :update_profile,
-      :all
-    ]) }
+    it { is_expected.to permit_actions([:index, :update]) }
   end
 
   context 'user is staff' do
@@ -21,7 +15,7 @@ describe UserPolicy do
 
     subject { described_class.new(user, 'user') }
 
-    it { is_expected.to forbid_actions([:sign_up, :all]) }
-    it { is_expected.to permit_actions([:sign_out, :personal_info, :update_profile]) }
+    it { is_expected.to forbid_action(:index) }
+    it { is_expected.to permit_action(:update) }
   end
 end

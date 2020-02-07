@@ -12,14 +12,16 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
       it "should raise error if assigned date isn't today and time start is present" do
         time_record_form.assigned_date = Date.today - 2.days
         time_record_form.time_start = Time.now
-        expect{ time_record_form.valid? }.to raise_error(GraphQL::ExecutionError, I18n.t("time_records.errors.only_todays_taks"))
+        time_record_form.valid?
+        expect(time_record_form.errors[:base]).to include(I18n.t("time_records.errors.only_todays_taks"))
       end
 
       it "shouldn't raise error if assigned date is today" do
         freeze_time do
           time_record_form.assigned_date = Date.today
           time_record_form.time_start = Time.now
-          expect{ time_record_form.valid? }.to_not raise_error(GraphQL::ExecutionError, I18n.t("time_records.errors.only_todays_taks"))
+          time_record_form.valid?
+          expect(time_record_form.errors[:base]).to_not include(I18n.t("time_records.errors.only_todays_taks"))
         end
       end
 
@@ -27,7 +29,8 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
         freeze_time do
           time_record_form.assigned_date = Date.today - 2.days
           time_record_form.time_start = nil
-          expect{ time_record_form.valid? }.to_not raise_error(GraphQL::ExecutionError, I18n.t("time_records.errors.only_todays_taks"))
+          time_record_form.valid?
+          expect(time_record_form.errors[:base]).to_not include(I18n.t("time_records.errors.only_todays_taks"))
         end
       end
     end
@@ -37,15 +40,17 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
         freeze_time do
           create(:time_record, user: create(:user), spent_time: 1.5)
           time_record_form.spent_time = 23
-          expect{ time_record_form.valid? }.to_not raise_error(GraphQL::ExecutionError, I18n.t("time_records.errors.should_be_less_than_24_hours"))
+          time_record_form.valid?
+          expect(time_record_form.errors[:base]).to_not eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
         end
       end
 
-      it "should raise error if sum of spent time for task's day is more than 24 hours" do
+      it "should add error if sum of spent time for task's day is more than 24 hours" do
         freeze_time do
           create(:time_record, user: user, spent_time: 1.5)
           time_record_form.spent_time = 23
-          expect{ time_record_form.valid? }.to raise_error(GraphQL::ExecutionError, I18n.t("time_records.errors.should_be_less_than_24_hours"))
+          time_record_form.valid?
+          expect(time_record_form.errors[:base]).to eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
         end
       end
 
@@ -53,7 +58,8 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
         freeze_time do
           create(:time_record, spent_time: 1.5)
           time_record_form.spent_time = 22
-          expect{ time_record_form.valid? }.to_not raise_error(GraphQL::ExecutionError, I18n.t("time_records.errors.should_be_less_than_24_hours"))
+          time_record_form.valid?
+          expect(time_record_form.errors[:base]).to_not include(I18n.t("time_records.errors.should_be_less_than_24_hours"))
         end
       end
     end
@@ -98,8 +104,7 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
     context "when form is invalid" do
       it "should raise error" do
         allow(time_record_form).to receive(:valid?) { false }
-        time_record_form.errors.add(:base, "Big Error")
-        expect{ time_record_form.save }.to raise_error(GraphQL::ExecutionError, "Big Error")
+        expect(time_record_form.save).to be_falsey
       end
     end
 

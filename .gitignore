@@ -8,7 +8,6 @@
 /.bundle
 /config/database.yml
 
-/app/graphql/*/.keep
 .env.*.local
 
 # Ignore the default SQLite database.

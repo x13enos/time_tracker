@@ -6,13 +6,13 @@ ruby '2.6.1'
 gem 'bcrypt'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails'
-gem 'graphql', '1.9.15'
 gem 'jwt'
 gem 'pg'
 gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.2.2'
 gem 'pundit'
 gem 'wicked_pdf'
+gem 'jbuilder'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'

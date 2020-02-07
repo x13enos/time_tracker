@@ -1,23 +1,18 @@
 class ReportGenerator
 
-  def initialize(params)
-    @params = params
+  def initialize(time_records, dates, user)
+    @time_records = time_records
+    @dates = dates
+    @user = user
   end
 
   def perform
-    select_time_records
     generate_report
     link
   end
 
   private
-  attr_reader :params
-
-  def select_time_records
-    @time_records = params[:user].time_records.includes(:project).
-      where("assigned_date BETWEEN ? AND ?", params[:from_date], params[:to_date]).
-      order(created_at: :desc)
-  end
+  attr_reader :dates, :time_records, :user
 
   def generate_report
     pdf = WickedPdf.new.pdf_from_string(render_report_from_template)
@@ -30,11 +25,11 @@ class ReportGenerator
   def render_report_from_template
     ActionController::Base.render(
       file: "pdfs/report", locals: {
-        user: params[:user],
-        time_records: @time_records,
-        from_date: params[:from_date],
-        to_date: params[:to_date],
-        projects: @time_records.map(&:project).uniq
+        user: user,
+        time_records: time_records,
+        from_date: dates[:from],
+        to_date: dates[:to],
+        projects: time_records.map(&:project).uniq
       }
     )
   end

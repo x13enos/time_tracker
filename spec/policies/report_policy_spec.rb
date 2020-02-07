@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-describe ProjectPolicy do
+describe ReportPolicy do
 
   context 'user is staff' do
     let(:user) { build(:user, role: :staff) }
 
-    subject { described_class.new(user, Project) }
+    subject { described_class.new(user, :report) }
 
     it { is_expected.to permit_action(:index) }
   end
@@ -13,7 +13,7 @@ describe ProjectPolicy do
   context 'user was not found' do
     let(:user) { build(:user, role: :staff) }
 
-    subject { described_class.new(nil, Project) }
+    subject { described_class.new(nil, :report) }
 
     it { is_expected.to forbid_action(:index) }
   end

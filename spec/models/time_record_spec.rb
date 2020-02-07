@@ -42,4 +42,36 @@ RSpec.describe TimeRecord, type: :model do
     end
   end
 
+  describe '#time_start_as_epoch' do
+    it "should return time start as epoch if time record has that" do
+      travel_to Time.zone.local(2019, 10, 29)
+
+      time_record = create(:time_record, time_start: Time.now)
+      expect(time_record.time_start_as_epoch).to eq(1572307200)
+
+      travel_back
+    end
+
+    it "should return nil if time record doesn't have time start" do
+      time_record = create(:time_record, time_start: nil)
+      expect(time_record.time_start_as_epoch).to be_nil
+    end
+  end
+
+  describe '#calculated_spent_time' do
+    it "should return real spent time if time record is active" do
+      travel_to Time.zone.local(2019, 10, 29)
+
+      time_record = create(:time_record, time_start: Time.now - 1.hours, spent_time: 0.5)
+      expect(time_record.calculated_spent_time).to eq(1.5)
+
+      travel_back
+    end
+
+    it "should return spent time from time record if it isn't active" do
+      time_record = create(:time_record, time_start: nil, spent_time: 0.5)
+      expect(time_record.calculated_spent_time).to eq(0.5)
+    end
+  end
+
 end

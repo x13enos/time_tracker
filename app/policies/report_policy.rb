@@ -1,6 +1,6 @@
 class ReportPolicy < ApplicationPolicy
 
-  def generate?
+  def index?
     user?
   end
 
