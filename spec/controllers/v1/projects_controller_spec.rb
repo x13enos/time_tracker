@@ -19,5 +19,10 @@ RSpec.describe V1::ProjectsController, type: :controller do
         { id: project_2.id, name: project_2.name}
       ].to_json)
     end
+
+    it "should set locale if user was authorized" do
+      get :index, params: { format: :json }
+      expect(I18n.locale.to_s).to eq(@current_user.locale)
+    end
   end
 end

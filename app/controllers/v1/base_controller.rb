@@ -6,6 +6,7 @@ class V1::BaseController < ApplicationController
 
   before_action :authenticate
   around_action :set_time_zone
+  before_action :set_locale, if: :current_user
   after_action :set_token
 
   def current_user
@@ -52,5 +53,9 @@ class V1::BaseController < ApplicationController
   def set_time_zone
     timezone = current_user.try(:timezone) || Time.zone.tzinfo.name
     Time.use_zone(timezone) { yield }
+  end
+
+  def set_locale
+    I18n.locale = current_user.locale
   end
 end
