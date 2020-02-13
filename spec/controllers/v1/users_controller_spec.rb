@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe V1::UsersController, type: :controller do
   describe "GET #index" do
     login_admin
-    
+
     it "should return list of users" do
       get :index, params: { format: :json }
       expect(response.body).to eq([
@@ -24,7 +24,8 @@ RSpec.describe V1::UsersController, type: :controller do
         email: @current_user.email,
         name: @current_user.name,
         timezone: @current_user.timezone,
-        role: @current_user.role
+        role: @current_user.role,
+        locale: @current_user.locale
       }.to_json)
     end
 
