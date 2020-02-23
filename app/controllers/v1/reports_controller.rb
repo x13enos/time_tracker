@@ -6,8 +6,6 @@ class V1::ReportsController < V1::BaseController
     if params[:pdf].present?
       report_generator = ReportGenerator.new(@time_records, converted_dates, @user)
       render json: { link: report_generator.perform }
-    else
-      render template: '/v1/time_records/index.json.jbuilder', locals: { time_records: @time_records }
     end
   end
 
