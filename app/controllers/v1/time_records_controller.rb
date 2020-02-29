@@ -1,9 +1,10 @@
 class V1::TimeRecordsController < V1::BaseController
   def index
     authorize TimeRecord
+    current_date = params[:assigned_date].to_i.convert_to_date_time
     @time_records = current_user.time_records
-      .where("assigned_date = ?", params[:assigned_date].to_i.convert_to_date_time)
-      .order(created_at: :desc)
+      .where("assigned_date BETWEEN ? and ?", current_date.beginning_of_week, current_date.end_of_week)
+      .order(created_at: :asc)
   end
 
   def create
