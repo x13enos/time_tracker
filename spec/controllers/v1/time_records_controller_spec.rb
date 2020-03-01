@@ -40,7 +40,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "POST #create" do
-    let(:epoch_time) { 1572372039 }
+    let(:epoch_time) { 1572300000 }
     let!(:project) { create(:project) }
 
     context "params are valid" do
@@ -67,12 +67,14 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
           "project_id" => time_record.project_id,
           "time_start" => time_record.time_start_as_epoch,
           "spent_time" => time_record.spent_time,
-          "assigned_date" => time_record.assigned_date.to_epoch
+          "assigned_date" => time_record.assigned_date.to_epoch_beginning_of_day
         }.to_json)
       end
 
       it "should set start time if param with this key was passed info" do
         travel_to Time.zone.local(2019, 10, 29)
+
+        allow(@current_user).to receive(:timezone) { "Europe/Helsinki" }
 
         post :create, params: time_record_params.merge({ start_task: true })
         expect(TimeRecord.last.time_start).to be_present
@@ -131,7 +133,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
           "project_id" => time_record.project_id,
           "time_start" => time_record.time_start_as_epoch,
           "spent_time" => time_record.spent_time,
-          "assigned_date" => time_record.assigned_date.to_epoch
+          "assigned_date" => time_record.assigned_date.to_epoch_beginning_of_day
         }.to_json)
       end
 
