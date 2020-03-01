@@ -71,7 +71,6 @@ GEM
     ffi (1.10.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    graphql (1.9.15)
     i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     jbuilder (2.9.1)
@@ -135,7 +134,7 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
-    rake (12.3.2)
+    rake (13.0.1)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
@@ -194,7 +193,6 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
-  graphql
   jbuilder
   jwt
   listen (>= 3.0.5, < 3.2)
