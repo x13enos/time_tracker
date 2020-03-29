@@ -17,7 +17,11 @@ class ApplicationPolicy
   end
 
   def record_belongs_to_user?
-    record.user_id == user.id
+    if record.has_attribute?(:user_id)
+      record.user_id == user.id
+    else
+      record.user_ids.include?(user.id)
+    end
   end
 
 end

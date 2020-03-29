@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     end
     resources :time_records, only: [:index, :create, :update, :destroy]
     resources :reports, only: :index
-    resources :projects, only: :index
+    resources :projects, only: [:index, :create, :update, :destroy]
     resources :users, only: :index do
       put :update, on: :collection
     end
