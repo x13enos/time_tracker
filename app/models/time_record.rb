@@ -28,4 +28,8 @@ class TimeRecord < ApplicationRecord
       spent_time
     end
   end
+
+  def belongs_to_user?(user_id)
+    self.user_id == user_id
+  end
 end

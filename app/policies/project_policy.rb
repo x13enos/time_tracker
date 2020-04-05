@@ -16,4 +16,12 @@ class ProjectPolicy < ApplicationPolicy
     user_is_admin? && record_belongs_to_user?
   end
 
+  def assign_user?
+    user_is_admin? && record_belongs_to_user?
+  end
+
+  def remove_user?
+    user_is_admin? && record_belongs_to_user?
+  end
+
 end

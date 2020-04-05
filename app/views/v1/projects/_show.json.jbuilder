@@ -1,1 +1,1 @@
-json.(project, :id, :name)
+json.(project, :id, :name, :user_ids)

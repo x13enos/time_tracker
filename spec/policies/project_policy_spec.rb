@@ -12,7 +12,7 @@ describe ProjectPolicy do
 
     subject { described_class.new(user, project) }
 
-    it { is_expected.to permit_actions([:update, :destroy]) }
+    it { is_expected.to permit_actions([:update, :destroy, :assign_user, :remove_user]) }
   end
 
   context 'user is admin and class was passed' do
@@ -33,7 +33,7 @@ describe ProjectPolicy do
 
     subject { described_class.new(user, project) }
 
-    it { is_expected.to forbid_actions([:update, :destroy]) }
+    it { is_expected.to forbid_actions([:update, :destroy, :assign_user, :remove_user]) }
   end
 
   context 'user is staff and class was passed' do
@@ -55,7 +55,7 @@ describe ProjectPolicy do
 
     subject { described_class.new(nil, project) }
 
-    it { is_expected.to forbid_actions([:update, :destroy]) }
+    it { is_expected.to forbid_actions([:update, :destroy, :assign_user, :remove_user]) }
   end
 
   context 'user was not found and class was passed' do
