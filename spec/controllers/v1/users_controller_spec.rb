@@ -9,7 +9,8 @@ RSpec.describe V1::UsersController, type: :controller do
       expect(response.body).to eq([
         {
           id: @current_user.id,
-          name: @current_user.name
+          name: @current_user.name,
+          email: @current_user.email
         }
       ].to_json)
     end
@@ -21,6 +22,7 @@ RSpec.describe V1::UsersController, type: :controller do
     it "should return user's data if user info was updated" do
       put :update, params: { email: "example@gmail.com", format: :json }
       expect(response.body).to eq({
+        id: @current_user.id,
         email: @current_user.email,
         name: @current_user.name,
         timezone: @current_user.timezone,

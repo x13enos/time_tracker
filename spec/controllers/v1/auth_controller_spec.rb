@@ -10,6 +10,7 @@ RSpec.describe V1::AuthController, type: :controller do
       it "should return user's info" do
         get :index, { format: :json }
         expect(response.body).to eq({
+          id: @current_user.id,
           email: @current_user.email,
           name: @current_user.name,
           timezone: @current_user.timezone,
@@ -44,6 +45,7 @@ RSpec.describe V1::AuthController, type: :controller do
       allow(user).to receive(:authenticate) { user }
       post :create, params: { email: "example@gmail.com", password: "1111", format: :json }
       expect(response.body).to eq({
+        id: user.id,
         email: user.email,
         name: user.name,
         timezone: user.timezone,
@@ -82,6 +84,7 @@ RSpec.describe V1::AuthController, type: :controller do
       it "should return user's info" do
         delete :destroy, params: { format: :json }
         expect(response.body).to eq({
+          id: @current_user.id,
           email: @current_user.email,
           name: @current_user.name,
           timezone: @current_user.timezone,

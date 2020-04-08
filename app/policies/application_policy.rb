@@ -17,7 +17,7 @@ class ApplicationPolicy
   end
 
   def record_belongs_to_user?
-    record.user_id == user.id
+    record.belongs_to_user?(user.id)
   end
 
 end

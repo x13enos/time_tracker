@@ -74,4 +74,21 @@ RSpec.describe TimeRecord, type: :model do
     end
   end
 
+  describe '#belongs_to_user?' do
+    it "should return true if that belongs to the passed user" do
+      user = create(:user)
+      time_record = create(:time_record, user: user)
+
+      expect(time_record.belongs_to_user?(user.id)).to be_truthy
+    end
+
+    it "should return false if that doesn't belong to the passed user" do
+      user = create(:user)
+      user_2 = create(:user)
+      time_record = create(:time_record, user: user)
+
+      expect(time_record.belongs_to_user?(user_2.id)).to be_falsey
+    end
+  end
+
 end
