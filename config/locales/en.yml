@@ -1,11 +1,18 @@
 en:
   unathorized: "Unathorized."
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "This email was already be taken"
   users:
     errors:
-      locale_inclusion: "We don't support this language yet."
+      locale_inclusion: "We don't support this language yet"
   auth:
     errors:
-      unathorized: "Email or Password are wrong."
+      unathorized: "Email or Password are wrong"
   projects:
     errors:
       user_was_not_assigned: "User wasn't assigned to this project"
