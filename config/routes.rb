@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       put :assign_user, on: :member
       put :remove_user, on: :member
     end
-    resources :users, only: :index do
+    resources :users, only: [:index, :create, :destroy] do
       put :update, on: :collection
     end
   end

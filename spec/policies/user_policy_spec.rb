@@ -7,7 +7,7 @@ describe UserPolicy do
 
     subject { described_class.new(user, User) }
 
-    it { is_expected.to permit_actions([:index, :update]) }
+    it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
   end
 
   context 'user is staff' do
@@ -15,7 +15,7 @@ describe UserPolicy do
 
     subject { described_class.new(user, 'user') }
 
-    it { is_expected.to forbid_action(:index) }
+    it { is_expected.to forbid_actions([:create, :index, :destroy]) }
     it { is_expected.to permit_action(:update) }
   end
 end

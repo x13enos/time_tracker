@@ -1,16 +1,23 @@
 ru:
   unathorized: "Вы не авторизованы для данного действия."
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "Данный email уже используется для другого пользователя"
   users:
     errors:
-      locale_inclusion: "Приложение еще не подерживает данный язык."
+      locale_inclusion: "Приложение еще не подерживает данный язык"
   auth:
     errors:
-      unathorized: "Вы ввели неправильную почту или пароль."
+      unathorized: "Вы ввели неправильную почту или пароль"
   projects:
     errors:
       user_was_not_assigned: "Не удалось добавить пользователя в проект"
       user_was_not_removed: "Не удалось удалить пользователя из проекта"
   time_records:
     errors:
-      should_be_less_than_24_hours: "Общее количество потраченного времени не может превышать 24 часа за день."
-      only_todays_taks: "Вы можете стартовать только сегодняшние задачи."
+      should_be_less_than_24_hours: "Общее количество потраченного времени не может превышать 24 часа за день"
+      only_todays_taks: "Вы можете стартовать только сегодняшние задачи"
