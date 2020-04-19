@@ -7,6 +7,13 @@ en:
           attributes:
             email:
               taken: "This email was already be taken"
+  recovery_password:
+    email_not_present: "Email not present"
+    token_not_present: "Token not present"
+    password_not_present: "Password not present"
+    confirmation_password_does_not_match: "Confirmation password should be the same"
+    user_not_found: "Email address not found. Please check and try again"
+    invalid_token: "Token not valid or expired. Try to recover password one more time."
   users:
     errors:
       locale_inclusion: "We don't support this language yet"

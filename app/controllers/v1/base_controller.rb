@@ -35,11 +35,15 @@ class V1::BaseController < ApplicationController
   end
 
   def decoded_token
-    @decoded_token ||= begin
-                        TokenCryptService.decode(token)
-                      rescue JWT::ExpiredSignature, JWT::DecodeError
-                        false
-                      end
+    @decoded_token ||= decode(token)
+  end
+
+  def decode(passed_token)
+    begin
+      TokenCryptService.decode(passed_token)
+    rescue JWT::ExpiredSignature, JWT::DecodeError
+      false
+    end
   end
 
   def set_token(user=current_user)

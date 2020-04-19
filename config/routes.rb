@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     resources :users, only: [:index, :create, :destroy] do
       put :update, on: :collection
     end
+    get "/forgot_password", to: 'passwords#forgot'
+    post "/reset_password", to: 'passwords#reset'
   end
 
 end
