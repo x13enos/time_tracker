@@ -21,9 +21,14 @@ RSpec.describe V1::AuthController, type: :controller do
     end
 
     context "user was not authorized" do
-      it "should return empty hash" do
+      it "should return error message" do
         get :index, { format: :json }
-        expect(response.body).to eq({}.to_json)
+        expect(response.body).to eq({ error: I18n.t("auth.errors.unathorized") }.to_json)
+      end
+
+      it "should return 401 status" do
+        get :index, { format: :json }
+        expect(response.status).to eq(401)
       end
     end
   end

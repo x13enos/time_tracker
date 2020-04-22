@@ -2,21 +2,14 @@ class V1::ReportsController < V1::BaseController
   def index
     authorize :report
     select_user
-    select_time_records
+    @time_records_data = TimeRecordsSelector.new(params, @user).perform
     if params[:pdf].present?
-      report_generator = ReportGenerator.new(@time_records, converted_dates, @user)
+      report_generator = ReportGenerator.new(@time_records_data, @user)
       render json: { link: report_generator.perform }
     end
   end
 
   private
-
-  def converted_dates
-    @converted_dates ||= {
-      from: params[:from_date].to_i.convert_to_date_time,
-      to: params[:to_date].to_i.convert_to_date_time
-    }
-  end
 
   def select_user
     @user = if current_user.admin? && params[:user_id].present?
@@ -26,15 +19,4 @@ class V1::ReportsController < V1::BaseController
     end
   end
 
-  def select_time_records
-    @time_records = @user.nil? ? [] : get_users_time_records
-  end
-
-  def get_users_time_records
-    @user.time_records
-      .joins(:project)
-      .joins(:user)
-      .where("assigned_date BETWEEN ? AND ?", converted_dates[:from], converted_dates[:to])
-      .order(created_at: :desc)
-  end
 end

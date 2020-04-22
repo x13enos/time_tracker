@@ -15,8 +15,18 @@ RSpec.describe V1::ProjectsController, type: :controller do
 
       get :index, params: { format: :json }
       expect(response.body).to eq([
-        { id: project.id, name: project.name, user_ids: [@current_user.id] },
-        { id: project_2.id, name: project_2.name, user_ids: [@current_user.id] }
+        {
+          id: project.id,
+          name: project.name,
+          user_ids: [@current_user.id],
+          regexp_of_grouping: nil
+        },
+        {
+          id: project_2.id,
+          name: project_2.name,
+          user_ids: [@current_user.id],
+          regexp_of_grouping: nil 
+        }
       ].to_json)
     end
 
@@ -34,7 +44,8 @@ RSpec.describe V1::ProjectsController, type: :controller do
       expect(response.body).to eq({
         id: Project.last.id,
         name: "test-project",
-        user_ids: [@current_user.id]
+        user_ids: [@current_user.id],
+        regexp_of_grouping: nil
       }.to_json)
     end
 
@@ -57,7 +68,8 @@ RSpec.describe V1::ProjectsController, type: :controller do
       expect(response.body).to eq({
         id: project.id,
         name: "test-project",
-        user_ids: project.user_ids
+        user_ids: project.user_ids,
+        regexp_of_grouping: nil
       }.to_json)
     end
 
@@ -80,7 +92,8 @@ RSpec.describe V1::ProjectsController, type: :controller do
       expect(response.body).to eq({
         id: project.id,
         name: project.name,
-        user_ids: []
+        user_ids: [],
+        regexp_of_grouping: nil
       }.to_json)
     end
 
