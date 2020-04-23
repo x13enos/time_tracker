@@ -25,7 +25,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
           id: project_2.id,
           name: project_2.name,
           user_ids: [@current_user.id],
-          regexp_of_grouping: nil 
+          regexp_of_grouping: nil
         }
       ].to_json)
     end
@@ -51,7 +51,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
 
     it "should return error message if project wasn't created" do
       post :create, params: { name: "", format: :json }
-      expect(response.body).to eq({ error: "Name can't be blank" }.to_json)
+      expect(response.body).to eq({ error: "can't be blank" }.to_json)
     end
   end
 
@@ -75,7 +75,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
 
     it "should return error message if project wasn't updated" do
       put :update, params: { id: project.id, name: "", format: :json }
-      expect(response.body).to eq({ error: "Name can't be blank" }.to_json)
+      expect(response.body).to eq({ error: "can't be blank" }.to_json)
     end
   end
 
