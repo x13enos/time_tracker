@@ -65,6 +65,6 @@ class V1::ProjectsController < V1::BaseController
   end
 
   def project_params
-    params.permit(:name)
+    params.permit(:name, :regexp_of_grouping)
   end
 end

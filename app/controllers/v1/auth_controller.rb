@@ -6,7 +6,7 @@ class V1::AuthController < V1::BaseController
     if current_user
       render partial: '/v1/users/show.json.jbuilder', locals: { user: current_user }
     else
-      render json: {}
+      render json: { error: I18n.t("auth.errors.unathorized") }, status: 401
     end
   end
 

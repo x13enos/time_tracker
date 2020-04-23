@@ -1,0 +1,61 @@
+require "rails_helper"
+
+RSpec.describe TimeRecordsSelector do
+  def create_time_records(user)
+    travel_to Time.zone.local(2019, 10, 29)
+
+    @time_record = create(:time_record, user: user, description: "TT-88: first", assigned_date: Time.zone.today, spent_time: 0.45)
+    @time_record_2 = create(:time_record, user: user, description: "TT-78: second", created_at: Time.zone.now - 2.hour, assigned_date: Time.zone.today, spent_time: 1.44)
+    @time_record_3 = create(:time_record, user: create(:user), assigned_date: Time.zone.today)
+    @time_record_4 = create(:time_record, user: user, description: "TT-88: third", created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today - 10.days, spent_time: 3.5)
+    @time_record_5 = create(:time_record, user: user, assigned_date: Time.zone.today - 25.days)
+
+    travel_back
+  end
+
+  let(:project) { create(:project, regexp_of_grouping: '\ATT-\d+:') }
+  let(:user) { create(:user) }
+  let(:params) {
+    {
+      from_date: 1571153533,
+      to_date: 1572372039
+    }
+  }
+
+  before { create_time_records(user) }
+
+  describe "perform" do
+    context "grouped_time_records" do
+      it "should return empty array if user wasn't passed" do
+        result = TimeRecordsSelector.new(params, nil).perform
+        expect(result[:grouped_time_records]).to be_empty
+      end
+
+      it "should return grouped time records if they assigned to project with regexp" do
+        [@time_record, @time_record_2, @time_record_4].each { |t| t.update(project_id: project.id) }
+        result = TimeRecordsSelector.new(params, user).perform
+        expect(result[:grouped_time_records]).to eq([
+          [@time_record, @time_record_4], [@time_record_2]
+        ])
+      end
+    end
+
+    it "shold return list of projects" do
+      result = TimeRecordsSelector.new(params, user).perform
+      expect(result[:projects]).to include(@time_record.project, @time_record_2.project, @time_record_4.project)
+    end
+
+    it "shold return converted timestamps" do
+      result = TimeRecordsSelector.new(params, user).perform
+      expect(result[:converted_dates]).to eq({
+        from: 1571153533.convert_to_date_time,
+        to: 1572372039.convert_to_date_time
+      })
+    end
+
+    it "shold return total spent time for selected time records" do
+      result = TimeRecordsSelector.new(params, user).perform
+      expect(result[:total_spent_time]).to eq(5.39)
+    end
+  end
+end

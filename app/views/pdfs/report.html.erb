@@ -70,6 +70,14 @@
       table .spent_time{
         text-align: right;
       }
+
+      .grouped-description{
+        padding-left: 35px;
+      }
+
+      .bold-font{
+        font-weight: 600;
+      }
     </style>
   </head>
   <body>
@@ -89,18 +97,30 @@
             <th>Date</th>
             <th>Employee</th>
             <th>Description</th>
-            <th class='spent_time'>TOTAL <%= time_records.pluck(:spent_time).inject(0){|sum,x| sum + x } %></th>
+            <th class='spent_time'>TOTAL <%= total_time %></th>
           </tr>
         </thead>
         <tbody>
-          <% time_records.each do |time_record| %>
-            <tr>
-              <td><%= time_record.project.name %></td>
-              <td><%= time_record.assigned_date %></td>
-              <td><%= time_record.user.name %></td>
-              <td><%= time_record.description %></td>
-              <td class='spent_time'><%= time_record.spent_time %></td>
-            </tr>
+          <% time_records.each do |time_records_pack| %>
+            <% if time_records_pack.size > 1 %>
+              <tr>
+                <td><%= time_records_pack.map(&:project_id).uniq.size %></td>
+                <td></td>
+                <td><%= time_records_pack.map(&:user_id).uniq.length %></td>
+                <td class="bold-font"><%= time_records_pack[0].description[0, 20] %>... + <%= time_records_pack.size - 1 %> tasks</td>
+                <td class='spent_time bold-font'><%= time_records_pack.sum(&:spent_time) %></td>
+              </tr>
+            <% end %>
+
+            <% time_records_pack.each do |time_record| %>
+              <tr>
+                <td><%= time_record.project.name %></td>
+                <td><%= time_record.assigned_date %></td>
+                <td><%= time_record.user.name %></td>
+                <td class="<%= 'grouped-description' if time_records_pack.size > 1 %>"><%= time_record.description %></td>
+                <td class='spent_time'><%= time_record.spent_time %></td>
+              </tr>
+            <% end %>
           <% end %>
         </tbody>
       </table>

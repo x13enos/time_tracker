@@ -1,15 +1,23 @@
 require "rails_helper"
 
 RSpec.describe ReportGenerator do
-
   describe "perform" do
     let(:user) { create(:user) }
-    let(:from_date) { Time.zone.local(2019, 10, 15) }
-    let(:to_date) { Time.zone.local(2019, 10, 30) }
     let(:time_records) { [
       create(:time_record, project: project, user: user, assigned_date: Time.zone.today, spent_time: 0.45)
     ] }
-    let(:generator) { ReportGenerator.new(time_records, { from: from_date, to: to_date }, user) }
+    let(:time_records_data) {
+      {
+        grouped_time_records: [time_records],
+        converted_dates: {
+          from: Time.zone.local(2019, 10, 15),
+          to: Time.zone.local(2019, 10, 30)
+        },
+        projects: [project],
+        total_spent_time: 15
+      }
+    }
+    let(:generator) { ReportGenerator.new(time_records_data, user) }
     let(:project) { create(:project) }
 
     it "should render partial and pass time records in locals" do
@@ -17,11 +25,12 @@ RSpec.describe ReportGenerator do
       expect(ActionController::Base).to receive(:render).with({
         file: "pdfs/report",
         locals: {
-          time_records: time_records,
+          time_records: [time_records],
           projects: [project],
           user: user,
-          from_date: from_date,
-          to_date: to_date
+          from_date: Time.zone.local(2019, 10, 15),
+          to_date: Time.zone.local(2019, 10, 30),
+          total_time: 15
         }
       })
       generator.perform
