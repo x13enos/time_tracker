@@ -7,6 +7,10 @@ en:
           attributes:
             email:
               taken: "This email was already be taken"
+        project:
+          attributes:
+            name:
+              taken: "This name was already be taken"
   recovery_password:
     email_not_present: "Email not present"
     token_not_present: "Token not present"

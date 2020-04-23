@@ -7,6 +7,10 @@ ru:
           attributes:
             email:
               taken: "Данный email уже используется для другого пользователя"
+        project:
+          attributes:
+            name:
+              taken: "Данное имя уже было использовано для другого проекта"
   users:
     errors:
       locale_inclusion: "Приложение еще не подерживает данный язык"
