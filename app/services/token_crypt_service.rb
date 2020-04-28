@@ -1,10 +1,10 @@
 class TokenCryptService
-  TOKEN_LIFETIME = 15.minutes
+  TOKEN_LIFETIME = 8.hours
   ALGORITHM_TYPE = 'HS256'
 
   class << self
-    def encode(data)
-      payload = { data: data, exp: expiration_time.to_s.to_i  }
+    def encode(data, token_lifetime = TOKEN_LIFETIME )
+      payload = { data: data, exp: expiration_time(token_lifetime).to_s.to_i  }
       JWT.encode(payload, secret_key, ALGORITHM_TYPE)
     end
 
@@ -19,8 +19,8 @@ class TokenCryptService
       ENV["JWT_KEY"]
     end
 
-    def expiration_time
-      Time.now.to_i + TOKEN_LIFETIME
+    def expiration_time(token_lifetime)
+      Time.now.to_i + token_lifetime
     end
   end
 
