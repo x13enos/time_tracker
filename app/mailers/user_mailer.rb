@@ -8,7 +8,7 @@ class UserMailer < ApplicationMailer
 
   def recovery_password_email(user)
     @user = user
-    @token = TokenCryptService.encode(user.email)
+    @token = TokenCryptService.encode(user.email, 1.hours)
     mail(to: user.email, subject: "Reset your Time Tracker account")
   end
 

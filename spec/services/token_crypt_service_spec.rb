@@ -17,6 +17,15 @@ RSpec.describe TokenCryptService do
       end
     end
 
+    it "should call JWT and use passed lifetime" do
+      freeze_time do
+        expiration_time = Time.now.to_i + 1.hour
+        payload = { data: "admin@gmail.com", exp: expiration_time.to_s.to_i  }
+        expect(JWT).to receive(:encode).with(payload, "secret_key", TokenCryptService::ALGORITHM_TYPE)
+        TokenCryptService.encode("admin@gmail.com", 1.hour)
+      end
+    end
+
     it "should return encoded data" do
       allow(JWT).to receive(:encode) { "encoded_data" }
       expect(TokenCryptService.encode("admin@gmail.com")).to eq("encoded_data")
