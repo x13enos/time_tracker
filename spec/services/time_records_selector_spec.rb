@@ -4,11 +4,10 @@ RSpec.describe TimeRecordsSelector do
   def create_time_records(user)
     travel_to Time.zone.local(2019, 10, 29)
 
-    @time_record = create(:time_record, user: user, description: "TT-88: first", assigned_date: Time.zone.today, spent_time: 0.45)
-    @time_record_2 = create(:time_record, user: user, description: "TT-78: second", created_at: Time.zone.now - 2.hour, assigned_date: Time.zone.today, spent_time: 1.44)
+    @time_record = create(:time_record, user: user, description: "TT-88: first", assigned_date: Date.today, spent_time: 0.45)
+    @time_record_2 = create(:time_record, user: user, description: "TT-78: second", created_at: Time.now - 2.hour, assigned_date: Date.today, spent_time: 1.44)
     @time_record_3 = create(:time_record, user: create(:user), assigned_date: Time.zone.today)
-    @time_record_4 = create(:time_record, user: user, description: "TT-88: third", created_at: Time.zone.now - 1.hour, assigned_date: Time.zone.today - 10.days, spent_time: 3.5)
-    @time_record_5 = create(:time_record, user: user, assigned_date: Time.zone.today - 25.days)
+    @time_record_4 = create(:time_record, user: user, description: "TT-88: third", created_at: Time.now - 1.hour, assigned_date: Date.today - 10.days, spent_time: 3.5)
 
     travel_back
   end
@@ -17,8 +16,8 @@ RSpec.describe TimeRecordsSelector do
   let(:user) { create(:user) }
   let(:params) {
     {
-      from_date: 1571153533,
-      to_date: 1572372039
+      from_date: "15-10-2019",
+      to_date: "29-10-2019"
     }
   }
 
@@ -48,8 +47,8 @@ RSpec.describe TimeRecordsSelector do
     it "shold return converted timestamps" do
       result = TimeRecordsSelector.new(params, user).perform
       expect(result[:converted_dates]).to eq({
-        from: 1571153533.convert_to_date_time,
-        to: 1572372039.convert_to_date_time
+        from: "15-10-2019".to_date,
+        to: "29-10-2019".to_date,
       })
     end
 

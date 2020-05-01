@@ -7,7 +7,6 @@ RSpec.describe V1::UsersController, type: :controller do
       id: user.id,
       email: user.email,
       name: user.name,
-      timezone: user.timezone,
       role: user.role,
       locale: user.locale
     }

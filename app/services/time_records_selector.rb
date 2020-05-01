@@ -19,8 +19,8 @@ class TimeRecordsSelector
 
   def converted_dates
     @converted_dates ||= {
-      from: params[:from_date].to_i.convert_to_date_time,
-      to: params[:to_date].to_i.convert_to_date_time
+      from: params[:from_date].to_date,
+      to: params[:to_date].to_date
     }
   end
 

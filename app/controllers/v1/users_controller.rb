@@ -39,7 +39,7 @@ class V1::UsersController < V1::BaseController
   private
 
   def user_params
-    params.permit(:name, :email, :timezone, :password, :locale)
+    params.permit(:name, :email, :password, :locale)
   end
 
   def send_email(user, password)

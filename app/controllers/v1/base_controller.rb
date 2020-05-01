@@ -5,7 +5,6 @@ class V1::BaseController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :authentication_error
 
   before_action :authenticate
-  around_action :set_time_zone
   before_action :set_locale, if: :current_user
   after_action :set_token
 
@@ -52,11 +51,6 @@ class V1::BaseController < ApplicationController
       secure: Rails.env.production?,
       httponly: true
     }
-  end
-
-  def set_time_zone
-    timezone = current_user.try(:timezone) || Time.zone.tzinfo.name
-    Time.use_zone(timezone) { yield }
   end
 
   def set_locale

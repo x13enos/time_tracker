@@ -1,7 +1,7 @@
 class V1::TimeRecordsController < V1::BaseController
   def index
     authorize TimeRecord
-    current_date = params[:assigned_date].to_i.convert_to_date_time
+    current_date = params[:assigned_date].to_datetime
     @time_records = current_user.time_records
       .where("assigned_date BETWEEN ? and ?", current_date.beginning_of_week, current_date.end_of_week)
       .order(created_at: :asc)
@@ -39,14 +39,14 @@ class V1::TimeRecordsController < V1::BaseController
   end
 
   def time_record_params
-    params.permit(:name, :email, :timezone, :password)
+    params.permit(:name, :email, :password)
   end
 
   def prepared_params
-    params[:assigned_date] = params[:assigned_date].to_i.convert_to_date_time if params[:assigned_date]
+    params[:assigned_date] = params[:assigned_date].to_datetime if params[:assigned_date]
     permitted_params = params.permit(:project_id, :description, :spent_time, :assigned_date)
     permitted_params.merge({
-      time_start: params[:start_task] ? Time.zone.now : nil
+      time_start: params[:start_task] ? Time.now : nil
     })
   end
 end

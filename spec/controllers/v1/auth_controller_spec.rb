@@ -13,7 +13,6 @@ RSpec.describe V1::AuthController, type: :controller do
           id: @current_user.id,
           email: @current_user.email,
           name: @current_user.name,
-          timezone: @current_user.timezone,
           role: @current_user.role,
           locale: @current_user.locale
         }.to_json)
@@ -53,7 +52,6 @@ RSpec.describe V1::AuthController, type: :controller do
         id: user.id,
         email: user.email,
         name: user.name,
-        timezone: user.timezone,
         role: user.role,
         locale: user.locale
       }.to_json)
@@ -92,7 +90,6 @@ RSpec.describe V1::AuthController, type: :controller do
           id: @current_user.id,
           email: @current_user.email,
           name: @current_user.name,
-          timezone: @current_user.timezone,
           role: @current_user.role,
           locale: @current_user.locale
         }.to_json)
