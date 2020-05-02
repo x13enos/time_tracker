@@ -19,14 +19,13 @@ module TimeRecords
     end
 
     def only_todays_task_could_be_activated
-      if Time.zone.parse(assigned_date.to_s) != Time.zone.today.beginning_of_day
+      if assigned_date.to_date != Date.today
         self.errors.add(:base, I18n.t("time_records.errors.only_todays_taks"))
       end
     end
 
     def value_of_spent_time
-      local_assigned_date = Time.zone.parse(assigned_date.to_s)
-      day_tasks = user.time_records.where("time_records.assigned_date BETWEEN ? AND ?", local_assigned_date.beginning_of_day, local_assigned_date.end_of_day)
+      day_tasks = user.time_records.where("time_records.assigned_date = ?", assigned_date)
       day_tasks = day_tasks.where.not(id: id) if id
       if (day_tasks.sum(:spent_time) + spent_time.to_f) > 24.0
         self.errors.add(:base, I18n.t("time_records.errors.should_be_less_than_24_hours"))

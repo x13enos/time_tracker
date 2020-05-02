@@ -6,21 +6,20 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   describe "GET #index" do
     it "should return weekly user's time records in the right order" do
       travel_to Time.zone.local(2019, 10, 29)
-      time_start = Time.zone.now - 1.hour
-      epoch_time = 1572372039
+      time_start = Time.now - 1.hour
 
-      time_record = create(:time_record, user: @current_user, time_start: time_start, assigned_date: Time.zone.today)
-      time_record_2 = create(:time_record, user: @current_user, created_at: Time.zone.now + 1.hour, assigned_date: Time.zone.today.beginning_of_week)
-      time_record_3 = create(:time_record, assigned_date: Time.zone.today + 1.week)
+      time_record = create(:time_record, user: @current_user, time_start: time_start, assigned_date: Date.today)
+      time_record_2 = create(:time_record, user: @current_user, created_at: Time.now + 1.hour, assigned_date: Date.today.beginning_of_week)
+      time_record_3 = create(:time_record, assigned_date: Date.today + 1.week)
 
-      get :index, params: { assigned_date: epoch_time, format: :json }
+      get :index, params: { assigned_date: "29-10-2019", format: :json }
       expect(response.body).to eql({
         "time_records" => [
           {
             "id" => time_record.id,
             "description" => time_record.description,
             "project_id" => time_record.project_id,
-            "assigned_date" => time_record.assigned_date.to_epoch,
+            "assigned_date" => time_record.assigned_date.strftime("%d/%m/%Y"),
             "time_start" => time_record.time_start_as_epoch,
             "spent_time" => time_record.spent_time + 1.0
           },
@@ -28,7 +27,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
             "id" => time_record_2.id,
             "description" => time_record_2.description,
             "project_id" => time_record_2.project_id,
-            "assigned_date" => time_record_2.assigned_date.to_epoch,
+            "assigned_date" => time_record_2.assigned_date.strftime("%d/%m/%Y"),
             "time_start" => time_record_2.time_start_as_epoch,
             "spent_time" => time_record_2.spent_time
           }
@@ -40,13 +39,12 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "POST #create" do
-    let(:epoch_time) { 1572300000 }
     let!(:project) { create(:project) }
 
     context "params are valid" do
       let(:time_record_params) do
         {
-          assigned_date: epoch_time,
+          assigned_date: "28-10-2019",
           description: "test",
           spent_time: "0.0",
           project_id: project.id,
@@ -67,14 +65,12 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
           "project_id" => time_record.project_id,
           "time_start" => time_record.time_start_as_epoch,
           "spent_time" => time_record.spent_time,
-          "assigned_date" => time_record.assigned_date.to_epoch_beginning_of_day
+          "assigned_date" => "28/10/2019"
         }.to_json)
       end
 
       it "should set start time if param with this key was passed info" do
-        travel_to Time.zone.local(2019, 10, 29)
-
-        allow(@current_user).to receive(:timezone) { "Europe/Helsinki" }
+        travel_to Time.zone.local(2019, 10, 28)
 
         post :create, params: time_record_params.merge({ start_task: true })
         expect(TimeRecord.last.time_start).to be_present
@@ -86,7 +82,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
     context "params are invalid" do
       let(:time_record_params) do
         {
-          assigned_date: epoch_time,
+          assigned_date: "29-10-2019",
           description: "",
           spent_time: "0.0",
           project_id: project.id,
@@ -106,13 +102,12 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "PUT #update" do
-    let(:epoch_time) { 1572372039 }
     let(:time_record) { create(:time_record, user: @current_user) }
 
     context "params are valid" do
       let(:time_record_params) do
         {
-          assigned_date: epoch_time,
+          assigned_date: "28-10-2019",
           description: "test",
           spent_time: "0.0",
           project_id: project.id,
@@ -133,12 +128,12 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
           "project_id" => time_record.project_id,
           "time_start" => time_record.time_start_as_epoch,
           "spent_time" => time_record.spent_time,
-          "assigned_date" => time_record.assigned_date.to_epoch_beginning_of_day
+          "assigned_date" => time_record.assigned_date.strftime("%d/%m/%Y")
         }.to_json)
       end
 
       it "should set start time if param with this key was passed info" do
-        travel_to Time.zone.local(2019, 10, 29)
+        travel_to Time.zone.local(2019, 10, 28)
 
         put :update, params: { id: time_record.id, start_task: true, format: :json }
         expect(TimeRecord.last.time_start).to be_present
@@ -182,7 +177,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
         "project_id" => time_record.project_id,
         "time_start" => time_record.time_start_as_epoch,
         "spent_time" => time_record.spent_time,
-        "assigned_date" => time_record.assigned_date.to_epoch
+        "assigned_date" => time_record.assigned_date.strftime("%d/%m/%Y")
       }.to_json)
     end
   end
