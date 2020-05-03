@@ -46,6 +46,16 @@ RSpec.describe V1::UsersController, type: :controller do
       expect{ post :create, params: { name: "new user", email: "example@gmail.com", format: :json } }.to change{ User.count }.from(1).to(2)
     end
 
+    it "should add user to the current workspace" do
+      post :create, params: { name: "new user", email: "example@gmail.com", format: :json }
+      expect(@current_user.active_workspace.users).to include(User.find_by(email: "example@gmail.com"))
+    end
+
+    it "should set active workspace for new user" do
+      post :create, params: { name: "new user", email: "example@gmail.com", format: :json }
+      expect(User.find_by(email: "example@gmail.com").active_workspace_id).to eq(@current_user.active_workspace_id)
+    end
+
     it "should generate and keep password for new user" do
       user = build(:user)
       allow(User).to receive(:new) { user }

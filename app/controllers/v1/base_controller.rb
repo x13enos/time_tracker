@@ -14,6 +14,12 @@ class V1::BaseController < ApplicationController
     end
   end
 
+  def current_workspace
+    @current_workspace ||= if current_user
+      current_user.active_workspace
+    end
+  end
+
   private
 
   def logged_in?

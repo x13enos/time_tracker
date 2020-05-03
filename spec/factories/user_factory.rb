@@ -4,6 +4,7 @@ FactoryBot.define do
     name     { Faker::Name.name }
     email    { Faker::Internet.unique.email }
     password { "password" }
+    association :active_workspace, factory: :workspace
 
     trait :admin do
       role { :admin }

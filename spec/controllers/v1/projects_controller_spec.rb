@@ -6,9 +6,9 @@ RSpec.describe V1::ProjectsController, type: :controller do
   describe "GET #index" do
     it "should return list of user's projects" do
 
-      project = create(:project, name: "company A")
-      project_2 = create(:project, name: "company B")
-      project_3 = create(:project, name: "company C")
+      project = create(:project, name: "company A", workspace: @current_user.active_workspace)
+      project_2 = create(:project, name: "company B", workspace: @current_user.active_workspace)
+      project_3 = create(:project, name: "company C", workspace: @current_user.active_workspace)
 
       project.users << @current_user
       project_2.users << @current_user
@@ -36,7 +36,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
     end
   end
 
-  describe "PUT #create" do
+  describe "POST #create" do
     login_admin
 
     it "should return project's data if it was created" do
@@ -49,6 +49,11 @@ RSpec.describe V1::ProjectsController, type: :controller do
       }.to_json)
     end
 
+    it "should create project and add active workspace to that" do
+      post :create, params: { name: "test-project", format: :json }
+      expect(Project.last.workspace_id).to eq(@current_user.active_workspace_id)
+    end
+
     it "should return error message if project wasn't created" do
       post :create, params: { name: "", format: :json }
       expect(response.body).to eq({ error: "can't be blank" }.to_json)
@@ -57,7 +62,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
 
   describe "PUT #update" do
     login_admin
-    let!(:project) { create(:project) }
+    let!(:project) { create(:project, workspace: @current_user.active_workspace) }
 
     before do
       project.users << @current_user
@@ -81,7 +86,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
 
   describe "DELETE #destroy" do
     login_admin
-    let!(:project) { create(:project) }
+    let!(:project) { create(:project, workspace: @current_user.active_workspace) }
 
     before do
       project.users << @current_user
@@ -102,7 +107,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
     end
 
     it "should return error message if project wasn't deleted" do
-      allow(@current_user).to receive_message_chain(:projects, :find) { project }
+      allow(@current_user).to receive_message_chain(:projects, :by_workspace, :find) { project }
       allow(project).to receive(:destroy) { false }
       project.errors.add(:base, "can't delete")
       delete :destroy, params: { id: project.id, format: :json }
@@ -112,7 +117,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
 
   describe "PUT #assign_user" do
     login_admin
-    let!(:project) { create(:project) }
+    let!(:project) { create(:project, workspace: @current_user.active_workspace) }
     let(:user) { create(:user) }
 
     before do
@@ -125,7 +130,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
     end
 
     it "should return error message if user wasn't assigned to the project" do
-      allow(@curren_user).to receive_message_chain(:User, :find) { project }
+      allow(@current_user).to receive_message_chain(:projects, :by_workspace, :find) { project }
       allow(project).to receive_message_chain(:users, :<<).and_raise(ActiveRecord::StaleObjectError)
       put :assign_user, params: { id: project.id, user_id: '111', format: :json }
       expect(response.body).to eq({ error: I18n.t("projects.errors.user_was_not_assigned") }.to_json)
@@ -134,7 +139,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
 
   describe "PUT #remove_user" do
     login_admin
-    let!(:project) { create(:project) }
+    let!(:project) { create(:project, workspace: @current_user.active_workspace) }
     let(:user) { create(:user) }
 
     before do
@@ -147,7 +152,6 @@ RSpec.describe V1::ProjectsController, type: :controller do
     end
 
     it "should return error message if user wasn't removed from project" do
-      allow(@curren_user).to receive_message_chain(:User, :find) { project }
       allow(project).to receive_message_chain(:users, :delete).and_raise(ActiveRecord::StaleObjectError)
       put :remove_user, params: { id: project.id, user_id: '111', format: :json }
       expect(response.body).to eq({ error: I18n.t("projects.errors.user_was_not_removed") }.to_json)

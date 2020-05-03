@@ -8,9 +8,10 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
       travel_to Time.zone.local(2019, 10, 29)
       time_start = Time.now - 1.hour
 
-      time_record = create(:time_record, user: @current_user, time_start: time_start, assigned_date: Date.today)
-      time_record_2 = create(:time_record, user: @current_user, created_at: Time.now + 1.hour, assigned_date: Date.today.beginning_of_week)
-      time_record_3 = create(:time_record, assigned_date: Date.today + 1.week)
+      project = create(:project, workspace: @current_user.active_workspace)
+      time_record = create(:time_record, user: @current_user, time_start: time_start, assigned_date: Date.today, project: project)
+      time_record_2 = create(:time_record, user: @current_user, created_at: Time.now + 1.hour, assigned_date: Date.today.beginning_of_week, project: project)
+      time_record_3 = create(:time_record, assigned_date: Date.today + 1.week, project: project)
 
       get :index, params: { assigned_date: "29-10-2019", format: :json }
       expect(response.body).to eql({
@@ -102,7 +103,8 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "PUT #update" do
-    let(:time_record) { create(:time_record, user: @current_user) }
+    let(:project) { create(:project, workspace: @current_user.active_workspace )}
+    let(:time_record) { create(:time_record, user: @current_user, project: project) }
 
     context "params are valid" do
       let(:time_record_params) do
@@ -163,7 +165,8 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    let!(:time_record) { create(:time_record, user: @current_user) }
+    let!(:project) { create(:project, workspace: @current_user.active_workspace )}
+    let!(:time_record) { create(:time_record, user: @current_user, project: project) }
 
     it "should delete time record" do
       expect{ delete :destroy, params: { id: time_record.id, format: :json } }.to change{ TimeRecord.count }.from(1).to(0)

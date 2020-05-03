@@ -6,9 +6,8 @@ class V1::UsersController < V1::BaseController
 
   def create
     authorize User
-    user = User.new(user_params)
     password = SecureRandom.urlsafe_base64(8)
-    user.password = password
+    user = build_user(password)
     if user.save
       send_email(user, password)
       render partial: '/v1/users/show.json.jbuilder', locals: { user: user.reload }
@@ -44,5 +43,12 @@ class V1::UsersController < V1::BaseController
 
   def send_email(user, password)
     UserMailer.invitation_email(user, password).deliver_now
+  end
+
+  def build_user(password)
+    user = current_workspace.users.new(user_params)
+    user.active_workspace_id = current_workspace.id
+    user.password = password
+    return user
   end
 end

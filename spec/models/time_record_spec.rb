@@ -2,8 +2,26 @@ require 'rails_helper'
 
 RSpec.describe TimeRecord, type: :model do
 
-  it { should belong_to(:user) }
-  it { should belong_to(:project) }
+  context 'associations' do
+    it { should belong_to(:user) }
+    it { should belong_to(:project) }
+    it { should have_one(:workspace).through(:project) }
+  end
+  
+  describe '.by_workspace' do
+    it "should return list of time records selected by passed workspace" do
+      workspace = create(:workspace)
+      project1 = create(:project, workspace: workspace)
+      project2 = create(:project)
+
+      time_record1 = create(:time_record, project: project1)
+      time_record2 = create(:time_record, project: project2)
+      time_record3 = create(:time_record, project: project1)
+
+      expect(TimeRecord.by_workspace(workspace.id)).to include(time_record1, time_record3)
+      expect(TimeRecord.by_workspace(workspace.id).count).to eq(2)
+    end
+  end
 
   describe '.active' do
     let!(:inactive_time_record) { create(:time_record, time_start: nil) }
