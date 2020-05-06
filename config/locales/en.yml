@@ -32,3 +32,7 @@ en:
     errors:
       should_be_less_than_24_hours: "The total amount of spent time cannot exceed 24 hours per day"
       only_todays_taks: "You can only launch tasks which assigned to today"
+  workspaces:
+    errors:
+      user_was_not_invited: "User wasn't invited to this workspace."
+      user_was_not_removed: "User wasn't removed from this workspace."

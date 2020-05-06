@@ -4,16 +4,18 @@ RSpec.describe TimeRecordsSelector do
   def create_time_records(user)
     travel_to Time.zone.local(2019, 10, 29)
 
-    project = create(:project, workspace: user.active_workspace)
     @time_record = create(:time_record, user: user, description: "TT-88: first", assigned_date: Date.today, spent_time: 0.45, project: project)
-    @time_record_2 = create(:time_record, user: user, description: "TT-78: second", created_at: Time.now - 2.hour, assigned_date: Date.today, spent_time: 1.44, project: project)
+    @time_record_2 = create(:time_record, user: user, description: "TT-78: second", created_at: Time.now - 2.hour, assigned_date: Date.today, spent_time: 1.44, project: project_2)
     @time_record_3 = create(:time_record, user: create(:user), assigned_date: Time.zone.today, project: project)
-    @time_record_4 = create(:time_record, user: user, description: "TT-88: third", created_at: Time.now - 1.hour, assigned_date: Date.today - 10.days, spent_time: 3.5, project: project)
+    @time_record_4 = create(:time_record, user: user, description: "TT-88: third", created_at: Time.now - 1.hour, assigned_date: Date.today - 10.days, spent_time: 3.5, project: project_3)
 
     travel_back
   end
 
-  let(:project) { create(:project, regexp_of_grouping: '\ATT-\d+:', workspace: user.active_workspace) }
+  let(:project) { create(:project, workspace: user.active_workspace) }
+  let(:project_2) { create(:project, workspace: user.active_workspace) }
+  let(:project_3) { create(:project, workspace: user.active_workspace) }
+  let(:project_with_regexp) { create(:project, regexp_of_grouping: '\ATT-\d+:', workspace: user.active_workspace) }
   let(:user) { create(:user) }
   let(:params) {
     {
@@ -22,7 +24,7 @@ RSpec.describe TimeRecordsSelector do
     }
   }
 
-  before { create_time_records(user) }
+  before(:each) { create_time_records(user) }
 
   describe "perform" do
     context "grouped_time_records" do
@@ -32,7 +34,7 @@ RSpec.describe TimeRecordsSelector do
       end
 
       it "should return grouped time records if they assigned to project with regexp" do
-        [@time_record, @time_record_2, @time_record_4].each { |t| t.update(project_id: project.id) }
+        [@time_record, @time_record_2, @time_record_4].each { |t| t.update(project_id: project_with_regexp.id) }
         result = TimeRecordsSelector.new(params, user).perform
         expect(result[:grouped_time_records]).to eq([
           [@time_record, @time_record_4], [@time_record_2]
@@ -40,12 +42,12 @@ RSpec.describe TimeRecordsSelector do
       end
     end
 
-    it "shold return list of projects" do
+    it "should return list of projects" do
       result = TimeRecordsSelector.new(params, user).perform
       expect(result[:projects]).to include(@time_record.project, @time_record_2.project, @time_record_4.project)
     end
 
-    it "shold return converted timestamps" do
+    it "should return converted timestamps" do
       result = TimeRecordsSelector.new(params, user).perform
       expect(result[:converted_dates]).to eq({
         from: "15-10-2019".to_date,

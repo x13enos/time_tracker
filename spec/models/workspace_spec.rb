@@ -15,4 +15,20 @@ RSpec.describe Workspace, type: :model do
     it { should have_many(:projects).dependent(:destroy) }
   end
 
+  describe '#belongs_to_user?' do
+    it "should return true if that belongs to the passed user" do
+      user = create(:user)
+      workspace = create(:workspace)
+      workspace.users << user
+
+      expect(workspace.belongs_to_user?(user.id)).to be_truthy
+    end
+
+    it "should return false if that doesn't belong to the passed user" do
+      user = create(:user)
+      workspace = create(:workspace)
+
+      expect(workspace.belongs_to_user?(user.id)).to be_falsey
+    end
+  end
 end

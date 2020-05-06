@@ -4,4 +4,8 @@ class Workspace < ApplicationRecord
   has_many :projects, dependent: :destroy
 
   validates :name, presence: true
+
+  def belongs_to_user?(user_id)
+    self.user_ids.include?(user_id)
+  end
 end

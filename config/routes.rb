@@ -10,8 +10,11 @@ Rails.application.routes.draw do
       put :assign_user, on: :member
       put :remove_user, on: :member
     end
-    resources :users, only: [:index, :create, :destroy] do
+    resources :users, only: :index do
       put :update, on: :collection
+    end
+    resources :workspaces, only: [:index, :create, :update, :destroy] do
+      resources :workspace_users, only: [:create, :destroy]
     end
     get "/forgot_password", to: 'passwords#forgot'
     post "/reset_password", to: 'passwords#reset'

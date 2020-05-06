@@ -2,14 +2,14 @@ class V1::ProjectsController < V1::BaseController
   def index
     authorize Project
     @projects = current_user.projects
-                            .by_workspace(current_user.active_workspace_id)
+                            .by_workspace(current_workspace_id)
                             .order(:name)
   end
 
   def create
     authorize Project
     @project = Project.new(project_params)
-    @project.workspace_id = current_user.active_workspace_id
+    @project.workspace_id = current_workspace_id
     @project.users = [current_user]
     @project.save
     generate_response
@@ -61,7 +61,7 @@ class V1::ProjectsController < V1::BaseController
 
   def project
     @project ||= current_user.projects
-                             .by_workspace(current_user.active_workspace_id)
+                             .by_workspace(current_workspace_id)
                              .find(params[:id])
   end
 

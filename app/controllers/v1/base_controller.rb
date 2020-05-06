@@ -14,9 +14,9 @@ class V1::BaseController < ApplicationController
     end
   end
 
-  def current_workspace
-    @current_workspace ||= if current_user
-      current_user.active_workspace
+  def current_workspace_id
+    @current_workspace_id ||= if current_user
+      current_user.active_workspace_id
     end
   end
 
