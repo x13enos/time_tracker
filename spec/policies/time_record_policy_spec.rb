@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe TimeRecordPolicy do
 
-  context "actions create and all doesn't require any conditions" do
+  context "actions 'create' and 'index' doesn't require any conditions" do
     let(:user) { build(:user) }
 
     subject { described_class.new(user, TimeRecord) }

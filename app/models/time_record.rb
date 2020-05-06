@@ -3,6 +3,9 @@ class TimeRecord < ApplicationRecord
 
   belongs_to :user
   belongs_to :project
+  has_one :workspace, through: :project
+
+  scope :by_workspace, ->(workspace_id) { joins(:project).where("projects.workspace_id = ?", workspace_id) }
 
   def stop
     time_passed = ((Time.now - time_start) / 3600).round(2)

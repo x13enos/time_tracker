@@ -3,6 +3,7 @@ class V1::TimeRecordsController < V1::BaseController
     authorize TimeRecord
     current_date = params[:assigned_date].to_datetime
     @time_records = current_user.time_records
+      .by_workspace(current_workspace_id)
       .where("assigned_date BETWEEN ? and ?", current_date.beginning_of_week, current_date.end_of_week)
       .order(created_at: :asc)
   end
@@ -13,13 +14,11 @@ class V1::TimeRecordsController < V1::BaseController
   end
 
   def update
-    time_record = current_user.time_records.find(params[:id])
     authorize time_record
     handle_form(TimeRecords::UpdateForm.new(prepared_params, current_user, time_record))
   end
 
   def destroy
-    time_record = current_user.time_records.find(params[:id])
     authorize time_record
     if time_record.delete
       render partial: '/v1/time_records/show.json.jbuilder', locals: { time_record: time_record }
@@ -48,5 +47,12 @@ class V1::TimeRecordsController < V1::BaseController
     permitted_params.merge({
       time_start: params[:start_task] ? Time.now : nil
     })
+  end
+
+  def time_record
+    @time_record ||= current_user
+      .time_records
+      .by_workspace(current_workspace_id)
+      .find(params[:id])
   end
 end
