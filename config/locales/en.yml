@@ -28,6 +28,7 @@ en:
     errors:
       user_was_not_assigned: "User wasn't assigned to this project"
       user_was_not_removed: "User wasn't removed from this project"
+      incorrect_format_of_regexp: "An invalid regular expression pattern"
   time_records:
     errors:
       should_be_less_than_24_hours: "The total amount of spent time cannot exceed 24 hours per day"
