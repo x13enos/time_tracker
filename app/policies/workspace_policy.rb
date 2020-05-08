@@ -1,7 +1,7 @@
 class WorkspacePolicy < ApplicationPolicy
 
   def index?
-    user_is_admin?
+    user?
   end
 
   def create?

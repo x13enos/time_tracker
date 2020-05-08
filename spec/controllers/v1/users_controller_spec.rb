@@ -8,7 +8,8 @@ RSpec.describe V1::UsersController, type: :controller do
       email: user.email,
       name: user.name,
       role: user.role,
-      locale: user.locale
+      locale: user.locale,
+      active_workspace_id: user.active_workspace_id
     }
   end
 

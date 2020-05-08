@@ -14,7 +14,8 @@ RSpec.describe V1::AuthController, type: :controller do
           email: @current_user.email,
           name: @current_user.name,
           role: @current_user.role,
-          locale: @current_user.locale
+          locale: @current_user.locale,
+          active_workspace_id: @current_user.active_workspace_id
         }.to_json)
       end
     end
@@ -53,7 +54,8 @@ RSpec.describe V1::AuthController, type: :controller do
         email: user.email,
         name: user.name,
         role: user.role,
-        locale: user.locale
+        locale: user.locale,
+        active_workspace_id: user.active_workspace_id
       }.to_json)
     end
 
@@ -91,7 +93,8 @@ RSpec.describe V1::AuthController, type: :controller do
           email: @current_user.email,
           name: @current_user.name,
           role: @current_user.role,
-          locale: @current_user.locale
+          locale: @current_user.locale,
+          active_workspace_id: @current_user.active_workspace_id
         }.to_json)
       end
     end
