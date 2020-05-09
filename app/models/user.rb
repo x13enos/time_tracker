@@ -4,7 +4,7 @@ class User < ApplicationRecord
 
   enum role: [:admin, :staff]
 
-  validates :email, :locale, presence: true
+  validates :email, :locale, :active_workspace_id, presence: true
   validates :email, uniqueness: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, length: { in: 8..32 }, allow_nil: true

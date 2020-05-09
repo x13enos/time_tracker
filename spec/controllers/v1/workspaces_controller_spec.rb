@@ -3,21 +3,43 @@ require 'rails_helper'
 RSpec.describe V1::WorkspacesController, type: :controller do
 
   describe "GET #index" do
-    login_admin
+    context "user is admin" do
+      login_admin
 
-    let!(:workspace1) { create(:workspace, user_ids: [@current_user.id]) }
-    let!(:workspace2) { create(:workspace) }
+      let!(:workspace1) { create(:workspace, user_ids: [@current_user.id]) }
+      let!(:workspace2) { create(:workspace) }
 
 
-    it "should return list of user workspaces" do
-      get :index, params: { format: :json }
-      expect(response.body).to include([
-        {
-          id: workspace1.id,
-          name: workspace1.name,
-          user_ids: [@current_user.id]
-        }
-      ].to_json)
+      it "should return list of user workspaces with user_ids" do
+        controller.instance_variable_set(:@current_user, @current_user)
+        get :index, params: { format: :json }
+        expect(response.body).to include([
+          {
+            id: workspace1.id,
+            name: workspace1.name,
+            user_ids: [@current_user.id]
+          }
+        ].to_json)
+      end
+    end
+
+    context "user is staff" do
+      login_staff
+
+      let!(:workspace1) { create(:workspace, user_ids: [@current_user.id]) }
+      let!(:workspace2) { create(:workspace) }
+
+
+      it "should return list of user workspaces w/o user_ids" do
+        controller.instance_variable_set(:@current_user, @current_user)
+        get :index, params: { format: :json }
+        expect(response.body).to include([
+          {
+            id: workspace1.id,
+            name: workspace1.name
+          }
+        ].to_json)
+      end
     end
   end
 

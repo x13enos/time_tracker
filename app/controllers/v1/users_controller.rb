@@ -16,7 +16,7 @@ class V1::UsersController < V1::BaseController
   private
 
   def user_params
-    params.permit(:name, :email, :password, :locale)
+    params.permit(:name, :email, :password, :locale, :active_workspace_id)
   end
-  
+
 end

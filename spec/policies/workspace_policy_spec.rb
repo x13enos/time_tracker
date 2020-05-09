@@ -3,7 +3,8 @@ require 'rails_helper'
 describe WorkspacePolicy do
 
   context "user is admin" do
-    let(:user) { build(:user, role: :admin) }
+    let(:active_workspace) { create(:workspace) }
+    let(:user) { build(:user, role: :admin, active_workspace: active_workspace) }
 
     context "actions 'create' and 'index' doesn't require any conditions" do
 
@@ -26,14 +27,13 @@ describe WorkspacePolicy do
   end
 
   context "user is staff" do
-    let(:user) { build(:user) }
     let(:workspace) { create(:workspace) }
+    let(:user) { build(:user, active_workspace_id: workspace.id) }
 
     subject { described_class.new(user, workspace) }
 
-    context "actions should be forbidden" do
-      it { is_expected.to forbid_actions([:index, :create, :update, :destroy, :invite_user, :remove_user]) }
-    end
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to forbid_actions([:create, :update, :destroy, :invite_user, :remove_user]) }
 
   end
 
