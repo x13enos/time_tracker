@@ -11,10 +11,11 @@ en:
           attributes:
             name:
               taken: "This name was already be taken"
-  recovery_password:
-    email_not_present: "Email not present"
-    token_not_present: "Token not present"
-    password_not_present: "Password not present"
+  passwords:
+    email_does_not_present: "Email can't be blank"
+    token_does_not_present: "Token can't be blank"
+    password_does_not_present: "Password can't be blank"
+    name_does_not_present: "Name can't be blank"
     confirmation_password_does_not_match: "Confirmation password should be the same"
     user_not_found: "Email address not found. Please check and try again"
     invalid_token: "Token not valid or expired. Try to recover password one more time."

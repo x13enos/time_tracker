@@ -16,8 +16,9 @@ Rails.application.routes.draw do
     resources :workspaces, only: [:index, :create, :update, :destroy] do
       resources :workspace_users, only: [:create, :destroy]
     end
-    get "/forgot_password", to: 'passwords#forgot'
-    post "/reset_password", to: 'passwords#reset'
+    resources :passwords, only: [:new, :create] do
+      put :update, on: :collection
+    end
   end
 
 end

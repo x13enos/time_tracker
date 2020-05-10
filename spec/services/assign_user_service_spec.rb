@@ -16,12 +16,6 @@ RSpec.describe ReportGenerator do
         expect(user.reload.role).to eq("staff")
       end
 
-      it "should keep pregenerated password" do
-        allow(SecureRandom).to receive(:urlsafe_base64) { "i3Sl4ro4" }
-        user = AssignUserService.new(email, admin, workspace).perform
-        expect(user.reload.password == "i3Sl4ro4").to be_truthy
-      end
-
       it "should set passed workspace as active for new user" do
         user = AssignUserService.new(email, admin, workspace).perform
         expect(user.reload.active_workspace).to eq(workspace)

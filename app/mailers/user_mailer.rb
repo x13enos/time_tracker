@@ -2,6 +2,7 @@ class UserMailer < ApplicationMailer
 
   def invitation_email(invitation_data)
     @invitation_data = invitation_data
+    @token = TokenCryptService.encode(invitation_data[:user].email, 8.hours)
     mail(to: invitation_data[:user].email, subject: "Welcome to the time tracker!")
   end
 

@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   SUPPORTED_LANGUAGES = %w(en ru)
-  has_secure_password
+  has_secure_password validations: false
 
   enum role: [:admin, :staff]
 
