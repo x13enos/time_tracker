@@ -21,9 +21,7 @@ class AssignUserService
 
   def create_user
     @new_record = true
-    @password = SecureRandom.urlsafe_base64(8)
     user = User.new({ email: email, active_workspace_id: workspace.id, role: :staff })
-    user.password = @password
     user.save
     return user
   end
@@ -34,7 +32,7 @@ class AssignUserService
   end
 
   def send_invitation_email
-    UserMailer.invitation_email(invitation_data.merge(password: @password)).deliver_now
+    UserMailer.invitation_email(invitation_data).deliver_now
   end
 
 

@@ -26,16 +26,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="additional-text-block">
-                        <div>
-                            <p>
-                              <span>We generated password for you: <span style="color: red;"><%= @invitation_data[:password] %></span></span>
-                            </p>
-                            <p>
-                              <span>Please change it after you first login.</span>
-                            </p>
-                        </div>
-                    </div>
                     <!--<![endif]-->
                 </div>
             </div>
@@ -57,7 +47,7 @@
                         <!--<![endif]-->
                         <div align="center" class="button-container custom-button-container-styles">
                             <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:54pt; width:244.5pt; v-text-anchor:middle;" arcsize="13%" stroke="false" fillcolor="#3D3BEE"><w:anchorlock/><v:textbox inset="0,0,0,0"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:26px"><![endif]-->
-                            <a href="<%= ENV["FRONTEND_HOST"] %>">
+                            <a href="<%= ENV["FRONTEND_HOST"] %>/auth/invitation?token=<%= @token %>">
                                 <span class="link-text-wrapper">
                                   <span>
                                     <span data-mce-style="font-size: 26px; line-height: 52px;" style="font-size: 26px; line-height: 52px;">

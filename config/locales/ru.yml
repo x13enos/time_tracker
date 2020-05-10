@@ -11,6 +11,14 @@ ru:
           attributes:
             name:
               taken: "Данное имя уже было использовано для другого проекта"
+  passwords:
+    email_does_not_present: "Email не может быть пустым"
+    token_does_not_present: "Токен не может быть пустым"
+    password_does_not_present: "Пароль не может быть пустым"
+    name_does_not_present: "Имя не может быть пустым"
+    confirmation_password_does_not_match: "Пароли должны совпадать"
+    user_not_found: "Email не найден, пожалуйста проверьть его и попробуйте снова"
+    invalid_token: "Ссылка из письма устарела. Попробуйте востановить пароль еще раз"
   users:
     errors:
       locale_inclusion: "Приложение еще не подерживает данный язык"
