@@ -16,8 +16,13 @@ Rails.application.routes.draw do
     resources :workspaces, only: [:index, :create, :update, :destroy] do
       resources :workspace_users, only: [:create, :destroy]
     end
-    resources :passwords, only: [:new, :create] do
-      put :update, on: :collection
+    namespace :users do
+      resources :passwords, only: :create do
+        put :update, on: :collection
+      end
+      resources :invitations, only: [] do
+        put :update, on: :collection
+      end
     end
   end
 
