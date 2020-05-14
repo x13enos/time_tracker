@@ -23,7 +23,7 @@ class V1::TimeRecordsController < V1::BaseController
     if time_record.delete
       render partial: '/v1/time_records/show.json.jbuilder', locals: { time_record: time_record }
     else
-      render json: { error: time_record.errors.full_messages.join(", ") }, status: 400
+      render json: { errors: time_record.errors }, status: 400
     end
   end
 
@@ -33,7 +33,7 @@ class V1::TimeRecordsController < V1::BaseController
     if form.save
       render partial: '/v1/time_records/show.json.jbuilder', locals: { time_record: form.time_record }
     else
-      render json: { error: form.errors.full_messages.join(", ") }, status: 400
+      render json: { errors: form.errors }, status: 400
     end
   end
 

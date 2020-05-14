@@ -97,7 +97,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
 
       it "should return error message" do
         post :create, params: time_record_params
-        expect(response.body).to eq({ error: "Description can't be blank" }.to_json)
+        expect(response.body).to eq({ errors: { description: ["can't be blank"]} }.to_json)
       end
     end
   end
@@ -159,7 +159,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
 
       it "should return error message" do
         put :update, params: time_record_params
-        expect(response.body).to eq({ error: "Description can't be blank" }.to_json)
+        expect(response.body).to eq({ errors: { description: ["can't be blank"] } }.to_json)
       end
     end
   end

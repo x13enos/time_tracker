@@ -56,7 +56,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
 
     it "should return error message if project wasn't created" do
       post :create, params: { name: "", format: :json }
-      expect(response.body).to eq({ error: "can't be blank" }.to_json)
+      expect(response.body).to eq({ errors: { name: ["can't be blank"] } }.to_json)
     end
   end
 
@@ -80,7 +80,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
 
     it "should return error message if project wasn't updated" do
       put :update, params: { id: project.id, name: "", format: :json }
-      expect(response.body).to eq({ error: "can't be blank" }.to_json)
+      expect(response.body).to eq({ errors: { name: ["can't be blank"] } }.to_json)
     end
   end
 
@@ -111,7 +111,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
       allow(project).to receive(:destroy) { false }
       project.errors.add(:base, "can't delete")
       delete :destroy, params: { id: project.id, format: :json }
-      expect(response.body).to eq({ error: "can't delete" }.to_json)
+      expect(response.body).to eq({ errors: { base: ["can't delete"] } }.to_json)
     end
   end
 

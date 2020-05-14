@@ -5,7 +5,7 @@ RSpec.describe V1::Users::PasswordsController, type: :controller do
   describe "GET #new" do
     it "should return error in case of empty passed email" do
       post :create, params: { email: "", format: :json }
-      expect(response.body).to eq({ error: I18n.t("passwords.email_does_not_present") }.to_json)
+      expect(response.body).to eq({ errors: { base:I18n.t("passwords.email_does_not_present") } }.to_json)
       expect(response.status).to eq(400)
     end
 
@@ -33,7 +33,9 @@ RSpec.describe V1::Users::PasswordsController, type: :controller do
       it "should return error if user was not found" do
         post :create, params: { email: "test@gmail.com", format: :json }
         expect(response.body).to eq({
-          error: I18n.t("passwords.user_not_found")
+          errors: {
+            base: I18n.t("passwords.user_not_found")
+          }
         }.to_json)
       end
 
@@ -47,13 +49,13 @@ RSpec.describe V1::Users::PasswordsController, type: :controller do
   describe "PUT #update" do
     it "should return error in case of empty passed token" do
       put :update, params: { token: "", password: "", format: :json }
-      expect(response.body).to eq({ error: I18n.t("passwords.token_does_not_present") }.to_json)
+      expect(response.body).to eql({ errors: { base: I18n.t("passwords.token_does_not_present") } }.to_json)
       expect(response.status).to eq(400)
     end
 
     it "should return error in case of empty passed password" do
       put :update, params: { token: "2222", password: "", format: :json }
-      expect(response.body).to eq({ error: I18n.t("passwords.password_does_not_present") }.to_json)
+      expect(response.body).to eql({ errors: { base: I18n.t("passwords.password_does_not_present") } }.to_json)
       expect(response.status).to eq(400)
     end
 
@@ -99,14 +101,14 @@ RSpec.describe V1::Users::PasswordsController, type: :controller do
           allow(user).to receive(:save!) { false }
           user.errors.add(:base, "error")
           put :update, params: request_params
-          expect(response.body).to eq({ error: ["error"] }.to_json)
+          expect(response.body).to eq({ errors: { base: ["error"] } }.to_json)
         end
       end
 
       it "should return error message if token was expired" do
         allow(TokenCryptService).to receive(:decode).with("22222222") { nil }
         put :update, params: request_params
-        expect(response.body).to eq({ error: I18n.t("passwords.invalid_token") }.to_json)
+        expect(response.body).to eq({ errors: { base: I18n.t("passwords.invalid_token") } }.to_json)
       end
     end
   end

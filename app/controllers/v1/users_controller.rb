@@ -9,7 +9,7 @@ class V1::UsersController < V1::BaseController
     if current_user.update(user_params)
       render partial: '/v1/users/show.json.jbuilder', locals: { user: current_user.reload }
     else
-      render json: { error: current_user.errors.values.join(", ") }, status: 400
+      render json: { errors: current_user.reload.errors }, status: 400
     end
   end
 

@@ -53,7 +53,7 @@ class V1::ProjectsController < V1::BaseController
 
   def generate_response
     if project.errors.any?
-      render json: { error: project.errors.values.join(", ") }, status: 400
+      render json: { errors: project.errors }, status: 400
     else
       render partial: '/v1/projects/show.json.jbuilder', locals: { project: project }
     end

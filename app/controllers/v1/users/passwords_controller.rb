@@ -8,7 +8,7 @@ class V1::Users::PasswordsController < V1::Users::BaseController
       UserMailer.recovery_password_email(user).deliver_now
       render json: { status: 'ok' }, status: 200
     else
-      render json: { error: I18n.t("passwords.user_not_found") }, status: 404
+      render json: { errors: { base: I18n.t("passwords.user_not_found") } }, status: 404
     end
   end
 
