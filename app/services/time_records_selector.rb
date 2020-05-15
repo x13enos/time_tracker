@@ -39,7 +39,7 @@ class TimeRecordsSelector
   def group_time_records
     user_time_records.group_by do |time_record|
       regexp = time_record.project.regexp_of_grouping
-      if regexp
+      if regexp.present?
         /#{regexp}/.match(time_record.description).to_a.first || time_record.id
       else
         time_record.id

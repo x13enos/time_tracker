@@ -82,10 +82,10 @@
   </head>
   <body>
     <header class="clearfix">
-      <h1>Summary report</h1>
-      <h2>For <%= user.name || user.email %> by next period: <%= from_date.strftime("%d-%m-%Y") %> - <%= to_date.strftime("%d-%m-%Y") %></h2>
+      <h1><%= I18n.t('reports.title') %></h1>
+      <h2><%= I18n.t('reports.for_user_by_period', user: (user.name || user.email), from: from_date.strftime("%d-%m-%Y"), to: to_date.strftime("%d-%m-%Y") ) %></h2>
       <p>
-        Projects:
+        <%= I18n.t('reports.projects') %>
         <%= projects.pluck(:name).join(", ") %>
       </p>
     </header>
@@ -93,11 +93,11 @@
       <table>
         <thead>
           <tr>
-            <th>Project</th>
-            <th>Date</th>
-            <th>Employee</th>
-            <th>Description</th>
-            <th class='spent_time'>TOTAL <%= total_time %></th>
+            <th><%= I18n.t('reports.project') %></th>
+            <th><%= I18n.t('reports.date') %></th>
+            <th><%= I18n.t('reports.employee') %></th>
+            <th><%= I18n.t('reports.description') %></th>
+            <th class='spent_time'><%= I18n.t('reports.total') %> <%= total_time %></th>
           </tr>
         </thead>
         <tbody>
