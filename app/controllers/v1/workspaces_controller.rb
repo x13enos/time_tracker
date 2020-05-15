@@ -11,7 +11,7 @@ class V1::WorkspacesController < V1::BaseController
     if @workspace.save
       render partial: '/v1/workspaces/show.json.jbuilder'
     else
-      render json: { error: @workspace.errors.values.join(", ") }, status: 400
+      render json: { errors: @workspace.errors }, status: 400
     end
   end
 
@@ -20,7 +20,7 @@ class V1::WorkspacesController < V1::BaseController
     if @workspace.update(workspace_params)
       render partial: '/v1/workspaces/show.json.jbuilder'
     else
-      render json: { error: workspace.errors.values.join(", ") }, status: 400
+      render json: { errors: workspace.errors }, status: 400
     end
   end
 
@@ -29,12 +29,12 @@ class V1::WorkspacesController < V1::BaseController
     if workspace.destroy
       render partial: '/v1/workspaces/show.json.jbuilder'
     else
-      render json: { error: workspace.errors.values.join(", ") }, status: 400
+      render json: { errors: workspace.errors }, status: 400
     end
   end
 
   private
-  
+
   def workspace_params
     params.permit(:name)
   end

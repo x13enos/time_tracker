@@ -39,7 +39,7 @@ RSpec.describe V1::UsersController, type: :controller do
 
     it "should return error message if user info was not updated" do
       put :update, params: { email: "",  format: :json }
-      expect(response.body).to eq({ error: @current_user.errors.values.join(", ") }.to_json)
+      expect(response.body).to eq({ errors: @current_user.errors }.to_json)
     end
   end
 end

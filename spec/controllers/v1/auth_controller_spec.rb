@@ -70,7 +70,7 @@ RSpec.describe V1::AuthController, type: :controller do
       allow(User).to receive(:find_by) { user }
       allow(user).to receive(:authenticate) { false }
       post :create, params: { email: "example@gmail.com", password: "1111", format: :json }
-      expect(response.body).to eq({ error: I18n.t("auth.errors.unathorized") }.to_json)
+      expect(response.body).to eq({ errors: { base: I18n.t("auth.errors.unathorized") } }.to_json)
       expect(response.status).to eq(401)
     end
   end
