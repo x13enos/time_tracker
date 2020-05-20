@@ -38,9 +38,7 @@ RSpec.describe TimeRecordsSelector do
       it "should return grouped time records if they assigned to project with regexp" do
         [@time_record, @time_record_2, @time_record_4].each { |t| t.update(project_id: project_with_regexp.id) }
         result = TimeRecordsSelector.new(params, user).perform
-        expect(result[:grouped_time_records]).to eq([
-          [@time_record_5], [@time_record_6], [@time_record, @time_record_4], [@time_record_2]
-        ])
+        expect(result[:grouped_time_records]).to include([@time_record_5], [@time_record_6], [@time_record, @time_record_4], [@time_record_2])
       end
     end
 

@@ -20,6 +20,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
             "id" => time_record.id,
             "description" => time_record.description,
             "project_id" => time_record.project_id,
+            "tag_ids" => time_record.tag_ids,
             "assigned_date" => time_record.assigned_date.strftime("%d/%m/%Y"),
             "time_start" => time_record.time_start_as_epoch,
             "spent_time" => time_record.spent_time + 1.0
@@ -28,6 +29,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
             "id" => time_record_2.id,
             "description" => time_record_2.description,
             "project_id" => time_record_2.project_id,
+            "tag_ids" => time_record_2.tag_ids,
             "assigned_date" => time_record_2.assigned_date.strftime("%d/%m/%Y"),
             "time_start" => time_record_2.time_start_as_epoch,
             "spent_time" => time_record_2.spent_time
@@ -64,6 +66,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
           "id" => time_record.id,
           "description" => time_record.description,
           "project_id" => time_record.project_id,
+          "tag_ids" => time_record.tag_ids,
           "time_start" => time_record.time_start_as_epoch,
           "spent_time" => time_record.spent_time,
           "assigned_date" => "28/10/2019"
@@ -128,6 +131,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
           "id" => time_record.id,
           "description" => time_record.reload.description,
           "project_id" => time_record.project_id,
+          "tag_ids" => time_record.tag_ids,
           "time_start" => time_record.time_start_as_epoch,
           "spent_time" => time_record.spent_time,
           "assigned_date" => time_record.assigned_date.strftime("%d/%m/%Y")
@@ -178,6 +182,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
         "id" => time_record.id,
         "description" => time_record.description,
         "project_id" => time_record.project_id,
+        "tag_ids" => time_record.tag_ids,
         "time_start" => time_record.time_start_as_epoch,
         "spent_time" => time_record.spent_time,
         "assigned_date" => time_record.assigned_date.strftime("%d/%m/%Y")

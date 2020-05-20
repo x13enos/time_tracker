@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :workspaces, only: [:index, :create, :update, :destroy] do
       resources :workspace_users, only: [:create, :destroy]
     end
+    resources :tags, except: [:new, :edit]
     namespace :users do
       resources :passwords, only: :create do
         put :update, on: :collection

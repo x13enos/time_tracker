@@ -6,8 +6,9 @@ RSpec.describe TimeRecord, type: :model do
     it { should belong_to(:user) }
     it { should belong_to(:project) }
     it { should have_one(:workspace).through(:project) }
+    it { should have_and_belong_to_many(:tags) }
   end
-  
+
   describe '.by_workspace' do
     it "should return list of time records selected by passed workspace" do
       workspace = create(:workspace)

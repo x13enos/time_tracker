@@ -43,7 +43,13 @@ class V1::TimeRecordsController < V1::BaseController
 
   def prepared_params
     params[:assigned_date] = params[:assigned_date].to_datetime if params[:assigned_date]
-    permitted_params = params.permit(:project_id, :description, :spent_time, :assigned_date)
+    permitted_params = params.permit(
+      :project_id,
+      :description,
+      :spent_time,
+      :assigned_date,
+      tag_ids: []
+    )
     permitted_params.merge({
       time_start: params[:start_task] ? Time.now : nil
     })

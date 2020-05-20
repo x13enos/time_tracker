@@ -11,6 +11,10 @@ ru:
           attributes:
             name:
               taken: "Данное имя уже было использовано для другого проекта"
+        tag:
+          attributes:
+            name:
+              taken: "Данное имя уже было использовано для другой метки"
   passwords:
     email_does_not_present: "Email не может быть пустым"
     token_does_not_present: "Токен не может быть пустым"
