@@ -26,6 +26,8 @@
 
 /db/schema.rb
 
+*.swp
+
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
