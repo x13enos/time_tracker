@@ -61,9 +61,22 @@ RSpec.describe V1::AuthController, type: :controller do
 
     it "should set token if user was authorized" do
       allow(User).to receive_message_chain(:find_by, :authenticate) { user }
-      allow(TokenCryptService).to receive(:encode).with(user.email) { 'security_token' }
+      allow(TokenCryptService).to receive(:encode).with(user.email, nil) { 'security_token' }
       post :create, params: { email: "example@gmail.com", password: "1111", format: :json }
       expect(cookies[:token]).to eq('security_token')
+    end
+
+    it "should set long token if user was authorized and param remember_me was passed" do
+      allow(User).to receive_message_chain(:find_by, :authenticate) { user }
+      allow(TokenCryptService).to receive(:encode).with(user.email, 30.days) { 'security_token' }
+      post :create, params: { email: "example@gmail.com", password: "1111", remember_me: true, format: :json }
+      expect(cookies[:token]).to eq('security_token')
+    end
+
+    it "should set additional cookie 'remember me'" do
+      allow(User).to receive_message_chain(:find_by, :authenticate) { user }
+      post :create, params: { email: "example@gmail.com", password: "1111", remember_me: true, format: :json }
+      expect(cookies[:remember_me]).to be_truthy
     end
 
     it "should return message and code status if user was not authorized" do

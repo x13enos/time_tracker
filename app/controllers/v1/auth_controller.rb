@@ -14,7 +14,7 @@ class V1::AuthController < V1::BaseController
     not_auth_user = User.find_by(email: auth_params[:email])
     user = not_auth_user&.authenticate(auth_params[:password])
     if user
-      set_token(user)
+      manage_token_for_user(user)
       render partial: '/v1/users/show.json.jbuilder', locals: { user: user }
     else
       render json: { errors: { base: I18n.t("auth.errors.unathorized") } }, status: 401
@@ -31,5 +31,14 @@ class V1::AuthController < V1::BaseController
 
   def auth_params
     params.permit(:email, :password)
+  end
+
+  def manage_token_for_user(user)
+    if ActiveModel::Type::Boolean.new.cast(params[:remember_me])
+      set_cookie(:remember_me, true)
+      set_token(user, 30.days)
+    else
+      set_token(user)
+    end
   end
 end

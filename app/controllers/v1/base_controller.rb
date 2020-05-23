@@ -6,7 +6,7 @@ class V1::BaseController < ApplicationController
 
   before_action :authenticate
   before_action :set_locale, if: :current_user
-  after_action :set_token
+  after_action :set_token, if: :token_should_be_refresh
 
   def current_user
     @current_user ||= if token.present? && decoded_token
@@ -46,14 +46,22 @@ class V1::BaseController < ApplicationController
   def decode(passed_token)
     begin
       TokenCryptService.decode(passed_token)
-    rescue JWT::ExpiredSignature, JWT::DecodeError
+    rescue JWT::ExpiredSignature
+      cookies.delete(:remember_me)
+      false
+    rescue JWT::DecodeError
       false
     end
   end
 
-  def set_token(user=current_user)
-    cookies[:token] = {
-      value: TokenCryptService.encode(user.email),
+  def set_token(user=current_user, token_lifetime=nil)
+    token = TokenCryptService.encode(user.email, token_lifetime)
+    set_cookie(:token, token)
+  end
+
+  def set_cookie(key, value)
+    cookies[key] = {
+      value: value,
       secure: Rails.env.production?,
       httponly: true
     }
@@ -61,5 +69,9 @@ class V1::BaseController < ApplicationController
 
   def set_locale
     I18n.locale = current_user.locale
+  end
+
+  def token_should_be_refresh
+    !cookies[:remember_me]
   end
 end
