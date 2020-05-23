@@ -1,7 +1,7 @@
 class V1::UsersController < V1::BaseController
   def index
     authorize User
-    @users = User.all
+    get_users
   end
 
   def update
@@ -17,6 +17,11 @@ class V1::UsersController < V1::BaseController
 
   def user_params
     params.permit(:name, :email, :password, :locale, :active_workspace_id)
+  end
+
+  def get_users
+    workspace_ids = ActiveModel::Type::Boolean.new.cast(params[:current_workspace]) ? current_workspace_id : current_user.workspace_ids
+    @users = User.includes(:workspaces).where(workspaces: { id:  workspace_ids } )
   end
 
 end
