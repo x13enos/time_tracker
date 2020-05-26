@@ -13,7 +13,7 @@ RSpec.describe TokenCryptService do
         expiration_time = Time.now.to_i + TokenCryptService::TOKEN_LIFETIME
         payload = { data: "admin@gmail.com", exp: expiration_time.to_s.to_i  }
         expect(JWT).to receive(:encode).with(payload, "secret_key", TokenCryptService::ALGORITHM_TYPE)
-        TokenCryptService.encode("admin@gmail.com")
+        TokenCryptService.encode("admin@gmail.com", nil)
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe TokenCryptService do
 
     it "should return encoded data" do
       allow(JWT).to receive(:encode) { "encoded_data" }
-      expect(TokenCryptService.encode("admin@gmail.com")).to eq("encoded_data")
+      expect(TokenCryptService.encode("admin@gmail.com", nil)).to eq("encoded_data")
     end
   end
 

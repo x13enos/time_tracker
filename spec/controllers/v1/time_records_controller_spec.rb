@@ -1,47 +1,79 @@
 require 'rails_helper'
 
 RSpec.describe V1::TimeRecordsController, type: :controller do
-  login_staff
 
   describe "GET #index" do
-    it "should return weekly user's time records in the right order" do
-      travel_to Time.zone.local(2019, 10, 29)
-      time_start = Time.now - 1.hour
+    context 'user has problem with authorisation' do
+      it 'should clean remember me token in case of expired token' do
+        travel_to Time.zone.local(2019, 10, 29)
+        user = create(:user)
+        cookies[:token] = TokenCryptService.encode(user.email, nil)
+        cookies[:remember_me] = true
+        travel_back
+        get :index, params: { assigned_date: "29-10-2019", format: :json }
 
-      project = create(:project, workspace: @current_user.active_workspace)
-      time_record = create(:time_record, user: @current_user, time_start: time_start, assigned_date: Date.today, project: project)
-      time_record_2 = create(:time_record, user: @current_user, created_at: Time.now + 1.hour, assigned_date: Date.today.beginning_of_week, project: project)
-      time_record_3 = create(:time_record, assigned_date: Date.today + 1.week, project: project)
+        expect(cookies[:remember_me]).to be_nil
+      end
 
-      get :index, params: { assigned_date: "29-10-2019", format: :json }
-      expect(response.body).to eql({
-        "time_records" => [
-          {
-            "id" => time_record.id,
-            "description" => time_record.description,
-            "project_id" => time_record.project_id,
-            "tag_ids" => time_record.tag_ids,
-            "assigned_date" => time_record.assigned_date.strftime("%d/%m/%Y"),
-            "time_start" => time_record.time_start_as_epoch,
-            "spent_time" => time_record.spent_time + 1.0
-          },
-          {
-            "id" => time_record_2.id,
-            "description" => time_record_2.description,
-            "project_id" => time_record_2.project_id,
-            "tag_ids" => time_record_2.tag_ids,
-            "assigned_date" => time_record_2.assigned_date.strftime("%d/%m/%Y"),
-            "time_start" => time_record_2.time_start_as_epoch,
-            "spent_time" => time_record_2.spent_time
-          }
-        ]
-      }.to_json)
+      it 'should not update token if remember_me cookie was set' do
+        travel_to Time.now - 10.days
+        user = create(:user)
+        token = TokenCryptService.encode(user.email, 30.days)
+        cookies[:token] = token
+        cookies[:remember_me] = true
+        travel_back
+        get :index, params: { assigned_date: "29-10-2019", format: :json }
 
-      travel_back
+        expect(cookies[:token]).to eq(token)
+      end
     end
+
+    context "user is authorised" do
+      login_staff
+
+      it "should return weekly user's time records in the right order" do
+
+        travel_to Time.zone.local(2019, 10, 29)
+        time_start = Time.now - 1.hour
+
+        project = create(:project, workspace: @current_user.active_workspace)
+        time_record = create(:time_record, user: @current_user, time_start: time_start, assigned_date: Date.today, project: project)
+        time_record_2 = create(:time_record, user: @current_user, created_at: Time.now + 1.hour, assigned_date: Date.today.beginning_of_week, project: project)
+        time_record_3 = create(:time_record, assigned_date: Date.today + 1.week, project: project)
+
+        get :index, params: { assigned_date: "29-10-2019", format: :json }
+        expect(response.body).to eql({
+          "time_records" => [
+            {
+              "id" => time_record.id,
+              "description" => time_record.description,
+              "project_id" => time_record.project_id,
+              "tag_ids" => time_record.tag_ids,
+              "assigned_date" => time_record.assigned_date.strftime("%d/%m/%Y"),
+              "time_start" => time_record.time_start_as_epoch,
+              "spent_time" => time_record.spent_time + 1.0
+            },
+            {
+              "id" => time_record_2.id,
+              "description" => time_record_2.description,
+              "project_id" => time_record_2.project_id,
+              "tag_ids" => time_record_2.tag_ids,
+              "assigned_date" => time_record_2.assigned_date.strftime("%d/%m/%Y"),
+              "time_start" => time_record_2.time_start_as_epoch,
+              "spent_time" => time_record_2.spent_time
+            }
+          ]
+        }.to_json)
+
+        travel_back
+      end
+    end
+
   end
 
   describe "POST #create" do
+    login_staff
+
     let!(:project) { create(:project) }
 
     context "params are valid" do
@@ -106,6 +138,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "PUT #update" do
+    login_staff
     let(:project) { create(:project, workspace: @current_user.active_workspace )}
     let(:time_record) { create(:time_record, user: @current_user, project: project) }
 
@@ -169,6 +202,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
+    login_staff
     let!(:project) { create(:project, workspace: @current_user.active_workspace )}
     let!(:time_record) { create(:time_record, user: @current_user, project: project) }
 
