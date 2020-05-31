@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/x13enos/time_tracker_extension
+  revision: 6a65362508a88733b2d51c6961b17db9b9127688
+  specs:
+    time_tracker_extension (0.1.0)
+      pry-rails
+      rails (~> 5.2.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -207,6 +215,7 @@ DEPENDENCIES
   shoulda-matchers (~> 3.1)
   spring
   spring-watcher-listen (~> 2.0.0)
+  time_tracker_extension!
   tzinfo-data
   wicked_pdf
 
