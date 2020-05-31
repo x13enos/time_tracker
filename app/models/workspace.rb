@@ -1,4 +1,5 @@
 class Workspace < ApplicationRecord
+  include TimeTrackerExtension::WorkspaceExtension if EXTENSION_ENABLED
 
   has_and_belongs_to_many :users, -> { distinct }
   has_many :projects, dependent: :destroy

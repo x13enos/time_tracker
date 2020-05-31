@@ -1,6 +1,7 @@
 module TimeRecords
   class BaseForm
     include ActiveModel::Model
+    include TimeTrackerExtension::TimeRecords::BaseFormExtension if EXTENSION_ENABLED
 
     validates :description, :spent_time, :assigned_date, presence: true
 

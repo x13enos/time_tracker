@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  mount TimeTrackerExtension::Engine, at: "/"
+
   namespace :v1 do
     resources :auth, only: [:create, :index] do
       delete :destroy, on: :collection
@@ -16,7 +18,7 @@ Rails.application.routes.draw do
     resources :workspaces, only: [:index, :create, :update, :destroy] do
       resources :workspace_users, only: [:create, :destroy]
     end
-    resources :tags, except: [:new, :edit]
+    resources :tags, except: [:new, :show, :edit]
     namespace :users do
       resources :passwords, only: :create do
         put :update, on: :collection
@@ -26,5 +28,4 @@ Rails.application.routes.draw do
       end
     end
   end
-
 end
