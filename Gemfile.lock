@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/x13enos/time_tracker_extension
-  revision: 6a65362508a88733b2d51c6961b17db9b9127688
+  revision: 43e209863b962008131b2d8900f9b91770c9a34f
   specs:
     time_tracker_extension (0.1.0)
       pry-rails

@@ -26,28 +26,32 @@ RSpec.describe TimeRecordsSelector do
     }
   }
 
-  before(:each) { create_time_records(user) }
-
   describe "perform" do
+
     context "grouped_time_records" do
       it "should return empty array if user wasn't passed" do
+        create_time_records(user)
         result = TimeRecordsSelector.new(params, nil).perform
         expect(result[:grouped_time_records]).to be_empty
       end
 
       it "should return grouped time records if they assigned to project with regexp" do
+        create_time_records(user)
         [@time_record, @time_record_2, @time_record_4].each { |t| t.update(project_id: project_with_regexp.id) }
         result = TimeRecordsSelector.new(params, user).perform
+        expect(result[:grouped_time_records].size).to eq(4)
         expect(result[:grouped_time_records]).to include([@time_record_5], [@time_record_6], [@time_record, @time_record_4], [@time_record_2])
       end
     end
 
     it "should return list of projects" do
+      create_time_records(user)
       result = TimeRecordsSelector.new(params, user).perform
       expect(result[:projects]).to include(@time_record.project, @time_record_2.project, @time_record_4.project)
     end
 
     it "should return converted timestamps" do
+      create_time_records(user)
       result = TimeRecordsSelector.new(params, user).perform
       expect(result[:converted_dates]).to eq({
         from: "15-10-2019".to_date,
@@ -56,8 +60,20 @@ RSpec.describe TimeRecordsSelector do
     end
 
     it "shold return total spent time for selected time records" do
+      create_time_records(user)
       result = TimeRecordsSelector.new(params, user).perform
       expect(result[:total_spent_time]).to eq(6.29)
+    end
+
+    it "should return orders in right order" do
+      travel_to Time.zone.local(2019, 10, 29)
+      @time_record = create(:time_record, user: user, created_at: Time.now - 1.hour, assigned_date: Date.today, project: project_3)
+      @time_record_1 = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
+      travel_back
+
+      result = TimeRecordsSelector.new(params, user).perform
+      time_record_ids = result[:grouped_time_records].flatten.map(&:id)
+      expect(time_record_ids).to eql([@time_record_1.id, @time_record.id])
     end
   end
 end
