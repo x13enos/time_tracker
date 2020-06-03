@@ -33,7 +33,7 @@ class TimeRecordsSelector
       .by_workspace(user.active_workspace_id)
       .joins(:user)
       .where("assigned_date BETWEEN ? AND ?", converted_dates[:from], converted_dates[:to])
-      .order(created_at: :desc)
+      .order(assigned_date: :desc, created_at: :desc)
   end
 
   def group_time_records
