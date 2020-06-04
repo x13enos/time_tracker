@@ -5,6 +5,7 @@ class V1::BaseController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :authentication_error
 
   before_action :authenticate
+  around_action :set_time_zone
   before_action :set_locale, if: :current_user
   after_action :set_token, if: :token_should_be_refresh
 
@@ -73,5 +74,10 @@ class V1::BaseController < ApplicationController
 
   def token_should_be_refresh
     !cookies[:remember_me]
+  end
+
+  def set_time_zone
+    timezone = ActiveSupport::TimeZone[params["timezone_offset"].to_i]
+    Time.use_zone(timezone) { yield }
   end
 end
