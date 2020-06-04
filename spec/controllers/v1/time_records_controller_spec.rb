@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe V1::TimeRecordsController, type: :controller do
 
   describe "GET #index" do
+
     context 'user has problem with authorisation' do
       it 'should clean remember me token in case of expired token' do
         travel_to Time.zone.local(2019, 10, 29)
@@ -30,6 +31,11 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
 
     context "user is authorised" do
       login_staff
+
+      it "should set the right timezone for request" do
+        expect(Time).to receive(:use_zone).with(ActiveSupport::TimeZone[-3])
+        get :index, params: { assigned_date: "29-10-2019", timezone_offset: "-3", format: :json }
+      end
 
       it "should return weekly user's time records in the right order" do
 

@@ -20,7 +20,7 @@ module TimeRecords
     end
 
     def only_todays_task_could_be_activated
-      if assigned_date.to_date != Date.today
+      if assigned_date.to_date != Time.zone.today
         self.errors.add(:base, I18n.t("time_records.errors.only_todays_taks"))
       end
     end

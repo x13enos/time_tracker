@@ -10,10 +10,14 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
 
     describe 'only_todays_task_could_be_activated' do
       it "should raise error if assigned date isn't today and time start is present" do
-        time_record_form.assigned_date = Date.today - 2.days
-        time_record_form.time_start = Time.now
+        travel_to Time.zone.local(2019, 10, 29, 1, 0, 0)
+        time_record_form.assigned_date = Date.today
+        Time.zone = ActiveSupport::TimeZone[-5]
+        time_record_form.time_start = Time.zone.now
         time_record_form.valid?
         expect(time_record_form.errors[:base]).to include(I18n.t("time_records.errors.only_todays_taks"))
+        Time.zone = ActiveSupport::TimeZone[0]
+        travel_back
       end
 
       it "shouldn't raise error if assigned date is today" do
