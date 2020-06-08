@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/x13enos/time_tracker_extension
-  revision: 43e209863b962008131b2d8900f9b91770c9a34f
+  revision: 5c2292d0839b918c77907e2f9eaa2cdab2be6b1a
   specs:
-    time_tracker_extension (0.1.0)
+    time_tracker_extension (0.2.0)
       pry-rails
       rails (~> 5.2.2)
 
@@ -215,7 +215,7 @@ DEPENDENCIES
   shoulda-matchers (~> 3.1)
   spring
   spring-watcher-listen (~> 2.0.0)
-  time_tracker_extension!
+  time_tracker_extension (~> 0.2)!
   tzinfo-data
   wicked_pdf
 
