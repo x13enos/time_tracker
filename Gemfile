@@ -13,7 +13,7 @@ gem 'rails', '~> 5.2.2'
 gem 'pundit'
 gem 'wicked_pdf'
 gem 'jbuilder'
-gem 'time_tracker_extension', git: 'https://github.com/x13enos/time_tracker_extension'
+gem 'time_tracker_extension', '~> 0.2', git: 'https://github.com/x13enos/time_tracker_extension'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
