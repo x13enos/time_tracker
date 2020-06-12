@@ -17,6 +17,7 @@ RUN mkdir -p $RAILS_ROOT
 WORKDIR $RAILS_ROOT
 
 ADD Gemfile* $RAILS_ROOT/
+# ADD ./extension /var/www/extension
 RUN gem install bundler && bundle install
 
 ADD . $RAILS_ROOT
