@@ -27,28 +27,6 @@ class V1::ProjectsController < V1::BaseController
     generate_response
   end
 
-  def assign_user
-    authorize project
-    begin
-      project.users << user
-      render json: { success: true }, status: 200
-    rescue
-      # TODO: send message to bug tracker about this
-      render json: { error: I18n.t("projects.errors.user_was_not_assigned") }, status: 400
-    end
-  end
-
-  def remove_user
-    authorize project
-    begin
-      project.users.delete(user)
-      render json: { success: true }, status: 200
-    rescue
-      # TODO: send message to bug tracker about this
-      render json: { error: I18n.t("projects.errors.user_was_not_removed") }, status: 400
-    end
-  end
-
   private
 
   def generate_response

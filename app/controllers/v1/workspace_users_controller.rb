@@ -1,6 +1,6 @@
 class V1::WorkspaceUsersController < V1::BaseController
   def create
-    authorize workspace
+    authorize workspace, policy_class: WorkspaceUserPolicy
     begin
       user = AssignUserService.new(params[:email], current_user, workspace).perform
       render partial: '/v1/users/show.json.jbuilder', locals: { user: user.reload }
@@ -10,7 +10,7 @@ class V1::WorkspaceUsersController < V1::BaseController
   end
 
   def destroy
-    authorize workspace
+    authorize workspace, policy_class: WorkspaceUserPolicy
     begin
       workspace.users.delete(User.find(params[:id]))
       render json: { success: true }, status: 200

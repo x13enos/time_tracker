@@ -66,7 +66,7 @@ RSpec.describe TimeRecord, type: :model do
       travel_to Time.zone.local(2019, 10, 29)
 
       time_record = create(:time_record, time_start: Time.now)
-      expect(time_record.time_start_as_epoch).to eq(1572307200)
+      expect(time_record.time_start_as_epoch).to eq(time_record.time_start.utc.iso8601.to_time.to_i)
 
       travel_back
     end

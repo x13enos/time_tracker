@@ -43,7 +43,7 @@ RSpec.describe V1::WorkspaceUsersController, type: :controller do
         expect(response.body).to eq(user_info(user).to_json)
       end
 
-      it "should return error message if user wasn't assigned to the project" do
+      it "should return error message if user wasn't assigned to the workspace" do
         allow(AssignUserService).to receive_message_chain(:new, :perform).and_raise(ActiveRecord::StaleObjectError)
         post :create, params: { workspace_id: workspace.id, email: user.email, format: :json }
         expect(response.body).to eq({ error: I18n.t("workspaces.errors.user_was_not_invited") }.to_json)
@@ -60,7 +60,7 @@ RSpec.describe V1::WorkspaceUsersController, type: :controller do
       workspace.users << [@current_user, user]
     end
 
-    it "should return success status if user was removed from project" do
+    it "should return success status if user was removed from workspace" do
       delete :destroy, params: { workspace_id: workspace.id, id: user.id, format: :json }
       expect(response.body).to eq({ success: true }.to_json)
     end
@@ -70,7 +70,7 @@ RSpec.describe V1::WorkspaceUsersController, type: :controller do
       expect(workspace.reload.user_ids).to_not include(user.id)
     end
 
-    it "should return error message if user wasn't removed from project" do
+    it "should return error message if user wasn't removed from workspace" do
       allow(@current_user).to receive_message_chain(:workspaces, :find) { workspace }
       allow(workspace).to receive_message_chain(:users, :delete).and_raise(ActiveRecord::StaleObjectError)
       delete :destroy, params: { workspace_id: workspace.id, id: user.id, format: :json }
