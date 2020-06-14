@@ -9,8 +9,7 @@ Rails.application.routes.draw do
     resources :time_records, only: [:index, :create, :update, :destroy]
     resources :reports, only: :index
     resources :projects, only: [:index, :create, :update, :destroy] do
-      put :assign_user, on: :member
-      put :remove_user, on: :member
+      resources :project_users, only: [:create, :destroy]
     end
     resources :users, only: :index do
       put :update, on: :collection

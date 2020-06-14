@@ -115,47 +115,4 @@ RSpec.describe V1::ProjectsController, type: :controller do
     end
   end
 
-  describe "PUT #assign_user" do
-    login_admin
-    let!(:project) { create(:project, workspace: @current_user.active_workspace) }
-    let(:user) { create(:user) }
-
-    before do
-      project.users << @current_user
-    end
-
-    it "should return success status if user was assigned to the project" do
-      put :assign_user, params: { id: project.id, user_id: user.id, format: :json }
-      expect(response.body).to eq({ success: true }.to_json)
-    end
-
-    it "should return error message if user wasn't assigned to the project" do
-      allow(@current_user).to receive_message_chain(:projects, :by_workspace, :find) { project }
-      allow(project).to receive_message_chain(:users, :<<).and_raise(ActiveRecord::StaleObjectError)
-      put :assign_user, params: { id: project.id, user_id: '111', format: :json }
-      expect(response.body).to eq({ error: I18n.t("projects.errors.user_was_not_assigned") }.to_json)
-    end
-  end
-
-  describe "PUT #remove_user" do
-    login_admin
-    let!(:project) { create(:project, workspace: @current_user.active_workspace) }
-    let(:user) { create(:user) }
-
-    before do
-      project.users << @current_user
-    end
-
-    it "should return success status if user was removed from project" do
-      put :remove_user, params: { id: project.id, user_id: user.id, format: :json }
-      expect(response.body).to eq({ success: true }.to_json)
-    end
-
-    it "should return error message if user wasn't removed from project" do
-      allow(project).to receive_message_chain(:users, :delete).and_raise(ActiveRecord::StaleObjectError)
-      put :remove_user, params: { id: project.id, user_id: '111', format: :json }
-      expect(response.body).to eq({ error: I18n.t("projects.errors.user_was_not_removed") }.to_json)
-    end
-  end
-
 end

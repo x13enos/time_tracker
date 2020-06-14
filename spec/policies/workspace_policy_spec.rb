@@ -22,7 +22,7 @@ describe WorkspacePolicy do
 
       subject { described_class.new(user, workspace) }
 
-      it { is_expected.to permit_actions([:update, :destroy, :invite_user, :remove_user]) }
+      it { is_expected.to permit_actions([:update, :destroy]) }
     end
   end
 
@@ -33,7 +33,7 @@ describe WorkspacePolicy do
     subject { described_class.new(user, workspace) }
 
     it { is_expected.to permit_action(:index) }
-    it { is_expected.to forbid_actions([:create, :update, :destroy, :invite_user, :remove_user]) }
+    it { is_expected.to forbid_actions([:create, :update, :destroy]) }
 
   end
 
