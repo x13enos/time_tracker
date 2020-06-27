@@ -30,3 +30,17 @@ services:
     ports:
       - "8080:8080"
       - "1025:1025"
+
+  polling_service:
+    image: x3enos/time_tracker:development
+    command: bundle exec rake time_tracker_extension:telegram_bot_poller
+    container_name: polling_service
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/var/www/time_tracker
+      - ./extension:/var/www/time_tracker_extension/
+    depends_on:
+      - db
+    env_file:
+      - .env.development.local
