@@ -1,4 +1,30 @@
 Rails.application.routes.draw do
-  post "/graphql", to: "graphql#execute"
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  mount TimeTrackerExtension::Engine, at: "/"
+
+  namespace :v1 do
+    resources :auth, only: [:create, :index] do
+      delete :destroy, on: :collection
+    end
+    resources :time_records, only: [:index, :create, :update, :destroy]
+    resources :reports, only: :index
+    resources :projects, only: [:index, :create, :update, :destroy] do
+      resources :project_users, only: [:create, :destroy]
+    end
+    resources :users, only: :index do
+      put :update, on: :collection
+    end
+    resources :workspaces, only: [:index, :create, :update, :destroy] do
+      resources :workspace_users, only: [:create, :destroy]
+    end
+    resources :tags, except: [:new, :show, :edit]
+    namespace :users do
+      resources :passwords, only: :create do
+        put :update, on: :collection
+      end
+      resources :invitations, only: [] do
+        put :update, on: :collection
+      end
+    end
+  end
 end

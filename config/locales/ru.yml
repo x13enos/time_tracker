@@ -1,0 +1,53 @@
+ru:
+  unathorized: "Вы не авторизованы для данного действия."
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "Данный email уже используется для другого пользователя"
+        project:
+          attributes:
+            name:
+              taken: "Данное имя уже было использовано для другого проекта"
+        tag:
+          attributes:
+            name:
+              taken: "Данное имя уже было использовано для другой метки"
+  passwords:
+    email_does_not_present: "Email не может быть пустым"
+    token_does_not_present: "Токен не может быть пустым"
+    password_does_not_present: "Пароль не может быть пустым"
+    name_does_not_present: "Имя не может быть пустым"
+    confirmation_password_does_not_match: "Пароли должны совпадать"
+    user_not_found: "Email не найден, пожалуйста проверьть его и попробуйте снова"
+    invalid_token: "Ссылка из письма устарела. Попробуйте востановить пароль еще раз"
+  users:
+    errors:
+      locale_inclusion: "Приложение еще не подерживает данный язык"
+  auth:
+    errors:
+      unathorized: "Вы ввели неправильную почту или пароль"
+  projects:
+    errors:
+      user_was_not_assigned: "Не удалось добавить пользователя в проект"
+      user_was_not_removed: "Не удалось удалить пользователя из проекта"
+      incorrect_format_of_regexp: "Неверный формат регулярного выражения"
+  time_records:
+    errors:
+      should_be_less_than_24_hours: "Общее количество потраченного времени не может превышать 24 часа за день"
+      only_todays_taks: "Вы можете стартовать только сегодняшние задачи"
+  workspaces:
+    errors:
+      user_was_not_invited: "Не удалось пригласить пользователя"
+      user_was_not_removed: "Не удалось удалить пользователя из рабочего пространства"
+  reports:
+    title: "Сводный отчет"
+    for_user_by_period: "Для %{user}, за следующий период: %{from} - %{to}"
+    projects: "Проекты: "
+    project: "Проект"
+    date: "Дата"
+    employee: "Работник"
+    description: "Описание"
+    total: "ВСЕГО"

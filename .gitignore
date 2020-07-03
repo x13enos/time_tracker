@@ -8,9 +8,7 @@
 /.bundle
 /config/database.yml
 
-/app/graphql/*/.keep
-.env.development.local
-/db/schema.rb
+.env.*.local
 
 # Ignore the default SQLite database.
 
@@ -20,9 +18,17 @@
 !/log/.keep
 !/tmp/.keep
 
+/public/reports/*.pdf
+
 # Ignore uploaded files in development
 /storage/*
 !/storage/.keep
+
+/db/schema.rb
+/extension/
+Dockerfile.development
+
+*.swp
 
 .byebug_history
 

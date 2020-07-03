@@ -1,33 +1,53 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  unathorized: "Unathorized."
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "This email was already be taken"
+        project:
+          attributes:
+            name:
+              taken: "This name was already be taken"
+        tag:
+          attributes:
+            name:
+              taken: "This name was already be taken"
+  passwords:
+    email_does_not_present: "Email can't be blank"
+    token_does_not_present: "Token can't be blank"
+    password_does_not_present: "Password can't be blank"
+    name_does_not_present: "Name can't be blank"
+    confirmation_password_does_not_match: "Confirmation password should be the same"
+    user_not_found: "Email address not found. Please check and try again"
+    invalid_token: "Token not valid or expired. Try to recover password one more time."
+  users:
+    errors:
+      locale_inclusion: "We don't support this language yet"
+  auth:
+    errors:
+      unathorized: "Email or Password are wrong"
+  projects:
+    errors:
+      user_was_not_assigned: "User wasn't assigned to this project"
+      user_was_not_removed: "User wasn't removed from this project"
+      incorrect_format_of_regexp: "An invalid regular expression pattern"
+  time_records:
+    errors:
+      should_be_less_than_24_hours: "The total amount of spent time cannot exceed 24 hours per day"
+      only_todays_taks: "You can only launch tasks which assigned to today"
+  workspaces:
+    errors:
+      user_was_not_invited: "User wasn't invited to this workspace."
+      user_was_not_removed: "User wasn't removed from this workspace."
+  reports:
+    title: "Summary report"
+    for_user_by_period: "For %{user}, by next period: %{from} - %{to}"
+    projects: "Projects: "
+    project: "Project"
+    date: "Date"
+    employee: "Employee"
+    description: "Description"
+    total: "TOTAL"
