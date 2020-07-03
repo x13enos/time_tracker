@@ -4,7 +4,7 @@ describe WorkspacePolicy do
 
   context "user is admin" do
     let(:active_workspace) { create(:workspace) }
-    let(:user) { build(:user, role: :admin, active_workspace: active_workspace) }
+    let(:user) { build(:user, role: :admin, workspace_ids: [active_workspace.id], active_workspace: active_workspace) }
 
     context "actions 'create' and 'index' doesn't require any conditions" do
 

@@ -12,6 +12,7 @@ class User < ApplicationRecord
   validates :password, length: { in: 8..32 }, allow_nil: true
   validates :locale, inclusion: { in: SUPPORTED_LANGUAGES,
     message: I18n.t("users.errors.locale_inclusion") }
+  validate :active_workspace_is_one_of_users_workspaces
 
   has_and_belongs_to_many :projects, -> { distinct }
   has_and_belongs_to_many :workspaces, -> { distinct }
@@ -19,4 +20,12 @@ class User < ApplicationRecord
                                 foreign_key: "active_workspace_id"
 
   has_many :time_records, dependent: :destroy
+
+  private
+
+  def active_workspace_is_one_of_users_workspaces
+    unless workspace_ids.include?(active_workspace_id)
+      errors.add(:active_workspace_id, I18n.t("users.errors.active_workspace_is_invalid"))
+    end
+  end
 end

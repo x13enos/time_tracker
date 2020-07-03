@@ -13,6 +13,15 @@ RSpec.describe User, type: :model do
     it { should validate_length_of(:password).is_at_least(8).is_at_most(32) }
     it { should validate_presence_of(:locale) }
     it { should validate_inclusion_of(:locale).in_array(User::SUPPORTED_LANGUAGES) }
+
+    describe "active_workspace_is_one_of_users_workspaces" do
+      let!(:active_workspace) { create(:workspace) }
+      let(:user) { build(:user, active_workspace: active_workspace) }
+      it "should add error if active workspace is not in list of user's workspaces" do
+        user.save
+        expect(user.errors[:active_workspace_id]).to include(I18n.t("users.errors.active_workspace_is_invalid"))
+      end
+    end
   end
 
   context 'associations' do
