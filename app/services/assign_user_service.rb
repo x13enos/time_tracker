@@ -8,7 +8,7 @@ class AssignUserService
 
   def perform
     get_user
-    add_user_to_workspace
+    @new_record ? send_invitation_email : add_user_to_workspace
     return user
   end
 
@@ -22,13 +22,14 @@ class AssignUserService
   def create_user
     @new_record = true
     user = User.new({ email: email, active_workspace_id: workspace.id, role: :staff })
+    user.workspace_ids = [workspace.id]
     user.save
     return user
   end
 
   def add_user_to_workspace
     workspace.users << user
-    @new_record ? send_invitation_email : send_email_about_assigning_user
+    send_email_about_assigning_user
   end
 
   def send_invitation_email

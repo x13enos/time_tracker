@@ -15,10 +15,9 @@ RSpec.describe V1::ProjectUsersController, type: :controller do
   describe "POST #create" do
     login_admin
     let!(:project) { create(:project, workspace: @current_user.active_workspace) }
-    let!(:user) { create(:user, active_workspace: @current_user.active_workspace) }
+    let!(:user) { create(:user, workspace_ids: [@current_user.active_workspace.id], active_workspace: @current_user.active_workspace) }
 
     before do
-      @current_user.active_workspace.users << [@current_user, user]
       project.users << @current_user
     end
 
@@ -49,10 +48,9 @@ RSpec.describe V1::ProjectUsersController, type: :controller do
   describe "DELETE #destroy" do
     login_admin
     let!(:project) { create(:project, workspace: @current_user.active_workspace) }
-    let(:user) { create(:user, active_workspace: @current_user.active_workspace) }
+    let!(:user) { create(:user, workspace_ids: [@current_user.active_workspace.id], active_workspace: @current_user.active_workspace) }
 
     before do
-      @current_user.active_workspace.users << [@current_user, user]
       project.users << [@current_user, user]
     end
 

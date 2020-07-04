@@ -6,17 +6,15 @@ RSpec.describe V1::WorkspacesController, type: :controller do
     context "user is admin" do
       login_admin
 
-      let!(:workspace1) { create(:workspace, user_ids: [@current_user.id]) }
-      let!(:workspace2) { create(:workspace) }
-
+      let!(:workspace) { create(:workspace) }
 
       it "should return list of user workspaces with user_ids" do
         controller.instance_variable_set(:@current_user, @current_user)
         get :index, params: { format: :json }
         expect(response.body).to include([
           {
-            id: workspace1.id,
-            name: workspace1.name,
+            id: @current_user.active_workspace.id,
+            name: @current_user.active_workspace.name,
             user_ids: [@current_user.id]
           }
         ].to_json)
@@ -26,8 +24,7 @@ RSpec.describe V1::WorkspacesController, type: :controller do
     context "user is staff" do
       login_staff
 
-      let!(:workspace1) { create(:workspace, user_ids: [@current_user.id]) }
-      let!(:workspace2) { create(:workspace) }
+      let!(:workspace) { create(:workspace) }
 
 
       it "should return list of user workspaces w/o user_ids" do
@@ -35,8 +32,8 @@ RSpec.describe V1::WorkspacesController, type: :controller do
         get :index, params: { format: :json }
         expect(response.body).to include([
           {
-            id: workspace1.id,
-            name: workspace1.name
+            id: @current_user.active_workspace.id,
+            name: @current_user.active_workspace.name,
           }
         ].to_json)
       end
