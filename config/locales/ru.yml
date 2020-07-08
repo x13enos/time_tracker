@@ -52,3 +52,8 @@ ru:
     employee: "Работник"
     description: "Описание"
     total: "ВСЕГО"
+  mailer:
+    hello_with_name: "Здравствуйте %{user}!"
+    subjects:
+      you_were_assigned_to_project: "Вы были добавлены к проекту!"
+    you_were_assigned_to_project: "Вас добавили в проект \"%{project}\" в рабочем пространстве \"%{workspace}\"."
