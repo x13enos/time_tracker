@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   mount TimeTrackerExtension::Engine, at: "/"
 
   namespace :v1 do
+    namespace :admin do
+      resources :users, only: :index
+    end
     resources :auth, only: [:create, :index] do
       delete :destroy, on: :collection
     end
