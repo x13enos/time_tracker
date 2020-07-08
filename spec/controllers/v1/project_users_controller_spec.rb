@@ -21,14 +21,30 @@ RSpec.describe V1::ProjectUsersController, type: :controller do
       project.users << @current_user
     end
 
-    it "should assigning user to the passed project" do
-      post :create, params: { project_id: project.id, user_id: user.id, format: :json }
-      expect(project.reload.user_ids).to include(user.id)
-    end
+    context "user was assigned to project" do
 
-    it "should return success status if user was added to the project" do
-      post :create, params: { project_id: project.id, user_id: user.id, format: :json }
-      expect(response.body).to eq(user_info(user).to_json)
+      it "should assigning user to the passed project" do
+        post :create, params: { project_id: project.id, user_id: user.id, format: :json }
+        expect(project.reload.user_ids).to include(user.id)
+      end
+
+      it "should return success status" do
+        post :create, params: { project_id: project.id, user_id: user.id, format: :json }
+        expect(response.body).to eq(user_info(user).to_json)
+      end
+
+      it "should create notification service" do
+        expect(UserNotifier).to receive(:new).with(user, :assign_user_to_project, { project: project }) { double(perform: true) }
+        post :create, params: { project_id: project.id, user_id: user.id, format: :json }
+      end
+
+      it "should launch notification service" do
+        notifier = double
+        allow(UserNotifier).to receive(:new) { notifier }
+        expect(notifier).to receive(:perform)
+        post :create, params: { project_id: project.id, user_id: user.id, format: :json }
+      end
+
     end
 
     it "should return error message if user wasn't assigned to the project" do
