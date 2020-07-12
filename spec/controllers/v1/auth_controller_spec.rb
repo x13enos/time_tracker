@@ -8,7 +8,7 @@ RSpec.describe V1::AuthController, type: :controller do
       login_staff
 
       it "should return user's info" do
-        get :index, { format: :json }
+        get :index, format: :json
         expect(response.body).to eq({
           id: @current_user.id,
           email: @current_user.email,
@@ -22,12 +22,12 @@ RSpec.describe V1::AuthController, type: :controller do
 
     context "user was not authorized" do
       it "should return error message" do
-        get :index, { format: :json }
+        get :index, format: :json
         expect(response.body).to eq({ error: I18n.t("auth.errors.unathorized") }.to_json)
       end
 
       it "should return 401 status" do
-        get :index, { format: :json }
+        get :index, format: :json
         expect(response.status).to eq(401)
       end
     end
