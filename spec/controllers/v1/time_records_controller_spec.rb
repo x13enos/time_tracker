@@ -185,6 +185,23 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
 
         travel_back
       end
+
+      it "should set start time as nil if spicific param for stopping issue was passed" do
+        travel_to Time.zone.local(2019, 10, 28)
+
+        put :update, params: { id: time_record.id, start_task: false, format: :json }
+        expect(time_record.reload.time_start).to be_nil
+
+        travel_back
+      end
+
+      it "shouldn't change start time if param for stopping issue was not passed" do
+        travel_to Time.zone.local(2019, 10, 28)
+
+        expect { put :update, params: { id: time_record.id,  format: :json } }.to_not change { time_record.time_start }
+
+        travel_back
+      end
     end
 
     context "params are invalid" do

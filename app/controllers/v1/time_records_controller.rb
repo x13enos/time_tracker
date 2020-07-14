@@ -52,9 +52,13 @@ class V1::TimeRecordsController < V1::BaseController
       :assigned_date,
       tag_ids: []
     )
-    permitted_params.merge({
-      time_start: params[:start_task] ? Time.now : nil
-    })
+
+    unless params[:start_task].nil?
+      start_task_value = ActiveModel::Type::Boolean.new.cast(params[:start_task])
+      permitted_params[:time_start] = start_task_value ? Time.now : nil
+    end
+
+    return permitted_params
   end
 
   def time_record

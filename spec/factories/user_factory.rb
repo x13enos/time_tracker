@@ -1,10 +1,17 @@
 FactoryBot.define do
 
   factory :user do
+    before(:create) do |object|
+      if object.active_workspace_id.nil?
+        workspace = create(:workspace)
+        object.workspaces << workspace
+        object.active_workspace = workspace
+      end
+    end
+
     name     { Faker::Name.name }
     email    { Faker::Internet.unique.email }
     password { "password" }
-    association :active_workspace, factory: :workspace
 
     trait :admin do
       role { :admin }

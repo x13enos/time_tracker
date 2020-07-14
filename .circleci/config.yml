@@ -2,7 +2,20 @@ version: 2.1
 jobs:
   build_image:
     docker:
-      - image: circleci/ruby:2.6.1
+      - image: circleci/ruby:2.7.1
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: |
+          IMAGE=x3enos/time_tracker:$CIRCLE_SHA1
+          PRODUCTION=x3enos/time_tracker:production
+          docker build -t $IMAGE -t $PRODUCTION .
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker push $IMAGE
+          docker push $PRODUCTION
+  build_development_image:
+    docker:
+      - image: circleci/ruby:2.7.1
     steps:
       - checkout
       - setup_remote_docker
@@ -15,7 +28,7 @@ jobs:
           docker push $DEVELOPMENT
   build:
     docker:
-      - image: circleci/ruby:2.6.1
+      - image: circleci/ruby:2.7.1
         environment:
           RAILS_ENV: test
       - image: postgres:9.5
@@ -82,9 +95,15 @@ workflows:
   build_and_deploy:
     jobs:
       - build
-      - build_image:
+      - build_development_image:
           requires:
             - build
           filters:
             branches:
               only: development
+      - build_image:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

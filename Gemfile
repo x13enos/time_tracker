@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.1'
+ruby '2.7.1'
 
 gem 'bcrypt'
 gem 'bootsnap', '>= 1.1.0', require: false
@@ -9,12 +9,12 @@ gem 'dotenv-rails'
 gem 'jwt'
 gem 'pg'
 gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.2.4.3'
+gem 'rails', '~> 6.0'
 gem 'pundit'
 gem 'wicked_pdf'
 gem 'jbuilder'
-# gem 'time_tracker_extension', '~> 0.2', path: '/var/www/time_tracker_extension'
-gem 'time_tracker_extension', '~> 0.2', git: 'https://github.com/x13enos/time_tracker_extension'
+# gem 'time_tracker_extension', '> 0.2', '< 1.0', path: './extension'
+gem 'time_tracker_extension', '> 0.2', '< 1.0', git: 'https://github.com/x13enos/time_tracker_extension'
 gem "skylight"
 gem "sentry-raven"
 

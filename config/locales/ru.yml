@@ -26,6 +26,7 @@ ru:
   users:
     errors:
       locale_inclusion: "Приложение еще не подерживает данный язык"
+      active_workspace_is_invalid: "Активное рабочее пространство может быть выбрано только из числа тех, к которым, принадлежит пользователь"
   auth:
     errors:
       unathorized: "Вы ввели неправильную почту или пароль"
@@ -51,3 +52,8 @@ ru:
     employee: "Работник"
     description: "Описание"
     total: "ВСЕГО"
+  mailer:
+    hello_with_name: "Здравствуйте %{user}!"
+    subjects:
+      you_were_assigned_to_project: "Вы были добавлены к проекту!"
+    you_were_assigned_to_project: "Вас добавили в проект \"%{project}\" в рабочем пространстве \"%{workspace}\"."

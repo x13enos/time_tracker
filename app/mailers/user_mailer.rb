@@ -16,4 +16,10 @@ class UserMailer < ApplicationMailer
     @invitation_data = invitation_data
     mail(to: invitation_data[:user].email, subject: "You was assigned to new workspace!")
   end
+
+  def assign_user_to_project(user, project)
+    @user = user
+    @project = project
+    mail(to: user.email, subject: I18n.t("mailer.subjects.you_were_assigned_to_project"))
+  end
 end

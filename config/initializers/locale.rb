@@ -1,2 +1,2 @@
-I18n.available_locales = User::SUPPORTED_LANGUAGES
+I18n.available_locales = %w(en ru)
 I18n.default_locale = :en

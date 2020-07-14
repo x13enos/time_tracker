@@ -3,12 +3,8 @@ require 'rails_helper'
 describe ProjectUserPolicy do
 
   context "user is admin" do
-    let(:workspace) { create(:workspace) }
-    let(:user) { build(:user, role: :admin, active_workspace: workspace) }
-
-    before do
-      workspace.users << user
-    end
+    let!(:workspace) { create(:workspace) }
+    let!(:user) { create(:user, role: :admin, workspace_ids: [workspace.id], active_workspace: workspace) }
 
     subject { described_class.new(user, workspace) }
     it { is_expected.to permit_actions([:create, :destroy]) }

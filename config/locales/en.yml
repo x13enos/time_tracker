@@ -26,6 +26,7 @@ en:
   users:
     errors:
       locale_inclusion: "We don't support this language yet"
+      active_workspace_is_invalid: "You can select active workspace only from the list of user's workspaces"
   auth:
     errors:
       unathorized: "Email or Password are wrong"
@@ -51,3 +52,8 @@ en:
     employee: "Employee"
     description: "Description"
     total: "TOTAL"
+  mailer:
+    hello_with_name: "Hello %{user}!"
+    subjects:
+      you_were_assigned_to_project: "You were assigned to project!"
+    you_were_assigned_to_project: "You were assigned to project \"%{project}\" in \"%{workspace}\"."
