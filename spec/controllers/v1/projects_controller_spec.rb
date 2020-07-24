@@ -31,8 +31,9 @@ RSpec.describe V1::ProjectsController, type: :controller do
     end
 
     it "should set locale if user was authorized" do
+      @current_user.update(locale: "ru")
+      expect(I18n).to receive(:with_locale).with("ru")
       get :index, params: { format: :json }
-      expect(I18n.locale.to_s).to eq(@current_user.locale)
     end
   end
 
