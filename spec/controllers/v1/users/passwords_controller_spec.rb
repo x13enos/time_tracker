@@ -11,6 +11,7 @@ RSpec.describe V1::Users::PasswordsController, type: :controller do
 
     context "email was passed" do
       let!(:user) { create(:user) }
+      
       it "should send email if user was found" do
         mailer = double
         allow(User).to receive(:find_by) { user }
@@ -25,23 +26,9 @@ RSpec.describe V1::Users::PasswordsController, type: :controller do
         expect(response.body).to eq({ status: "ok" }.to_json)
       end
 
-      it "should return 400 status if user was found" do
+      it "should return 200 status if user was found" do
         post :create, params: { email: user.email, format: :json }
         expect(response.status).to eq(200)
-      end
-
-      it "should return error if user was not found" do
-        post :create, params: { email: "test@gmail.com", format: :json }
-        expect(response.body).to eq({
-          errors: {
-            base: I18n.t("passwords.user_not_found")
-          }
-        }.to_json)
-      end
-
-      it "should return 404 if user was not found" do
-        post :create, params: { email: "test@gmail.com", format: :json }
-        expect(response.status).to eq(404)
       end
     end
   end

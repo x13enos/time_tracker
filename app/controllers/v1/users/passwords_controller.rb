@@ -4,12 +4,8 @@ class V1::Users::PasswordsController < V1::Users::BaseController
     validate_attribute_on_presence('email') and return
 
     user = User.find_by(email: params[:email])
-    if user.present?
-      UserMailer.recovery_password_email(user).deliver_now
-      render json: { status: 'ok' }, status: 200
-    else
-      render json: { errors: { base: I18n.t("passwords.user_not_found") } }, status: 404
-    end
+    UserMailer.recovery_password_email(user).deliver_now if user.present?
+    render json: { status: 'ok' }, status: 200
   end
 
   private
