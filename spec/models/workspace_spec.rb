@@ -13,6 +13,7 @@ RSpec.describe Workspace, type: :model do
 
     it { should have_and_belong_to_many(:users) }
     it { should have_many(:projects).dependent(:destroy) }
+    it { should have_many(:time_records).through(:projects) }
   end
 
   describe '#belongs_to_user?' do
