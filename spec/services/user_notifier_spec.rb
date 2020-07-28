@@ -20,10 +20,10 @@ RSpec.describe UserNotifier do
   end
 
   describe "perform" do
-    let!(:notifier) { UserNotifier.new(user, :approve_period, { period: "period" }) }
+    let!(:notifier) { UserNotifier.new(user, :assign_user_to_project, { period: "period" }) }
 
     it "should user I18n for using user's locale during the creating of notifications" do
-      allow(Notifiers::Email).to receive(:new) { double(approve_period: true) }
+      allow(Notifiers::Email).to receive(:new) { double(assign_user_to_project: true) }
       expect(I18n).to receive(:with_locale).with(user.locale, &Proc.new { notifier.send(:notifications) })
       notifier.perform
     end
@@ -31,7 +31,13 @@ RSpec.describe UserNotifier do
     it "should call mail notifier and use appropriated method" do
       email_notifier = double
       allow(Notifiers::Email).to receive(:new).with(user, { period: "period" }) { email_notifier }
-      expect(email_notifier).to receive(:approve_period)
+      expect(email_notifier).to receive(:assign_user_to_project)
+      notifier.perform
+    end
+
+    it "should not call mail notifier if it doesn't have appropriate method" do
+      notifier = UserNotifier.new(user, :non_existed_method, { period: "period" })
+      expect(Notifiers::Email).not_to receive(:new)
       notifier.perform
     end
   end

@@ -19,6 +19,11 @@ class UserNotifier
   end
 
   def notify_by_email
-    Notifiers::Email.new(user, args).send(notification_type)
+    send_notification(Notifiers::Email)
+  end
+
+  def send_notification(notification_class)
+    return unless notification_class.method_defined? notification_type
+    notification_class.new(user, args).send(notification_type)
   end
 end
