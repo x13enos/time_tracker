@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/x13enos/time_tracker_extension
-  revision: 493e1f6fbd787220108f9114e0978952a4889b76
+  revision: 88eb49b8aa775d38850108848c7b97a9d9436348
   specs:
-    time_tracker_extension (0.3.8)
+    time_tracker_extension (0.3.11)
       pry-rails
       rails (~> 6.0)
       telegram-bot
@@ -265,7 +265,7 @@ DEPENDENCIES
   skylight
   spring
   spring-watcher-listen (~> 2.0.0)
-  time_tracker_extension (>= 0.3.8, < 1.0)!
+  time_tracker_extension (>= 0.3.11, < 1.0)!
   tzinfo-data
   wicked_pdf
 
