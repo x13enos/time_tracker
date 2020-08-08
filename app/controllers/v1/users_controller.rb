@@ -18,7 +18,10 @@ class V1::UsersController < V1::BaseController
   private
 
   def user_params
-    params.permit(:name, :email, :password, :locale, :active_workspace_id)
+    params.permit(
+      :name, :email, :password, :locale, :active_workspace_id,
+      notification_settings_attributes: [ rules: [] ]
+    )
   end
 
   def get_users

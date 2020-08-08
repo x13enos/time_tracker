@@ -15,7 +15,8 @@ RSpec.describe V1::AuthController, type: :controller do
           name: @current_user.name,
           role: @current_user.role,
           locale: @current_user.locale,
-          active_workspace_id: @current_user.active_workspace_id
+          active_workspace_id: @current_user.active_workspace_id,
+          notification_settings: user.notification_settings.rules
         }.to_json)
       end
     end
@@ -55,7 +56,8 @@ RSpec.describe V1::AuthController, type: :controller do
         name: user.name,
         role: user.role,
         locale: user.locale,
-        active_workspace_id: user.active_workspace_id
+        active_workspace_id: user.active_workspace_id,
+        notification_settings: user.notification_settings.rules
       }.to_json)
     end
 
@@ -107,7 +109,8 @@ RSpec.describe V1::AuthController, type: :controller do
           name: @current_user.name,
           role: @current_user.role,
           locale: @current_user.locale,
-          active_workspace_id: @current_user.active_workspace_id
+          active_workspace_id: @current_user.active_workspace_id,
+          notification_settings: user.notification_settings.rules
         }.to_json)
       end
     end

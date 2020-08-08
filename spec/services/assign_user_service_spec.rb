@@ -11,6 +11,11 @@ RSpec.describe ReportGenerator do
         expect { AssignUserService.new(email, admin, workspace).perform }.to change { User.count }.from(1).to(2)
       end
 
+      it "should create notificaiton settings for user" do
+        expect { AssignUserService.new(email, admin, workspace).perform }.to change { NotificationSettings.count }.from(1).to(2)
+        expect(NotificationSettings.last.rules).to eql(['email_assign_user_to_project'])
+      end
+
       it "should create user with role - staff" do
         user = AssignUserService.new(email, admin, workspace).perform
         expect(user.reload.role).to eq("staff")

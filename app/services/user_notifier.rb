@@ -19,11 +19,11 @@ class UserNotifier
   end
 
   def notify_by_email
-    send_notification(Notifiers::Email)
+    return unless notification_found_in_settings('email')
+    Notifiers::Email.new(user, args).send(notification_type)
   end
 
-  def send_notification(notification_class)
-    return unless notification_class.method_defined? notification_type
-    notification_class.new(user, args).send(notification_type)
+  def notification_found_in_settings(notifier_type)
+    user.notification_settings.rules.include?("#{notifier_type}_#{notification_type}")
   end
 end

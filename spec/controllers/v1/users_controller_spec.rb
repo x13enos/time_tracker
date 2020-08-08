@@ -9,7 +9,8 @@ RSpec.describe V1::UsersController, type: :controller do
       name: user.name,
       role: user.role,
       locale: user.locale,
-      active_workspace_id: user.active_workspace_id
+      active_workspace_id: user.active_workspace_id,
+      notification_settings: user.notification_settings.rules
     }
   end
 
@@ -55,7 +56,6 @@ RSpec.describe V1::UsersController, type: :controller do
     it "should return user's data if user info was updated" do
       put :update, params: { email: "example@gmail.com", format: :json }
       expect(response.body).to eq(user_info(@current_user).to_json)
-
     end
 
     it "should return error message if user info was not updated" do
