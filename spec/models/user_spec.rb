@@ -27,6 +27,7 @@ RSpec.describe User, type: :model do
   context 'associations' do
     subject { build(:user, password: nil) }
 
+    it { should have_one(:notification_settings) }
     it { should have_and_belong_to_many(:projects) }
     it { should have_and_belong_to_many(:workspaces) }
     it { should have_many(:time_records).dependent(:destroy) }

@@ -23,6 +23,7 @@ class AssignUserService
     @new_record = true
     user = User.new({ email: email, active_workspace_id: workspace.id, role: :staff })
     user.workspace_ids = [workspace.id]
+    user.build_notification_settings(rules: ['email_assign_user_to_project'])
     user.save
     return user
   end

@@ -8,4 +8,10 @@ namespace :one_time do
       )
     end
   end
+
+  task "2020_07_29_create_notification_settings_for_users" => :environment do
+    User.all.each do |user|
+      user.create_notification_settings
+    end
+  end
 end

@@ -29,13 +29,14 @@ RSpec.describe UserNotifier do
     end
 
     it "should call mail notifier and use appropriated method" do
+      user.notification_settings.update(rules: ["email_assign_user_to_project"])
       email_notifier = double
       allow(Notifiers::Email).to receive(:new).with(user, { period: "period" }) { email_notifier }
       expect(email_notifier).to receive(:assign_user_to_project)
       notifier.perform
     end
 
-    it "should not call mail notifier if it doesn't have appropriate method" do
+    it "should not call mail notifier if user doesn't enable notification for that" do
       notifier = UserNotifier.new(user, :non_existed_method, { period: "period" })
       expect(Notifiers::Email).not_to receive(:new)
       notifier.perform

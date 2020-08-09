@@ -8,7 +8,8 @@ RSpec.describe V1::ProjectUsersController, type: :controller do
       name: user.name,
       role: user.role,
       locale: user.locale,
-      active_workspace_id: user.active_workspace_id
+      active_workspace_id: user.active_workspace_id,
+      notification_settings: user.notification_settings.rules
     }
   end
 

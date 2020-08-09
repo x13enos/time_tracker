@@ -13,8 +13,8 @@ gem 'rails', '~> 6.0'
 gem 'pundit'
 gem 'wicked_pdf'
 gem 'jbuilder'
-# gem 'time_tracker_extension', '> 0.3.11', '< 1.0', path: './extension'
-gem 'time_tracker_extension', '>= 0.3.11', '< 1.0', git: 'https://github.com/x13enos/time_tracker_extension'
+# gem 'time_tracker_extension', '>= 0.3.11', '< 1.0', path: '/var/www/time_tracker_extension'
+gem 'time_tracker_extension', '>= 0.3.13', '< 1.0', git: 'https://github.com/x13enos/time_tracker_extension'
 gem "skylight"
 gem "sentry-raven"
 
