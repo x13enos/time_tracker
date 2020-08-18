@@ -1,10 +1,13 @@
 class WorkspaceUserPolicy < ApplicationPolicy
+  def index?
+    user? && workspace_belongs_to_user?
+  end
 
   def create?
-    user_is_admin? && record_belongs_to_user?
+    user? && workspace_belongs_to_user?
   end
 
   def destroy?
-    user_is_admin? && record_belongs_to_user?
+    user? && workspace_belongs_to_user?
   end
 end

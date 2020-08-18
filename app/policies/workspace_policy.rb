@@ -5,15 +5,15 @@ class WorkspacePolicy < ApplicationPolicy
   end
 
   def create?
-    user_is_admin?
+    user?
   end
 
   def update?
-    user_is_admin? && record_belongs_to_user?
+    user? && workspace_belongs_to_user?
   end
 
   def destroy?
-    user_is_admin? && record_belongs_to_user?
+    user? && workspace_belongs_to_user?
   end
-  
+
 end

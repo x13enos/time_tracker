@@ -1,11 +1,13 @@
 FactoryBot.define do
 
   factory :user do
+
     before(:create) do |object|
       if object.active_workspace_id.nil?
         workspace = create(:workspace)
-        object.workspaces << workspace
         object.active_workspace = workspace
+      else
+        object.workspaces << object.active_workspace
       end
     end
 
@@ -18,15 +20,24 @@ FactoryBot.define do
     name     { Faker::Name.name }
     email    { Faker::Internet.unique.email }
     password { "password" }
+    association :active_workspace, factory: :workspace
+
+    trait :owner do
+      after(:create) do |object|
+        object.users_workspaces.first.update(role: :owner)
+      end
+    end
 
     trait :admin do
-      role { :admin }
-      id { 100 }
+      after(:create) do |object|
+        object.users_workspaces.first.update(role: :admin)
+      end
     end
 
     trait :staff do
-      role { :staff }
-      id { 101 }
+      after(:create) do |object|
+        object.users_workspaces.first.update(role: :staff)
+      end
     end
   end
 

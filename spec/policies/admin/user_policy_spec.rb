@@ -5,7 +5,7 @@ module Admin
   describe UserPolicy do
 
     context "user is admin" do
-      let(:user) { build(:user, role: :admin) }
+      let(:user) { create(:user, :admin) }
 
       subject { described_class.new(user, :user) }
 
@@ -13,7 +13,7 @@ module Admin
     end
 
     context 'user is staff' do
-      let(:user) { build(:user, role: :staff) }
+      let(:user) { create(:user, :staff) }
 
       subject { described_class.new(user, :user) }
 

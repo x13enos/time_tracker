@@ -3,7 +3,7 @@ require 'rails_helper'
 describe ReportPolicy do
 
   context 'user is staff' do
-    let(:user) { build(:user, role: :staff) }
+    let(:user) { build(:user, :staff) }
 
     subject { described_class.new(user, :report) }
 
@@ -11,7 +11,7 @@ describe ReportPolicy do
   end
 
   context 'user was not found' do
-    let(:user) { build(:user, role: :staff) }
+    let(:user) { build(:user, :staff) }
 
     subject { described_class.new(nil, :report) }
 

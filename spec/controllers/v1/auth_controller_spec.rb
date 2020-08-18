@@ -5,7 +5,7 @@ RSpec.describe V1::AuthController, type: :controller do
 
   describe "get #index" do
     context "user was authorized" do
-      login_staff
+      login_user(:staff)
 
       it "should return user's info" do
         get :index, format: :json
@@ -92,7 +92,7 @@ RSpec.describe V1::AuthController, type: :controller do
 
   describe "DELETE #destroy" do
     context "user was authorized" do
-      login_staff
+      login_user(:staff)
 
       it "should delete token" do
         cookies[:token] = "1111"

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe V1::ProjectsController, type: :controller do
-  login_staff
+  login_user(:staff)
 
   describe "GET #index" do
     it "should return list of user's projects" do
@@ -38,7 +38,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
   end
 
   describe "POST #create" do
-    login_admin
+    login_user(:admin)
 
     it "should return project's data if it was created" do
       post :create, params: { name: "test-project", format: :json }
@@ -62,7 +62,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
   end
 
   describe "PUT #update" do
-    login_admin
+    login_user(:admin)
     let!(:project) { create(:project, workspace: @current_user.active_workspace) }
 
     before do
@@ -86,7 +86,7 @@ RSpec.describe V1::ProjectsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    login_admin
+    login_user(:admin)
     let!(:project) { create(:project, workspace: @current_user.active_workspace) }
 
     before do

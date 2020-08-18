@@ -14,4 +14,8 @@ namespace :one_time do
       user.create_notification_settings
     end
   end
+
+  task "2020_08_09_create_roles_in_accociated_table" => :environment do
+    UsersWorkspace.update_all(role: "staff")
+  end
 end

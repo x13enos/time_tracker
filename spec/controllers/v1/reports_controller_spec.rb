@@ -4,7 +4,7 @@ RSpec.describe V1::ReportsController, type: :controller do
 
   describe "GET #report" do
     context "staff user" do
-      login_staff
+      login_user(:staff)
 
       it "should build service for selecting time records" do
         expect(TimeRecordsSelector).to receive(:new) { double(perform: {
@@ -22,7 +22,7 @@ RSpec.describe V1::ReportsController, type: :controller do
     end
 
     context "admin user" do
-      login_admin
+      login_user(:admin)
 
       it "should return empty array if passed used id is wrong" do
         get :index, params: { from_date: "15-10-2019", to_date: "29-10-2019", user_id: 84985839, format: :json }
@@ -34,7 +34,7 @@ RSpec.describe V1::ReportsController, type: :controller do
     end
 
     context "when pdf flag was passed in params" do
-      login_staff
+      login_user(:staff)
 
       it "should generate build report instance" do
         converted_dates = {

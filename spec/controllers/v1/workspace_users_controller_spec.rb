@@ -14,11 +14,10 @@ RSpec.describe V1::WorkspaceUsersController, type: :controller do
   end
 
   describe "POST #create" do
-    login_admin
     let!(:workspace) { create(:workspace) }
 
     before do
-      workspace.users << @current_user
+      login_user(:owner, workspace)
     end
 
     context "user already was created" do
@@ -53,12 +52,12 @@ RSpec.describe V1::WorkspaceUsersController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    login_admin
-    let!(:workspace) { create(:workspace) }
+    login_user(:admin)
+    let!(:workspace) { create(:workspace, users: [@current_user, user]) }
     let(:user) { create(:user) }
 
     before do
-      workspace.users << [@current_user, user]
+      @current_user.users_workspaces.find_by(workspace_id: workspace.id).update(role: "owner")
     end
 
     it "should return success status if user was removed from workspace" do

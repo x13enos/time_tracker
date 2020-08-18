@@ -2,7 +2,7 @@ module Admin
   class UserPolicy < ApplicationPolicy
 
     def index?
-      user_is_admin?
+      user_is_manager?
     end
 
   end

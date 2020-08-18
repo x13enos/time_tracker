@@ -4,8 +4,6 @@ class User < ApplicationRecord
   SUPPORTED_LANGUAGES = %w(en ru)
   has_secure_password validations: false
 
-  enum role: [:admin, :staff]
-
   validates :email, :locale, :active_workspace_id, presence: true
   validates :email, uniqueness: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -16,12 +14,30 @@ class User < ApplicationRecord
 
   has_one :notification_settings
   has_many :time_records, dependent: :destroy
+  has_many :users_workspaces
+  has_many :workspaces, -> { distinct }, through: :users_workspaces
   has_and_belongs_to_many :projects, -> { distinct }
-  has_and_belongs_to_many :workspaces, -> { distinct }
   belongs_to :active_workspace, class_name: "Workspace",
                                 foreign_key: "active_workspace_id"
 
   accepts_nested_attributes_for :notification_settings, update_only: true
+
+  def role(workspace_id = nil)
+    workspace_id ||= active_workspace_id
+    users_workspaces.find_by(workspace_id: workspace_id).role
+  end
+
+  def admin?
+    role == 'admin'
+  end
+
+  def owner?
+    role == 'owner'
+  end
+
+  def workspace_owner?(workspace_id)
+    role(workspace_id) == 'owner'
+  end
 
   private
 

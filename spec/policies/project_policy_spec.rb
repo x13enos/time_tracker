@@ -4,7 +4,7 @@ describe ProjectPolicy do
   let(:workspace) { create(:workspace)}
 
   context 'user is admin and defined project was passed' do
-    let(:user) { build(:user, role: :admin, workspace_ids: [workspace.id], active_workspace: workspace) }
+    let(:user) { create(:user, :admin, active_workspace: workspace) }
     let(:project) { create(:project) }
 
     before do
@@ -17,7 +17,7 @@ describe ProjectPolicy do
   end
 
   context 'user is admin and class was passed' do
-    let(:user) { build(:user, role: :admin, workspace_ids: [workspace.id], active_workspace: workspace) }
+    let(:user) { create(:user, :admin, active_workspace: workspace) }
 
     subject { described_class.new(user, Project) }
 
@@ -25,7 +25,7 @@ describe ProjectPolicy do
   end
 
   context 'user is staff and defined project was passed' do
-    let(:user) { build(:user, role: :staff, workspace_ids: [workspace.id], active_workspace: workspace) }
+    let(:user) { create(:user, :staff, active_workspace: workspace) }
     let(:project) { create(:project) }
 
     before do
@@ -38,7 +38,7 @@ describe ProjectPolicy do
   end
 
   context 'user is staff and class was passed' do
-    let(:user) { build(:user, role: :staff, workspace_ids: [workspace.id], active_workspace: workspace) }
+    let(:user) { create(:user, :staff, active_workspace: workspace) }
 
     subject { described_class.new(user, Project) }
 
@@ -47,7 +47,7 @@ describe ProjectPolicy do
   end
 
   context 'user was not found and class was passed' do
-    let(:user) { build(:user, role: :staff, workspace_ids: [workspace.id], active_workspace: workspace) }
+    let(:user) { create(:user, :staff, active_workspace: workspace) }
     let(:project) { create(:project) }
 
     before do
@@ -60,7 +60,7 @@ describe ProjectPolicy do
   end
 
   context 'user was not found and class was passed' do
-    let(:user) { build(:user, role: :staff, workspace_ids: [workspace.id], active_workspace: workspace) }
+    let(:user) { create(:user, :staff, active_workspace: workspace) }
 
     subject { described_class.new(nil, Project) }
 

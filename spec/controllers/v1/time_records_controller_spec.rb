@@ -30,7 +30,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
     end
 
     context "user is authorised" do
-      login_staff
+      login_user(:staff)
 
       it "should set the right timezone for request" do
         expect(Time).to receive(:use_zone).with(ActiveSupport::TimeZone[-3])
@@ -78,7 +78,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "POST #create" do
-    login_staff
+    login_user(:staff)
 
     let!(:project) { create(:project) }
 
@@ -144,7 +144,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "PUT #update" do
-    login_staff
+    login_user(:staff)
     let(:project) { create(:project, workspace: @current_user.active_workspace )}
     let(:time_record) { create(:time_record, user: @current_user, project: project) }
 
@@ -225,7 +225,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    login_staff
+    login_user(:staff)
     let!(:project) { create(:project, workspace: @current_user.active_workspace )}
     let!(:time_record) { create(:time_record, user: @current_user, project: project) }
 

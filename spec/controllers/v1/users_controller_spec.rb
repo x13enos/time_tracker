@@ -15,10 +15,9 @@ RSpec.describe V1::UsersController, type: :controller do
   end
 
   describe "GET #index" do
-    login_admin
+    login_user(:admin)
 
     it "should return list of users for current workspace" do
-      Workspace.last.users << @current_user
       get :index, params: { current_workspace: true, format: :json }
       expect(response.body).to eq([
         {
@@ -51,7 +50,7 @@ RSpec.describe V1::UsersController, type: :controller do
   end
 
   describe "PUT #update" do
-    login_staff
+    login_user(:staff)
 
     it "should return user's data if user info was updated" do
       put :update, params: { email: "example@gmail.com", format: :json }
