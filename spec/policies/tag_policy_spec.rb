@@ -3,7 +3,7 @@ require 'rails_helper'
 describe TagPolicy do
 
   context "only action index should be allow for staff user" do
-    let(:user) { build(:user) }
+    let(:user) { create(:user) }
 
     subject { described_class.new(user, Tag) }
 
@@ -12,7 +12,7 @@ describe TagPolicy do
   end
 
   context 'admin can do all actions' do
-    let(:admin) { build(:user, :admin) }
+    let(:admin) { create(:user, :admin) }
 
     let(:tag) { create(:tag) }
 

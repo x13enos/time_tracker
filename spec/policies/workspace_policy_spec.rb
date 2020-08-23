@@ -2,9 +2,12 @@ require 'rails_helper'
 
 describe WorkspacePolicy do
 
-  context "user is admin" do
+  context "user is owner" do
     let(:active_workspace) { create(:workspace) }
-    let(:user) { build(:user, role: :admin, workspace_ids: [active_workspace.id], active_workspace: active_workspace) }
+    let(:user) { create(:user, active_workspace: active_workspace) }
+    before do
+      user.users_workspaces.find_by(workspace_id: active_workspace.id).update(role: "owner")
+    end
 
     context "actions 'create' and 'index' doesn't require any conditions" do
 
@@ -18,6 +21,7 @@ describe WorkspacePolicy do
 
       before do
         workspace.users << user
+        user.users_workspaces.find_by(workspace_id: workspace.id).update(role: "owner")
       end
 
       subject { described_class.new(user, workspace) }
@@ -28,12 +32,16 @@ describe WorkspacePolicy do
 
   context "user is staff" do
     let(:workspace) { create(:workspace) }
-    let(:user) { build(:user, active_workspace_id: workspace.id) }
+    let(:user) { create(:user, active_workspace_id: workspace.id) }
 
     subject { described_class.new(user, workspace) }
 
-    it { is_expected.to permit_action(:index) }
-    it { is_expected.to forbid_actions([:create, :update, :destroy]) }
+    before do
+      user.users_workspaces.find_by(workspace_id: workspace.id).update(role: "staff")
+    end
+
+    it { is_expected.to permit_actions([:index, :create]) }
+    it { is_expected.to forbid_actions([:update, :destroy]) }
 
   end
 

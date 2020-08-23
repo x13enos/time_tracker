@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe V1::TagsController, type: :controller do
-  login_staff
+  login_user(:staff)
 
   describe "GET #index" do
     it "should return list of workspace's tags" do
@@ -25,7 +25,7 @@ RSpec.describe V1::TagsController, type: :controller do
   end
 
   describe "POST #create" do
-    login_admin
+    login_user(:admin)
 
     it "should return tag's data if it was created" do
       post :create, params: { name: "test-tag", format: :json }
@@ -47,7 +47,7 @@ RSpec.describe V1::TagsController, type: :controller do
   end
 
   describe "PUT #update" do
-    login_admin
+    login_user(:admin)
     let!(:tag) { create(:tag, workspace: @current_user.active_workspace) }
 
     it "should return tag's data if tag was updated" do
@@ -65,7 +65,7 @@ RSpec.describe V1::TagsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    login_admin
+    login_user(:admin)
     let!(:tag) { create(:tag, workspace: @current_user.active_workspace) }
 
     it "should return tag's data if it was deleted" do

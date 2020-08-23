@@ -1,4 +1,8 @@
 class V1::WorkspaceUsersController < V1::BaseController
+  def index
+    authorize workspace, policy_class: WorkspaceUserPolicy
+  end
+
   def create
     authorize workspace, policy_class: WorkspaceUserPolicy
     begin

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe ReportGenerator do
-  let!(:admin) { create(:user, role: :admin) }
   let!(:workspace) { create(:workspace) }
+  let!(:admin) { create(:user, :admin, active_workspace: workspace) }
   let!(:email) { "staff@gmail.com" }
 
   describe "perform" do

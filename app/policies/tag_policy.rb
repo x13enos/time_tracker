@@ -5,15 +5,15 @@ class TagPolicy < ApplicationPolicy
   end
 
   def create?
-    user_is_admin?
+    user_is_manager?
   end
 
   def update?
-    user_is_admin?
+    user_is_manager?
   end
 
   def destroy?
-    user_is_admin?
+    user_is_manager?
   end
 
 end

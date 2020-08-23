@@ -3,7 +3,7 @@ require 'rails_helper'
 describe AuthPolicy do
 
   context 'user is staff' do
-    let(:user) { build(:user, role: :staff) }
+    let(:user) { build(:user, :staff) }
 
     subject { described_class.new(user, :auth) }
 
