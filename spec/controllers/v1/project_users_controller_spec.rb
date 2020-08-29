@@ -9,14 +9,14 @@ RSpec.describe V1::ProjectUsersController, type: :controller do
       role: user.role,
       locale: user.locale,
       active_workspace_id: user.active_workspace_id,
-      notification_settings: user.notification_settings.rules
+      notification_settings: user.notification_settings
     }
   end
 
   describe "POST #create" do
     login_user(:admin)
     let!(:project) { create(:project, workspace: @current_user.active_workspace) }
-    let!(:user) { create(:user, workspace_ids: [@current_user.active_workspace.id], active_workspace: @current_user.active_workspace) }
+    let!(:user) { create(:user, active_workspace: @current_user.active_workspace) }
 
     before do
       project.users << @current_user
@@ -35,7 +35,11 @@ RSpec.describe V1::ProjectUsersController, type: :controller do
       end
 
       it "should create notification service" do
-        expect(UserNotifier).to receive(:new).with(user, :assign_user_to_project, { project: project }) { double(perform: true) }
+        expect(UserNotifier).to receive(:new).with(
+          user: user,
+          notification_type: :assign_user_to_project,
+          additional_data: { project: project }
+        ) { double(perform: true) }
         post :create, params: { project_id: project.id, user_id: user.id, format: :json }
       end
 
@@ -65,7 +69,7 @@ RSpec.describe V1::ProjectUsersController, type: :controller do
   describe "DELETE #destroy" do
     login_user(:admin)
     let!(:project) { create(:project, workspace: @current_user.active_workspace) }
-    let!(:user) { create(:user, workspace_ids: [@current_user.active_workspace.id], active_workspace: @current_user.active_workspace) }
+    let!(:user) { create(:user, active_workspace: @current_user.active_workspace) }
 
     before do
       project.users << [@current_user, user]

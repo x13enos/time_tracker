@@ -21,11 +21,14 @@ class AssignUserService
 
   def create_user
     @new_record = true
-    user = User.new({ email: email, active_workspace_id: workspace.id })
-    user.workspace_ids = [workspace.id]
-    user.build_notification_settings(rules: ['email_assign_user_to_project'])
-    user.save
-    return user
+    form = Users::CreateForm.new({
+      email: email,
+      active_workspace_id: workspace.id,
+      workspace_ids: [workspace.id],
+      locale: admin.locale
+    })
+    form.save
+    return form.user
   end
 
   def add_user_to_workspace

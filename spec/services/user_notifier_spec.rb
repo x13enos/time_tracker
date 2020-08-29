@@ -4,7 +4,13 @@ RSpec.describe UserNotifier do
   let(:user) { create(:user) }
 
   describe ".initialize" do
-    let!(:notifier) { UserNotifier.new(user, :approve_period, { period: "period" }) }
+    let!(:notifier) do
+      UserNotifier.new(
+        user: user,
+        notification_type: :approve_period,
+        additional_data: { period: "period" }
+      )
+    end
 
     it "should assign user to the notifier's attributes" do
       expect(notifier.send(:user)).to eq(user)
@@ -20,7 +26,13 @@ RSpec.describe UserNotifier do
   end
 
   describe "perform" do
-    let!(:notifier) { UserNotifier.new(user, :assign_user_to_project, { period: "period" }) }
+    let!(:notifier) do
+      UserNotifier.new(
+        user: user,
+        notification_type: :assign_user_to_project,
+        additional_data: { period: "period" }
+      )
+    end
 
     it "should user I18n for using user's locale during the creating of notifications" do
       allow(Notifiers::Email).to receive(:new) { double(assign_user_to_project: true) }
@@ -29,7 +41,7 @@ RSpec.describe UserNotifier do
     end
 
     it "should call mail notifier and use appropriated method" do
-      user.notification_settings.update(rules: ["email_assign_user_to_project"])
+      user.workspace_settings.update(notification_rules: ["email_assign_user_to_project"])
       email_notifier = double
       allow(Notifiers::Email).to receive(:new).with(user, { period: "period" }) { email_notifier }
       expect(email_notifier).to receive(:assign_user_to_project)
@@ -37,7 +49,11 @@ RSpec.describe UserNotifier do
     end
 
     it "should not call mail notifier if user doesn't enable notification for that" do
-      notifier = UserNotifier.new(user, :non_existed_method, { period: "period" })
+      notifier = UserNotifier.new(
+        user: user,
+        notification_type: :non_existed_method,
+        additional_data: { period: "period" }
+      )
       expect(Notifiers::Email).not_to receive(:new)
       notifier.perform
     end

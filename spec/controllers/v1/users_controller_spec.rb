@@ -10,7 +10,7 @@ RSpec.describe V1::UsersController, type: :controller do
       role: user.role,
       locale: user.locale,
       active_workspace_id: user.active_workspace_id,
-      notification_settings: user.notification_settings.rules
+      notification_settings: user.notification_settings
     }
   end
 
@@ -30,7 +30,7 @@ RSpec.describe V1::UsersController, type: :controller do
 
     it "should return list of users for admin's workspaces" do
       workspace = create(:workspace)
-      another_user = create(:user, workspace_ids: [workspace.id], active_workspace: workspace)
+      another_user = create(:user, active_workspace: workspace)
       workspace.users << @current_user
       @current_user.reload
       get :index, params: { current_workspace: false, format: :json }
@@ -53,13 +53,17 @@ RSpec.describe V1::UsersController, type: :controller do
     login_user(:staff)
 
     it "should return user's data if user info was updated" do
+      form = double(save: true, user: @current_user)
+      allow(Users::UpdateForm).to receive(:new) { form }
       put :update, params: { email: "example@gmail.com", format: :json }
-      expect(response.body).to eq(user_info(@current_user).to_json)
+      expect(response.body).to eq(user_info(form.user.reload).to_json)
     end
 
     it "should return error message if user info was not updated" do
+      form = double(save: false, user: @current_user, errors: { email: [] })
+      allow(Users::UpdateForm).to receive(:new) { form }
       put :update, params: { email: "",  format: :json }
-      expect(response.body).to eq({ errors: @current_user.errors }.to_json)
+      expect(response.body).to eq({ errors: form.errors }.to_json)
     end
   end
 end

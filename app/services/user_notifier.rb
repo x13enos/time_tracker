@@ -1,10 +1,11 @@
 class UserNotifier
   prepend TimeTrackerExtension::UserNotifier if EXTENSION_ENABLED
 
-  def initialize(user, notification_type, args)
-    @user = user
-    @args = args
-    @notification_type = notification_type
+  def initialize(notification_data)
+    @user = notification_data[:user]
+    @args = notification_data[:additional_data]
+    @notification_type = notification_data[:notification_type]
+    @workspace_id = notification_data[:workspace_id]
   end
 
   def perform
@@ -12,7 +13,7 @@ class UserNotifier
   end
 
   private
-  attr_reader :user, :notification_type, :args
+  attr_reader :user, :notification_type, :args, :workspace_id
 
   def notifications
     notify_by_email
@@ -24,6 +25,6 @@ class UserNotifier
   end
 
   def notification_found_in_settings(notifier_type)
-    user.notification_settings.rules.include?("#{notifier_type}_#{notification_type}")
+    user.notification_settings(workspace_id).include?("#{notifier_type}_#{notification_type}")
   end
 end
