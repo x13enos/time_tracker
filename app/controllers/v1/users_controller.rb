@@ -3,15 +3,17 @@ class V1::UsersController < V1::BaseController
 
   def index
     authorize User
-    get_users
+    workspace_ids = ActiveModel::Type::Boolean.new.cast(params[:current_workspace]) ? current_workspace_id : current_user.workspace_ids
+    @users = User.includes(:workspaces).where(workspaces: { id:  workspace_ids } )
   end
 
   def update
     authorize User
-    if current_user.update(user_params)
-      render_json_partial('/v1/users/show.json.jbuilder', { user: current_user.reload })
+    @form = Users::UpdateForm.new(user_params, current_user)
+    if @form.save
+      render_json_partial('/v1/users/show.json.jbuilder', { user: @form.user.reload })
     else
-      render json: { errors: current_user.reload.errors }, status: 400
+      render json: { errors: @form.errors }, status: 400
     end
   end
 
@@ -19,14 +21,12 @@ class V1::UsersController < V1::BaseController
 
   def user_params
     params.permit(
-      :name, :email, :password, :locale, :active_workspace_id,
-      notification_settings_attributes: [ rules: [] ]
+      :name,
+      :email,
+      :password,
+      :locale,
+      :active_workspace_id,
+      notification_rules: []
     )
   end
-
-  def get_users
-    workspace_ids = ActiveModel::Type::Boolean.new.cast(params[:current_workspace]) ? current_workspace_id : current_user.workspace_ids
-    @users = User.includes(:workspaces).where(workspaces: { id:  workspace_ids } )
-  end
-
 end

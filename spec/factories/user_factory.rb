@@ -11,12 +11,6 @@ FactoryBot.define do
       end
     end
 
-    after(:create) do |object|
-      if object.notification_settings.nil?
-        object.create_notification_settings
-      end
-    end
-
     name     { Faker::Name.name }
     email    { Faker::Internet.unique.email }
     password { "password" }

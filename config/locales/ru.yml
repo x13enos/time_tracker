@@ -3,10 +3,6 @@ ru:
   activerecord:
     errors:
       models:
-        user:
-          attributes:
-            email:
-              taken: "Данный email уже используется для другого пользователя"
         project:
           attributes:
             name:
@@ -25,6 +21,7 @@ ru:
     invalid_token: "Ссылка из письма устарела. Попробуйте востановить пароль еще раз"
   users:
     errors:
+      email_uniqueness: "Данный email уже используется для другого пользователя"
       locale_inclusion: "Приложение еще не подерживает данный язык"
       active_workspace_is_invalid: "Активное рабочее пространство может быть выбрано только из числа тех, к которым, принадлежит пользователь"
   auth:

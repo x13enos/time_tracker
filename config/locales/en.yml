@@ -3,10 +3,6 @@ en:
   activerecord:
     errors:
       models:
-        user:
-          attributes:
-            email:
-              taken: "This email was already be taken"
         project:
           attributes:
             name:
@@ -26,6 +22,7 @@ en:
   users:
     errors:
       locale_inclusion: "We don't support this language yet"
+      email_uniqueness: "This email was already be taken"
       active_workspace_is_invalid: "You can select active workspace only from the list of user's workspaces"
   auth:
     errors:
