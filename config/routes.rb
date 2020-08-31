@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     end
     resources :users, only: :index do
       put :update, on: :collection
+      put :change_workspace, on: :collection
     end
     resources :workspaces, only: [:index, :create, :update, :destroy] do
       resources :workspace_users, only: [:index, :create, :destroy]

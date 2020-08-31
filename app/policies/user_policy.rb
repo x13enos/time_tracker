@@ -8,4 +8,8 @@ class UserPolicy < ApplicationPolicy
     user?
   end
 
+  def change_workspace?
+    user?
+  end
+
 end
