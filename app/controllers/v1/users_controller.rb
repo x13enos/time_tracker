@@ -11,7 +11,17 @@ class V1::UsersController < V1::BaseController
     authorize User
     @form = Users::UpdateForm.new(user_params, current_user)
     if @form.save
-      render_json_partial('/v1/users/show.json.jbuilder', { user: @form.user.reload })
+      render_json_partial('/v1/auth/user.json.jbuilder', { user: @form.user.reload })
+          else
+            render json: { errors: @form.errors }, status: 400
+          end
+        end
+
+  def change_workspace
+    authorize User
+    @form = Users::ChangeWorkspaceForm.new(params[:workspace_id], current_user)
+    if @form.save
+      render json: { status: 'ok' }, status: 200
     else
       render json: { errors: @form.errors }, status: 400
     end
@@ -25,7 +35,6 @@ class V1::UsersController < V1::BaseController
       :email,
       :password,
       :locale,
-      :active_workspace_id,
       notification_rules: []
     )
   end

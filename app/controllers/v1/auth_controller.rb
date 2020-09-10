@@ -6,7 +6,7 @@ class V1::AuthController < V1::BaseController
 
   def index
     if current_user
-      render_json_partial('/v1/users/show.json.jbuilder', { user: current_user })
+      render_json_partial('/v1/auth/user.json.jbuilder', { user: current_user })
     else
       render json: { error: I18n.t("auth.errors.unathorized") }, status: 401
     end
@@ -17,7 +17,7 @@ class V1::AuthController < V1::BaseController
     user = not_auth_user&.authenticate(auth_params[:password])
     if user
       manage_token_for_user(user)
-      render_json_partial('/v1/users/show.json.jbuilder', { user: user })
+      render_json_partial('/v1/auth/user.json.jbuilder', { user: user })
     else
       render json: { errors: { base: I18n.t("auth.errors.unathorized") } }, status: 401
     end
@@ -26,7 +26,7 @@ class V1::AuthController < V1::BaseController
   def destroy
     authorize :auth
     cookies.delete(:token)
-    render_json_partial('/v1/users/show.json.jbuilder', { user: current_user })
+    render_json_partial('/v1/auth/user.json.jbuilder', { user: current_user })
   end
 
   private

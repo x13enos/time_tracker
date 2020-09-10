@@ -10,7 +10,10 @@ RSpec.describe V1::UsersController, type: :controller do
       role: user.role,
       locale: user.locale,
       active_workspace_id: user.active_workspace_id,
-      notification_settings: user.notification_settings
+      notification_settings: user.notification_settings,
+      workspaces: [
+        { id: user.workspaces.first.id, name: user.workspaces.first.name }
+      ]
     }
   end
 
@@ -63,6 +66,24 @@ RSpec.describe V1::UsersController, type: :controller do
       form = double(save: false, user: @current_user, errors: { email: [] })
       allow(Users::UpdateForm).to receive(:new) { form }
       put :update, params: { email: "",  format: :json }
+      expect(response.body).to eq({ errors: form.errors }.to_json)
+    end
+  end
+
+  describe "PUT #change_workspace" do
+    login_user(:staff)
+
+    it "should return status 200 if user's active workspace id was changed" do
+      form = double(save: true, user: @current_user)
+      allow(Users::ChangeWorkspaceForm).to receive(:new).with("15", @current_user) { form }
+      put :change_workspace, params: { workspace_id: "15", format: :json }
+      expect(response.status).to eq(200)
+    end
+
+    it "should return error message if user info was not updated" do
+      form = double(save: false, user: @current_user, errors: { active_workspace_id: [] })
+      allow(Users::ChangeWorkspaceForm).to receive(:new) { form }
+      put :change_workspace, params: { workspace_id: "",  format: :json }
       expect(response.body).to eq({ errors: form.errors }.to_json)
     end
   end
