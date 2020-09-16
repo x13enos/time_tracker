@@ -42,13 +42,13 @@ RSpec.describe V1::ReportsController, type: :controller do
           to: "29-10-2019".to_date
         }
         allow(TimeRecordsSelector).to receive_message_chain(:new, :perform) { ['time_records'] }
-        expect(ReportGenerator).to receive(:new).with(['time_records'], @current_user) { double({ perform: true }) }
+        expect(ReportGenerator).to receive(:new).with(['time_records'], @current_user) { double({ link: "link_to_file" }) }
         get :index, params: { from_date: "15-10-2019", to_date: "29-10-2019", pdf: true, user_id: @current_user.id, format: :json }
       end
 
       it "should return link" do
         allow(TimeRecordsSelector).to receive_message_chain(:new, :perform) { ['time_records'] }
-        allow(ReportGenerator).to receive(:new) { double({ perform: "link_to_file" }) }
+        allow(ReportGenerator).to receive(:new) { double({ link: "link_to_file" }) }
         get :index, params: { from_date: "15-10-2019", to_date: "29-10-2019", pdf: true, user_id: @current_user.id, format: :json }
         expect(response.body).to eq({ link: "link_to_file" }.to_json)
       end

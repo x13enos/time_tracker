@@ -30,7 +30,7 @@ class TimeRecordsSelector
 
   def get_time_records
     user.time_records
-      .by_workspace(user.active_workspace_id)
+      .by_workspace(params[:workspace_id] || user.active_workspace_id)
       .joins(:user)
       .where("assigned_date BETWEEN ? AND ?", converted_dates[:from], converted_dates[:to])
       .order(assigned_date: :desc, created_at: :desc)
