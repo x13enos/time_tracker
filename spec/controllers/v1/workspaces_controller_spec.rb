@@ -24,12 +24,17 @@ RSpec.describe V1::WorkspacesController, type: :controller do
   describe "POST #create" do
     login_user(:staff)
 
+    before do
+      controller.instance_variable_set(:@current_user, @current_user)
+    end
+
     it "should return workspace's data if it was created" do
       post :create, params: { name: "test-workspace", format: :json }
       expect(response.body).to eq({
         id: Workspace.last.id,
         name: "test-workspace",
-        user_ids: [@current_user.id]
+        user_ids: [@current_user.id],
+        owner: true
       }.to_json)
     end
 
@@ -54,6 +59,7 @@ RSpec.describe V1::WorkspacesController, type: :controller do
 
     before do
       login_user(:owner, workspace)
+      controller.instance_variable_set(:@current_user, @current_user)
     end
 
     it "should return workspace's data if workspace was updated" do
@@ -61,7 +67,8 @@ RSpec.describe V1::WorkspacesController, type: :controller do
       expect(response.body).to eq({
         id: workspace.id,
         name: "test-workspace",
-        user_ids: workspace.user_ids
+        user_ids: workspace.user_ids,
+        owner: true
       }.to_json)
     end
 
@@ -76,6 +83,7 @@ RSpec.describe V1::WorkspacesController, type: :controller do
 
     before do
       login_user(:owner, workspace)
+      controller.instance_variable_set(:@current_user, @current_user)
     end
 
     it "should return workspace's data if it was deleted" do
@@ -83,7 +91,8 @@ RSpec.describe V1::WorkspacesController, type: :controller do
       expect(response.body).to eq({
         id: workspace.id,
         name: workspace.name,
-        user_ids: [@current_user.id]
+        user_ids: [@current_user.id],
+        owner: true
       }.to_json)
     end
 

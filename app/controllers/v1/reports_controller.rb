@@ -5,7 +5,7 @@ class V1::ReportsController < V1::BaseController
     @time_records_data = TimeRecordsSelector.new(params, @user).perform
     if params[:pdf].present?
       report_generator = ReportGenerator.new(@time_records_data, @user)
-      render json: { link: report_generator.perform }
+      render json: { link: report_generator.link }
     end
   end
 

@@ -5,9 +5,13 @@ class ReportGenerator
     @user = user
   end
 
-  def perform
+  def link
     generate_report
-    link
+    ENV['HOST'] + "/reports/#{ @file_name }"
+  end
+
+  def file
+    generate_report
   end
 
   private
@@ -32,9 +36,5 @@ class ReportGenerator
         total_time: time_records_data[:total_spent_time]
       }
     )
-  end
-
-  def link
-    ENV['HOST'] + "/reports/#{ @file_name }"
   end
 end

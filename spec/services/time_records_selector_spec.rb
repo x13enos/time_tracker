@@ -65,7 +65,7 @@ RSpec.describe TimeRecordsSelector do
       expect(result[:total_spent_time]).to eq(6.29)
     end
 
-    it "should return orders in right order" do
+    it "should return time records in the right order" do
       travel_to Time.zone.local(2019, 10, 29)
       @time_record = create(:time_record, user: user, created_at: Time.now - 1.hour, assigned_date: Date.today, project: project_3)
       @time_record_1 = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
@@ -74,6 +74,22 @@ RSpec.describe TimeRecordsSelector do
       result = TimeRecordsSelector.new(params, user).perform
       time_record_ids = result[:grouped_time_records].flatten.map(&:id)
       expect(time_record_ids).to eql([@time_record_1.id, @time_record.id])
+    end
+
+    it "should use passed workspace id for selecting time records" do
+      travel_to Time.zone.local(2019, 10, 29)
+      another_project = create(:project)
+
+      @time_record = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
+      @time_record_1 = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
+      @time_record_2 = create(:time_record, user: user, assigned_date: Date.today, project: another_project)
+
+      travel_back
+
+      params[:workspace_id] = another_project.workspace_id
+      result = TimeRecordsSelector.new(params, user).perform
+      time_record_ids = result[:grouped_time_records].flatten.map(&:id)
+      expect(time_record_ids).to eql([@time_record_2.id])
     end
   end
 end
