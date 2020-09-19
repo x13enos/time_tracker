@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   mount TimeTrackerExtension::Engine, at: "/"
 
+  get 'reports/:id', to: 'reports#show'
+
   namespace :v1 do
     namespace :admin do
       resources :users, only: :index

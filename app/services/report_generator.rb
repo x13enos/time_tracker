@@ -1,4 +1,5 @@
 class ReportGenerator
+  attr_accessor :report
 
   def initialize(time_records_data, user)
     @time_records_data = time_records_data
@@ -6,24 +7,17 @@ class ReportGenerator
   end
 
   def link
-    generate_report
-    ENV['HOST'] + "/reports/#{ @file_name }"
+    create_report
+    ENV['HOST'] + "/reports/#{report.uuid}"
   end
 
   def file
-    generate_report
+    create_report
+    report.file.download
   end
 
   private
   attr_reader :time_records_data, :user
-
-  def generate_report
-    pdf = WickedPdf.new.pdf_from_string(render_report_from_template)
-    @file_name = "report-#{SecureRandom.uuid}.pdf"
-    File.open(Rails.root.join('public/reports/', @file_name), 'wb') do |file|
-      file << pdf
-    end
-  end
 
   def render_report_from_template
     ActionController::Base.render(
@@ -36,5 +30,14 @@ class ReportGenerator
         total_time: time_records_data[:total_spent_time]
       }
     )
+  end
+
+  def create_report
+    pdf = WickedPdf.new.pdf_from_string(render_report_from_template)
+    @report = Report.create(user: user, uuid: SecureRandom.uuid)
+    report.file.attach(
+      io: StringIO.new(pdf),
+      content_type: "application/pdf",
+      filename: "#{user.name} #{time_records_data[:converted_dates][:from]} | #{time_records_data[:converted_dates][:to]}.pdf")
   end
 end
