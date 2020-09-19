@@ -33,6 +33,7 @@ RSpec.describe ReportGenerator do
           total_time: 15
         }
       })
+      allow(StringIO).to receive(:new) { Tempfile.new }
       generator.link
     end
 
@@ -41,24 +42,22 @@ RSpec.describe ReportGenerator do
       allow(ActionController::Base).to receive(:render) { 'string' }
       allow(WickedPdf).to receive(:new) { pdf_service }
       expect(pdf_service).to receive(:pdf_from_string).with('string')
+      allow(StringIO).to receive(:new) { Tempfile.new }
       generator.link
     end
 
-    it "should keep file in the public folder" do
-      uuid = SecureRandom.uuid
-      allow(SecureRandom).to receive(:uuid) { uuid }
+    it "should create order" do
       allow(ActionController::Base).to receive(:render) { 'string' }
       allow_any_instance_of(WickedPdf).to receive(:pdf_from_string)
-      generator.link
-      expect(File).to exist("#{Rails.root}/public/reports/report-#{uuid}.pdf")
+      allow(StringIO).to receive(:new) { Tempfile.new }
+      expect { generator.link }.to change { Report.count }.from(0).to(1)
     end
 
     it "should return link on downloading file" do
-      uuid = SecureRandom.uuid
-      allow(SecureRandom).to receive(:uuid) { uuid }
       allow(ActionController::Base).to receive(:render) { 'string' }
       allow_any_instance_of(WickedPdf).to receive(:pdf_from_string)
-      expect(generator.link).to eq("#{ENV['HOST']}/reports/report-#{uuid}.pdf")
+      allow(StringIO).to receive(:new) { Tempfile.new }
+      expect(generator.link).to eq("#{ENV['HOST']}/reports/#{Report.last.uuid}")
     end
   end
 
@@ -68,9 +67,8 @@ RSpec.describe ReportGenerator do
       allow(SecureRandom).to receive(:uuid) { uuid }
       allow(ActionController::Base).to receive(:render) { 'string' }
       allow_any_instance_of(WickedPdf).to receive(:pdf_from_string)
-      file = Tempfile.new
-      allow(File).to receive(:open) { file }
-      expect(generator.file).to eq(file)
+      allow(StringIO).to receive(:new) { Tempfile.new }
+      expect(generator.file).to eq(Report.last.file.download)
     end
   end
 end
