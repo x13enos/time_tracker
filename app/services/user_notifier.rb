@@ -3,7 +3,7 @@ class UserNotifier
 
   def initialize(notification_data)
     @user = notification_data[:user]
-    @args = notification_data[:additional_data]
+    @additional_data = notification_data[:additional_data]
     @notification_type = notification_data[:notification_type]
     @workspace_id = notification_data[:workspace_id]
   end
@@ -13,7 +13,7 @@ class UserNotifier
   end
 
   private
-  attr_reader :user, :notification_type, :args, :workspace_id
+  attr_reader :user, :notification_type, :additional_data, :workspace_id
 
   def notifications
     notify_by_email
@@ -21,7 +21,7 @@ class UserNotifier
 
   def notify_by_email
     return unless notification_found_in_settings('email')
-    Notifiers::Email.new(user, args).send(notification_type)
+    Notifiers::Email.new(user, additional_data).send(notification_type)
   end
 
   def notification_found_in_settings(notifier_type)
