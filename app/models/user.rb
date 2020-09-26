@@ -15,6 +15,10 @@ class User < ApplicationRecord
     workspace_settings(workspace_id).role
   end
 
+  def staff?
+    role == 'staff'
+  end
+
   def admin?
     role == 'admin'
   end
