@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/x13enos/time_tracker_extension
-  revision: 80bdd4bb2f5d330242e338a2b50ff57a95e02c47
+  revision: 3c44e20d27e5c4f8042719d8c9af862db19b829a
   specs:
-    time_tracker_extension (0.4.4)
+    time_tracker_extension (0.4.5)
       pry-rails
       rails (~> 6.0)
       telegram-bot

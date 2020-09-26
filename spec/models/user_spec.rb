@@ -54,6 +54,18 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#staff?" do
+    it "should return true if user's active role is staff" do
+      user = create(:user, :staff)
+      expect(user.staff?).to be_truthy
+    end
+
+    it "should return false if user's active role is not staff" do
+      user = create(:user, :admin)
+      expect(user.staff?).to be_falsey
+    end
+  end
+
   describe "#admin?" do
     it "should return true if user's active role is admin" do
       user = create(:user, :admin)
