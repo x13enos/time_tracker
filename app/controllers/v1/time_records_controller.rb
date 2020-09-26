@@ -2,11 +2,11 @@ class V1::TimeRecordsController < V1::BaseController
 
   def index
     authorize TimeRecord
-    @current_date = params[:assigned_date].to_datetime
+    @active_date = params[:assigned_date].to_datetime
 
     @time_records = current_user.time_records
       .by_workspace(current_workspace_id)
-      .where("assigned_date BETWEEN ? and ?", @current_date.beginning_of_week, @current_date.end_of_week)
+      .where("assigned_date BETWEEN ? and ?", @active_date.beginning_of_week, @active_date.end_of_week)
       .order(created_at: :asc)
   end
 

@@ -12,7 +12,7 @@ class V1::ReportsController < V1::BaseController
   private
 
   def select_user
-    @user = if current_user.admin? && params[:user_id].present?
+    @user = if !current_user.staff? && params[:user_id].present?
       User.find_by(id: params[:user_id])
     else
       current_user

@@ -20,8 +20,8 @@ RSpec.describe UserNotifier do
       expect(notifier.send(:notification_type)).to eq(:approve_period)
     end
 
-    it "should assign additional args to the notifier's attributes" do
-      expect(notifier.send(:args)).to eq({ period: "period" })
+    it "should assign additional data to the notifier's attributes" do
+      expect(notifier.send(:additional_data)).to eq({ period: "period" })
     end
   end
 
