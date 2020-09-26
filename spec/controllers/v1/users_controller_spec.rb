@@ -32,10 +32,8 @@ RSpec.describe V1::UsersController, type: :controller do
     end
 
     it "should return list of users for admin's workspaces" do
-      workspace = create(:workspace)
-      another_user = create(:user, active_workspace: workspace)
-      workspace.users << @current_user
-      @current_user.reload
+      user_1 = create(:user, active_workspace: @current_user.active_workspace)
+      user_2 = create(:user)
       get :index, params: { current_workspace: false, format: :json }
       expect(response.body).to eql([
         {
@@ -44,9 +42,9 @@ RSpec.describe V1::UsersController, type: :controller do
           email: @current_user.email
         },
         {
-          id: another_user.id,
-          name: another_user.name,
-          email: another_user.email
+          id: user_1.id,
+          name: user_1.name,
+          email: user_1.email
         }
       ].to_json)
     end
