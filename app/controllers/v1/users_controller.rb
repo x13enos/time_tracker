@@ -3,8 +3,7 @@ class V1::UsersController < V1::BaseController
 
   def index
     authorize User
-    workspace_ids = ActiveModel::Type::Boolean.new.cast(params[:current_workspace]) ? current_workspace_id : current_user.workspace_ids
-    @users = User.includes(:workspaces).where(workspaces: { id:  workspace_ids } )
+    @users = User.includes(:workspaces).where(workspaces: { id:  current_workspace_id } )
   end
 
   def update
