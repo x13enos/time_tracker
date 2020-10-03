@@ -34,7 +34,7 @@ ru:
       incorrect_format_of_regexp: "Неверный формат регулярного выражения"
   time_records:
     errors:
-      should_be_less_than_24_hours: "Общее количество потраченного времени не может превышать 24 часа за день"
+      should_be_less_than_24_hours: "Общее время превышает 24 часа"
       only_todays_taks: "Вы можете стартовать только сегодняшние задачи"
   workspaces:
     errors:
