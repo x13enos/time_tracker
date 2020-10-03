@@ -50,7 +50,21 @@ en:
     description: "Description"
     total: "TOTAL"
   mailer:
+    hello: "Hello!"
     hello_with_name: "Hello %{user}!"
     subjects:
       you_were_assigned_to_project: "You were assigned to project!"
+      you_were_assigned_to_workspace: "You were assigned to workspace!"
+      welcome: "Welcome to the Time Tracker!"
+      reset_token: "Reset your Time Tracker account"
     you_were_assigned_to_project: "You were assigned to project \"%{project}\" in \"%{workspace}\"."
+    user_invited_you_to_assign_to_workspace: "%{admin} invited you to join the \"%{workspace}\" workspace on Time Tracker. You can change active workspace in your profile"
+    welcome:
+      title: "Welcome!"
+      description: "%{admin} invited you to join the \"%{workspace}\" workspace on Time Tracker. Please log in and start use that incredible tool."
+      start: "START NOW"
+    reset_token:
+      requested: "Someone (hopefully you) requested your password to be reset."
+      click_the_link: "Please click the following link to enter a new password for your account:"
+      recover_password: "RECOVER PASSWORD"
+      did_not_requested: "If you did not request your account password to be reset, you may safely ignore this email."

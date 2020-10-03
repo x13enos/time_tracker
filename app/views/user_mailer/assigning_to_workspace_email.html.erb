@@ -12,7 +12,15 @@
                         <div class="greetings-block">
                             <div>
                                 <p>
-                                  <strong><span style="font-size: 36px;">Hello<%= ", #{@invitation_data[:user].name}" if @invitation_data[:user].name.present? %>!</span></strong>
+                                  <strong>
+                                    <span style="font-size: 36px;">
+                                      <% if @invitation_data[:user].name.present? %>
+                                        <%= I18n.t("mailer.hello_with_name", user: @invitation_data[:user].name) %>
+                                      <% else %>
+                                        <%= I18n.t("mailer.hello") %>
+                                      <% end %>
+                                    </span>
+                                  </strong>
                                 </p>
                             </div>
                         </div>
@@ -21,7 +29,9 @@
                         <div class="main-text-block">
                             <div>
                                 <p>
-                                  <strong><span style="font-size: 20px;"> <%= @invitation_data[:admin].name %> invited you to join the <%= @invitation_data[:workspace].name %> workspace on Time Tracker. You can change active workspace in your profile.</span></strong>
+                                  <strong><span style="font-size: 20px;">
+                                    <%= I18n.t("mailer.user_invited_you_to_assign_to_workspace", admin: @invitation_data[:admin].name, workspace: @invitation_data[:workspace].name) %>
+                                  </span></strong>
                                 </p>
                             </div>
                         </div>
