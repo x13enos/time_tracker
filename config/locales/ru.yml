@@ -50,7 +50,21 @@ ru:
     description: "Описание"
     total: "ВСЕГО"
   mailer:
+    hello: "Здравствуйте!"
     hello_with_name: "Здравствуйте %{user}!"
     subjects:
       you_were_assigned_to_project: "Вы были добавлены к проекту!"
+      you_were_assigned_to_workspace: "Вы были приглашены в рабочее пространство!"
+      welcome: "Добро пожаловать на Time Tracker!"
+      reset_token: "Сбросьте пароль вашей учетной записи на Time Tracker"
     you_were_assigned_to_project: "Вас добавили в проект \"%{project}\" в рабочем пространстве \"%{workspace}\"."
+    user_invited_you_to_assign_to_workspace: "%{admin} пригласил вас в рабочее пространство - \"%{workspace}\" на Time Tracker. Вы можете изменить активное рабочее пространство в вашем профиле."
+    welcome:
+      title: "Добро пожаловать!"
+      description: "%{admin} пригласил вас в рабочее пространство - \"%{workspace}\" на Time Tracker. Вы уже можете начать пользоваться этим, потрясающим инструментом."
+      start: "НАЧАТЬ"
+    reset_token:
+      requested: "Кто-то (надеемся, что вы) запросил сброс пароля."
+      click_the_link: "Перейдите по ссылке ниже для сброса пароля к вашей учетной записи Time Tracker:"
+      recover_password: "СБРОС ПАРОЛЯ"
+      did_not_requested: "Если вы не запрашивали сброс пароля, проигнорируйте это письмо, и ваш пароль не будет изменен."

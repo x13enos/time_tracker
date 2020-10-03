@@ -52,7 +52,7 @@ RSpec.describe V1::AuthController, type: :controller do
       post :create, params: { email: "example@gmail.com", password: "1111", format: :json }
     end
 
-    it "should return user's info if its was authorized" do
+    it "should return user's info if he was authorized" do
       allow(User).to receive(:find_by).with({ email: "example@gmail.com" }) { user }
       allow(user).to receive(:authenticate) { user }
       post :create, params: { email: "example@gmail.com", password: "1111", format: :json }

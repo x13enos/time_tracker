@@ -11,7 +11,7 @@ RSpec.describe V1::Users::PasswordsController, type: :controller do
 
     context "email was passed" do
       let!(:user) { create(:user) }
-      
+
       it "should send email if user was found" do
         mailer = double
         allow(User).to receive(:find_by) { user }
@@ -29,6 +29,11 @@ RSpec.describe V1::Users::PasswordsController, type: :controller do
       it "should return 200 status if user was found" do
         post :create, params: { email: user.email, format: :json }
         expect(response.status).to eq(200)
+      end
+
+      it "should set locale if locale was passed in params" do
+        expect(I18n).to receive(:with_locale).with("ru")
+        post :create, params: { email: user.email, format: :json, locale: "ru" }
       end
     end
   end

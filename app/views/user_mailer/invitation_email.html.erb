@@ -12,7 +12,9 @@
                         <div class="greetings-block">
                             <div>
                                 <p>
-                                  <strong><span style="font-size: 36px;">Welcome!</span></strong>
+                                  <strong><span style="font-size: 36px;">
+                                    <%= I18n.t("mailer.welcome.title") %>
+                                  </span></strong>
                                 </p>
                             </div>
                         </div>
@@ -21,7 +23,9 @@
                         <div class="main-text-block">
                             <div>
                                 <p>
-                                  <strong><span style="font-size: 20px;"> <%= @invitation_data[:admin].name %> invited you to join the <%= @invitation_data[:workspace].name %> workspace on Time Tracker. Please log in and start use that incredible tool.</span></strong>
+                                  <strong><span style="font-size: 20px;">
+                                    <%= I18n.t("mailer.welcome.description", admin: @invitation_data[:admin].name, workspace: @invitation_data[:workspace].name) %>
+                                  </span></strong>
                                 </p>
                             </div>
                         </div>
@@ -51,7 +55,9 @@
                                 <span class="link-text-wrapper">
                                   <span>
                                     <span data-mce-style="font-size: 26px; line-height: 52px;" style="font-size: 26px; line-height: 52px;">
-                                      <strong>START NOW</strong>
+                                      <strong>
+                                        <%= I18n.t("mailer.welcome.start") %>
+                                      </strong>
                                     </span>
                                   </span>
                                 </span>

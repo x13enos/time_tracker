@@ -6,7 +6,7 @@ class V1::BaseController < ApplicationController
 
   before_action :authenticate
   around_action :set_time_zone
-  around_action :with_locale, if: :current_user
+  around_action :with_locale
   after_action :set_token, if: :token_should_be_refresh
 
   def current_user
@@ -69,7 +69,12 @@ class V1::BaseController < ApplicationController
   end
 
   def with_locale(&block)
-    I18n.with_locale(current_user.locale, &block)
+    locale = if current_user
+              current_user.locale
+            else
+              params[:locale] || I18n.default_locale
+            end
+    I18n.with_locale(locale, &block)
   end
 
   def token_should_be_refresh
