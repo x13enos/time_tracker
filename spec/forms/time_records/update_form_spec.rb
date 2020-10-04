@@ -60,7 +60,7 @@ RSpec.describe TimeRecords::UpdateForm, type: :model do
           create(:time_record, user: user, spent_time: 1.5)
           time_record_form.spent_time = 23
           time_record_form.valid?
-          expect(time_record_form.errors[:base]).to eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
+          expect(time_record_form.errors[:spent_time]).to eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
         end
       end
 
@@ -69,7 +69,7 @@ RSpec.describe TimeRecords::UpdateForm, type: :model do
           create(:time_record, spent_time: 1.5)
           time_record_form.spent_time = 22
           time_record_form.valid?
-          expect(time_record_form.errors[:base]).to_not eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
+          expect(time_record_form.errors[:spent_time]).to_not eq([I18n.t("time_records.errors.should_be_less_than_24_hours")])
         end
       end
     end

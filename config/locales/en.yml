@@ -34,7 +34,7 @@ en:
       incorrect_format_of_regexp: "An invalid regular expression pattern"
   time_records:
     errors:
-      should_be_less_than_24_hours: "The total amount of spent time cannot exceed 24 hours per day"
+      should_be_less_than_24_hours: "Total time exceeds 24 hours"
       only_todays_taks: "You can only launch tasks which assigned to today"
   workspaces:
     errors:

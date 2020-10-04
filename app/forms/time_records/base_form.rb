@@ -29,7 +29,7 @@ module TimeRecords
       day_tasks = user.time_records.where("time_records.assigned_date = ?", assigned_date)
       day_tasks = day_tasks.where.not(id: id) if id
       if (day_tasks.sum(:spent_time) + spent_time.to_f) > 24.0
-        self.errors.add(:base, I18n.t("time_records.errors.should_be_less_than_24_hours"))
+        self.errors.add(:spent_time, I18n.t("time_records.errors.should_be_less_than_24_hours"))
       end
     end
   end
