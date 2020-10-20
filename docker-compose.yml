@@ -13,7 +13,7 @@ services:
     entrypoint: /var/www/time_tracker/docker-entrypoint.sh
     volumes:
       - .:/var/www/time_tracker
-      - ./extension:/var/www/time_tracker_extension/
+      - ${EXTENSION_GEM_PATH}:/var/www/time_tracker_extension/
     ports:
       - "3000:3000"
     depends_on:
@@ -39,7 +39,7 @@ services:
     stdin_open: true
     volumes:
       - .:/var/www/time_tracker
-      - ./extension:/var/www/time_tracker_extension/
+      - ~/Projects/time_tracker_extension:/var/www/time_tracker_extension/
     depends_on:
       - db
     env_file:
