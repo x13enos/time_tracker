@@ -25,7 +25,6 @@
 !/storage/.keep
 
 /db/schema.rb
-/extension/
 Dockerfile.development
 
 *.swp
