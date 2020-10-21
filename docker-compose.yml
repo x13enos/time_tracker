@@ -39,7 +39,7 @@ services:
     stdin_open: true
     volumes:
       - .:/var/www/time_tracker
-      - ~/Projects/time_tracker_extension:/var/www/time_tracker_extension/
+      - ${EXTENSION_GEM_PATH}:/var/www/time_tracker_extension/
     depends_on:
       - db
     env_file:
