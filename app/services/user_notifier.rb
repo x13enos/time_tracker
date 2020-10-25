@@ -20,11 +20,11 @@ class UserNotifier
   end
 
   def notify_by_email
-    return unless notification_found_in_settings('email')
+    return unless notification_found_in_settings?('email')
     Notifiers::Email.new(user, additional_data).send(notification_type)
   end
 
-  def notification_found_in_settings(notifier_type)
+  def notification_found_in_settings?(notifier_type)
     user.notification_settings(workspace_id).include?("#{notifier_type}_#{notification_type}")
   end
 end
