@@ -110,4 +110,42 @@ RSpec.describe TimeRecord, type: :model do
     end
   end
 
+  describe ".passed_time" do
+    it "should return amount of passed seconds from the start" do
+      travel_to Time.zone.local(2019, 10, 29)
+
+      time_record = create(:time_record, time_start: Time.now - 1.hours)
+      expect(time_record.passed_time).to eq(1)
+
+      travel_back
+    end
+  end
+
+  describe ".total_time" do
+    it "should return sum of spent time and round that" do
+      travel_to Time.zone.local(2019, 10, 29)
+
+      user = create(:user)
+      time_record = create(:time_record, user: user, spent_time: 2.35)
+      time_record_2 = create(:time_record, user: user, spent_time: 2.859)
+      time_record_3 = create(:time_record, user: user, spent_time: 0.5)
+
+      expect(user.time_records.total_time).to eq(5.71)
+
+      travel_back
+    end
+
+    it "should return sum of spent time + passed time from start for active task and round this as well" do
+      travel_to Time.zone.local(2019, 10, 29)
+
+      user = create(:user)
+      time_record = create(:time_record, user: user, spent_time: 2.35)
+      time_record_2 = create(:time_record, user: user, spent_time: 2.859)
+      time_record_3 = create(:time_record, user: user, time_start: Time.now - 1.hours, spent_time: 0.5)
+
+      expect(user.time_records.total_time).to eq(6.71)
+
+      travel_back
+    end
+  end
 end
