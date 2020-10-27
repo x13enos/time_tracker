@@ -48,7 +48,7 @@ class TimeRecordsSelector
   end
 
   def count_total_spent_time
-    user_time_records.empty? ? 0.0 : user_time_records.sum(:spent_time)
+    user_time_records.empty? ? 0.0 : user_time_records.total_time
   end
 
   def projects
