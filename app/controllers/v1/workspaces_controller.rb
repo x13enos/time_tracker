@@ -27,7 +27,7 @@ class V1::WorkspacesController < V1::BaseController
   def destroy
     authorize workspace
     if workspace.destroy
-      render partial: '/v1/workspaces/show.json.jbuilder'
+      render json: "ok", status: 200
     else
       render json: { errors: workspace.errors }, status: 400
     end
