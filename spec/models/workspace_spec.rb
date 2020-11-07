@@ -11,6 +11,7 @@ RSpec.describe Workspace, type: :model do
   describe 'associations' do
     subject { build(:workspace) }
 
+    it { should have_many(:users_workspaces).dependent(:destroy) }
     it { should have_many(:users).through(:users_workspaces) }
     it { should have_many(:projects).dependent(:destroy) }
     it { should have_many(:time_records).through(:projects) }

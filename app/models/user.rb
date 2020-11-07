@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_secure_password validations: false
 
   has_many :time_records, dependent: :destroy
-  has_many :users_workspaces
+  has_many :users_workspaces, dependent: :destroy
   has_many :workspaces, -> { distinct }, through: :users_workspaces
   has_and_belongs_to_many :projects, -> { distinct }
   belongs_to :active_workspace, class_name: "Workspace",
