@@ -86,14 +86,9 @@ RSpec.describe V1::WorkspacesController, type: :controller do
       controller.instance_variable_set(:@current_user, @current_user)
     end
 
-    it "should return workspace's data if it was deleted" do
+    it "should return status 200 if it was deleted" do
       delete :destroy, params: { id: workspace.id, format: :json }
-      expect(response.body).to eq({
-        id: workspace.id,
-        name: workspace.name,
-        user_ids: [@current_user.id],
-        owner: true
-      }.to_json)
+      expect(response.status).to eq(200)
     end
 
     it "should remove workspace" do
