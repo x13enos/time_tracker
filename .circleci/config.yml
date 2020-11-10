@@ -26,6 +26,31 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker push $IMAGE
           docker push $DEVELOPMENT
+
+  deploy_staging:
+    docker:
+      - image: circleci/ruby:2.7.1
+    steps:
+      - checkout
+      - run: |
+          curl -u $CATTLE_KEY \
+          -X POST \
+          -H 'Accept: application/json' \
+          -H 'Content-Type: application/json' \
+          "https://k8s.andres-sild.com/v3/project/c-r9l2h:p-cnhjm/workloads/deployment:staging:time-tracker-api?action=redeploy"
+
+  deploy_production:
+    docker:
+      - image: circleci/ruby:2.7.1
+    steps:
+      - checkout
+      - run: |
+          curl -u $CATTLE_KEY \
+          -X POST \
+          -H 'Accept: application/json' \
+          -H 'Content-Type: application/json' \
+          "https://k8s.andres-sild.com/v3/project/c-r9l2h:p-cnhjm/workloads/deployment:default:time-tracker-api-production?action=redeploy"
+
   build:
     docker:
       - image: circleci/ruby:2.7.1
@@ -101,9 +126,37 @@ workflows:
           filters:
             branches:
               only: development
+      - deploy_staging_approval:
+          name: Deploy to staging
+          type: approval
+          requires:
+            - build_development_image
+          filters:
+            branches:
+              only: development
+      - deploy_staging:
+          requires:
+            - Deploy to staging
+          filters:
+            branches:
+              only: development
       - build_image:
           requires:
             - build
+          filters:
+            branches:
+              only: master
+      - deploy_production_approval:
+          name: Deploy to production
+          type: approval
+          requires:
+            - build_image
+          filters:
+            branches:
+              only: master
+      - deploy_production:
+          requires:
+            - Deploy to production
           filters:
             branches:
               only: master
