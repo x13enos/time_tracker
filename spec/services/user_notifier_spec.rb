@@ -57,5 +57,22 @@ RSpec.describe UserNotifier do
       expect(Notifiers::Email).not_to receive(:new)
       notifier.perform
     end
+
+    context "exception was raised" do
+      before do
+        user.workspace_settings.update(notification_rules: ["email_assign_user_to_project"])
+        allow(Notifiers::Email).to receive(:new).and_raise(Net::ReadTimeout)
+      end
+
+      it "should send exception's message to Sentry" do
+        expect(Raven).to receive(:capture_exception).with(Net::ReadTimeout)
+        notifier.perform
+      end
+
+      it "should post error to the rails logger" do
+        expect(Rails.logger).to receive(:error).with(Net::ReadTimeout)
+        notifier.perform
+      end
+    end
   end
 end
