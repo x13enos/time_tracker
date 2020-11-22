@@ -9,12 +9,12 @@ module TimeRecords
                  project_id user_id created_at updated_at tag_ids]
 
     attr_accessor *ATTRIBUTES
-    attr_accessor :id, :user, :time_record
+    attr_accessor :id, :user, :time_record, :start_task
 
     private
 
     def stop_other_launched_time_records
-      return if time_start.nil?
+      return unless start_task
       active_time_records = user.time_records.active.where("id <> ?", id)
       active_time_records.each(&:stop)
     end

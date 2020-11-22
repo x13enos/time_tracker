@@ -46,6 +46,7 @@ class V1::TimeRecordsController < V1::BaseController
   def prepared_params
     params[:assigned_date] = params[:assigned_date].to_datetime if params[:assigned_date]
     permitted_params = params.permit(
+      :start_task,
       :project_id,
       :description,
       :spent_time,

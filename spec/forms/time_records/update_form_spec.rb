@@ -92,7 +92,7 @@ RSpec.describe TimeRecords::UpdateForm, type: :model do
         time_record = create(:time_record, user: user, time_start: Time.now)
         new_time_record = create(:time_record, user: user, time_start: Time.now)
 
-        time_record_form.time_start = Time.now
+        time_record_form.start_task = true 
         allow(user).to receive_message_chain(:time_records, :create) { new_time_record }
         allow(user).to receive_message_chain(:time_records, :active, :where) { [time_record] }
         expect(time_record).to receive(:stop)
