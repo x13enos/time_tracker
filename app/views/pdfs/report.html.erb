@@ -108,7 +108,7 @@
                 <td></td>
                 <td><%= time_records_pack.map(&:user_id).uniq.length %></td>
                 <td class="bold-font"><%= time_records_pack[0].description[0, 20] %>... + <%= time_records_pack.size - 1 %> tasks</td>
-                <td class='spent_time bold-font'><%= time_records_pack.sum(&:spent_time) %></td>
+                <td class='spent_time bold-font'><%= time_records_pack.sum(&:calculated_spent_time) %></td>
               </tr>
             <% end %>
 
@@ -118,7 +118,7 @@
                 <td><%= time_record.assigned_date %></td>
                 <td><%= time_record.user.name %></td>
                 <td class="<%= 'grouped-description' if time_records_pack.size > 1 %>"><%= time_record.description %></td>
-                <td class='spent_time'><%= time_record.spent_time %></td>
+                <td class='spent_time'><%= time_record.calculated_spent_time %></td>
               </tr>
             <% end %>
           <% end %>

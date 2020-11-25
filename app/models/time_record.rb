@@ -26,14 +26,25 @@ class TimeRecord < ApplicationRecord
 
   def calculated_spent_time
     if active?
-      passed_time_from_start = (Time.now - time_start) / 3600
-      (passed_time_from_start + spent_time).round(2)
+      (passed_time + spent_time).round(2)
     else
       spent_time
     end
   end
 
+  def passed_time
+    (Time.now - time_start) / 3600
+  end
+
   def belongs_to_user?(user_id)
     self.user_id == user_id
+  end
+
+  def self.total_time
+    total_time = all.sum(:spent_time)
+    if active_task = all.find_by("time_start IS NOT NULL")
+      total_time += active_task.passed_time
+    end
+    return total_time.round(2)
   end
 end

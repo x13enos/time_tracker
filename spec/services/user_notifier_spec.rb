@@ -34,7 +34,7 @@ RSpec.describe UserNotifier do
       )
     end
 
-    it "should user I18n for using user's locale during the creating of notifications" do
+    it "should use I18n for using user's locale during the creating of notifications" do
       allow(Notifiers::Email).to receive(:new) { double(assign_user_to_project: true) }
       expect(I18n).to receive(:with_locale).with(user.locale, &Proc.new { notifier.send(:notifications) })
       notifier.perform
@@ -48,7 +48,7 @@ RSpec.describe UserNotifier do
       notifier.perform
     end
 
-    it "should not call mail notifier if user doesn't enable notification for that" do
+    it "should not call mail notifier if user didn't enable notification for that" do
       notifier = UserNotifier.new(
         user: user,
         notification_type: :non_existed_method,
@@ -56,6 +56,23 @@ RSpec.describe UserNotifier do
       )
       expect(Notifiers::Email).not_to receive(:new)
       notifier.perform
+    end
+
+    context "exception was raised" do
+      before do
+        user.workspace_settings.update(notification_rules: ["email_assign_user_to_project"])
+        allow(Notifiers::Email).to receive(:new).and_raise(Net::ReadTimeout)
+      end
+
+      it "should send exception's message to Sentry" do
+        expect(Raven).to receive(:capture_exception).with(Net::ReadTimeout)
+        notifier.perform
+      end
+
+      it "should post error to the rails logger" do
+        expect(Rails.logger).to receive(:error).with(Net::ReadTimeout)
+        notifier.perform
+      end
     end
   end
 end

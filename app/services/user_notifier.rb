@@ -16,15 +16,22 @@ class UserNotifier
   attr_reader :user, :notification_type, :additional_data, :workspace_id
 
   def notifications
-    notify_by_email
+    with_error_handling { notify_by_email }
   end
 
   def notify_by_email
-    return unless notification_found_in_settings('email')
+    return unless notification_found_in_settings?('email')
     Notifiers::Email.new(user, additional_data).send(notification_type)
   end
 
-  def notification_found_in_settings(notifier_type)
+  def notification_found_in_settings?(notifier_type)
     user.notification_settings(workspace_id).include?("#{notifier_type}_#{notification_type}")
+  end
+
+  def with_error_handling
+    yield
+  rescue StandardError => e
+    Raven.capture_exception(e)
+    Rails.logger.error(e)
   end
 end

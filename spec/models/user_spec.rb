@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
     subject { build(:user, password: nil) }
 
     it { should have_and_belong_to_many(:projects) }
-    it { should have_many(:users_workspaces) }
+    it { should have_many(:users_workspaces).dependent(:destroy) }
     it { should have_many(:workspaces).through(:users_workspaces) }
     it { should have_many(:time_records).dependent(:destroy) }
     it { should belong_to(:active_workspace).class_name("Workspace").with_foreign_key(:active_workspace_id) }
