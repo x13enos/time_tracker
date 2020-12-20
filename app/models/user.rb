@@ -9,7 +9,8 @@ class User < ApplicationRecord
   has_many :workspaces, -> { distinct }, through: :users_workspaces
   has_and_belongs_to_many :projects, -> { distinct }
   belongs_to :active_workspace, class_name: "Workspace",
-                                foreign_key: "active_workspace_id"
+                                foreign_key: "active_workspace_id",
+                                optional: true
 
   def role(workspace_id = nil)
     workspace_settings(workspace_id).role

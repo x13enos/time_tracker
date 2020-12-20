@@ -1,6 +1,8 @@
 module Users
   class UpdateForm < Users::BaseForm
     validate :email_is_unique?
+    validate :active_workspace_is_one_of_users_workspaces
+    validates :active_workspace_id, presence: true
 
     def initialize(passed_attributes, user)
       @user = user

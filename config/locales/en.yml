@@ -61,6 +61,9 @@ en:
     user_invited_you_to_assign_to_workspace: "%{admin} invited you to join the \"%{workspace}\" workspace on Time Tracker. You can change active workspace in your profile"
     welcome:
       title: "Welcome!"
+      description: "We are so glad you are joining us!"
+    invitation:
+      title: "Welcome!"
       description: "%{admin} invited you to join the \"%{workspace}\" workspace on Time Tracker. Please log in and start use that incredible tool."
       start: "START NOW"
     reset_token:
