@@ -6,6 +6,10 @@ class UserMailer < ApplicationMailer
     mail(to: invitation_data[:user].email, subject: I18n.t("mailer.subjects.welcome"))
   end
 
+  def welcome_email(user)
+    mail(to: user.email, subject: I18n.t("mailer.subjects.welcome"))
+  end
+
   def recovery_password_email(user)
     @user = user
     @token = TokenCryptService.encode(user.email, 1.hours)

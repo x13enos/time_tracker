@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       resources :invitations, only: [] do
         put :update, on: :collection
       end
+      resources :registrations, only: :create
     end
   end
 end

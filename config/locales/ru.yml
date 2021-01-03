@@ -1,5 +1,12 @@
 ru:
   unathorized: "Вы не авторизованы для данного действия."
+  activemodel:
+    errors:
+      models:
+        users/registrate_form:
+          attributes:
+            password:
+              too_short: "должен содержать не менее %{count} символов"
   activerecord:
     errors:
       models:
@@ -11,6 +18,7 @@ ru:
           attributes:
             name:
               taken: "Данное имя уже было использовано для другой метки"
+
   passwords:
     email_does_not_present: "Email не может быть пустым"
     token_does_not_present: "Токен не может быть пустым"
@@ -60,6 +68,9 @@ ru:
     you_were_assigned_to_project: "Вас добавили в проект \"%{project}\" в рабочем пространстве \"%{workspace}\"."
     user_invited_you_to_assign_to_workspace: "%{admin} пригласил вас в рабочее пространство - \"%{workspace}\" на Time Tracker. Вы можете изменить активное рабочее пространство в вашем профиле."
     welcome:
+      title: "Добро пожаловать!"
+      description: "Благодарим вас за то, что вы стали пользователем нашего приложения!"
+    invitation:
       title: "Добро пожаловать!"
       description: "%{admin} пригласил вас в рабочее пространство - \"%{workspace}\" на Time Tracker. Вы уже можете начать пользоваться этим, потрясающим инструментом."
       start: "НАЧАТЬ"
