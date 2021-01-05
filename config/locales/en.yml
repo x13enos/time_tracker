@@ -11,6 +11,13 @@ en:
           attributes:
             name:
               taken: "This name was already be taken"
+  activemodel:
+    errors:
+      models:
+        users_workspaces/update_form:
+          attributes:
+            role:
+              inclusion: "You cannot set this role for user"
   passwords:
     email_does_not_present: "Email can't be blank"
     token_does_not_present: "Token can't be blank"

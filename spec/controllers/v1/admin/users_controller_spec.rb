@@ -2,6 +2,21 @@ require 'rails_helper'
 
 RSpec.describe V1::Admin::UsersController, type: :controller do
 
+  def user_info(user)
+    {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      locale: user.locale,
+      active_workspace_id: user.active_workspace_id,
+      notification_settings: user.notification_settings,
+      workspaces: [
+        { id: user.workspaces.first.id, name: user.workspaces.first.name }
+      ]
+    }
+  end
+
   describe "GET #index" do
     it "should return list of users" do
 
@@ -27,6 +42,25 @@ RSpec.describe V1::Admin::UsersController, type: :controller do
           role: user_2.role(workspace)
         },
       ].to_json)
+    end
+  end
+
+  describe "PUT #update" do
+    login_user(:admin)
+    let!(:user) { create(:user, :staff, active_workspace: @current_user.active_workspace) }
+
+    it "should return user's data if user info was updated" do
+      form = double(save: true)
+      allow(UsersWorkspaces::UpdateForm).to receive(:new) { form }
+      put :update, params: { id: user.id, role: "admin", format: :json }
+      expect(response.body).to eq(user_info(user.reload).to_json)
+    end
+
+    it "should return error message if user info was not updated" do
+      form = double(save: false, errors: { role: [] })
+      allow(UsersWorkspaces::UpdateForm).to receive(:new) { form }
+      put :update, params: { id: user.id, role: "owner", format: :json }
+      expect(response.body).to eq({ errors: form.errors }.to_json)
     end
   end
 end

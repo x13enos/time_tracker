@@ -7,6 +7,10 @@ ru:
           attributes:
             password:
               too_short: "должен содержать не менее %{count} символов"
+        users_workspaces/update_form:
+          attributes:
+            role:
+              inclusion: "Вы не можете установить эту роль для пользователя"
   activerecord:
     errors:
       models:
