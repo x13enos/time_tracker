@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   namespace :v1 do
     namespace :admin do
-      resources :users, only: :index
+      resources :users, only: [:index, :update]
     end
     resources :auth, only: [:create, :index] do
       delete :destroy, on: :collection
