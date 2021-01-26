@@ -82,7 +82,7 @@ class V1::BaseController < ApplicationController
   end
 
   def set_time_zone
-    timezone = ActiveSupport::TimeZone[params["timezone_offset"].to_i]
-    Time.use_zone(timezone) { yield }
+    time_zone = params[:current_timezone] || 'UTC'
+    Time.use_zone(time_zone) { yield }
   end
 end

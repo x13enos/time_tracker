@@ -14,6 +14,7 @@ FactoryBot.define do
     name     { Faker::Name.name }
     email    { Faker::Internet.unique.email }
     password { "password" }
+    timezone { "Atlantic/South_Georgia" }
     association :active_workspace, factory: :workspace
 
     trait :owner do

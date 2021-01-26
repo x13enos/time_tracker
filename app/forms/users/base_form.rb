@@ -8,7 +8,7 @@ module Users
     validates :locale, inclusion: { in: User::SUPPORTED_LANGUAGES,
       message: I18n.t("users.errors.locale_inclusion") }
 
-    ATTRIBUTES = %w[email locale active_workspace_id name password workspace_ids]
+    ATTRIBUTES = %w[email locale active_workspace_id name password workspace_ids timezone]
 
     attr_accessor *ATTRIBUTES
     attr_accessor :user, :created_at, :updated_at, :notification_rules

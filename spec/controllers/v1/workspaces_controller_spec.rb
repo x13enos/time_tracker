@@ -7,7 +7,7 @@ RSpec.describe V1::WorkspacesController, type: :controller do
       let!(:workspace) { create(:workspace) }
 
       it "should return list of user workspaces with user_ids" do
-        login_user(:owner, workspace)
+        login_user_with_workspace(:owner, workspace)
         controller.instance_variable_set(:@current_user, @current_user)
         get :index, params: { format: :json }
         expect(response.body).to include([
@@ -58,7 +58,7 @@ RSpec.describe V1::WorkspacesController, type: :controller do
     let!(:workspace) { create(:workspace) }
 
     before do
-      login_user(:owner, workspace)
+      login_user_with_workspace(:owner, workspace)
       controller.instance_variable_set(:@current_user, @current_user)
     end
 
@@ -82,7 +82,7 @@ RSpec.describe V1::WorkspacesController, type: :controller do
     let!(:workspace) { create(:workspace) }
 
     before do
-      login_user(:owner, workspace)
+      login_user_with_workspace(:owner, workspace)
       controller.instance_variable_set(:@current_user, @current_user)
     end
 

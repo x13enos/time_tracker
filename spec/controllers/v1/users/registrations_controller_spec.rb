@@ -5,8 +5,15 @@ RSpec.describe V1::Users::RegistrationsController, type: :controller do
 
   describe "POST #create" do
     it "should build registration form" do
-      expect(Users::RegistrateForm).to receive(:new) { double(save: true, user: user) }
-      post :create, params: { email: "user@email.com", password: "11111111", format: :json }
+      params = ActionController::Parameters.new(
+        email: "user@email.com", 
+        password: "11111111",
+        locale: "en",
+        timezone: "Europe/Kiev"
+      )
+      permitted = params.permit(:email, :password, :locale, :timezone)
+      expect(Users::RegistrateForm).to receive(:new).with(permitted) { double(save: true, user: user) }
+      post :create, params: { email: "user@email.com", password: "11111111", current_timezone: "Europe/Kiev", locale: "en", format: :json }
     end
 
     it 'should set set token in cookies in case of succesfull creating' do
@@ -24,6 +31,7 @@ RSpec.describe V1::Users::RegistrationsController, type: :controller do
           name: user.name,
           role: user.role,
           locale: user.locale,
+          timezone: user.timezone,
           active_workspace_id: user.active_workspace_id,
           notification_settings: user.notification_settings,
           workspaces: [

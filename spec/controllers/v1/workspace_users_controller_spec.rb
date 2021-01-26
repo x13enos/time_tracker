@@ -1,23 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe V1::WorkspaceUsersController, type: :controller do
-  def user_info(user)
-    {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      locale: user.locale,
-      active_workspace_id: user.active_workspace_id,
-      notification_settings: user.notification_settings
-    }
-  end
 
   describe "POST #create" do
     let!(:workspace) { create(:workspace) }
 
     before do
-      login_user(:owner, workspace)
+      login_user_with_workspace(:owner, workspace)
     end
 
     context "user already was created" do
