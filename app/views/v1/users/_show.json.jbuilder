@@ -1,1 +1,1 @@
-json.(user, :id, :email, :name, :role, :locale, :active_workspace_id, :notification_settings)
+json.(user, :id, :email, :name, :role, :locale, :timezone, :active_workspace_id, :notification_settings)

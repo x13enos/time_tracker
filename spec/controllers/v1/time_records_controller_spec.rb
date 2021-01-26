@@ -33,8 +33,8 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
       login_user(:staff)
 
       it "should set the right timezone for request" do
-        expect(Time).to receive(:use_zone).with(ActiveSupport::TimeZone[-3])
-        get :index, params: { assigned_date: "29-10-2019", timezone_offset: "-3", format: :json }
+        expect(Time).to receive(:use_zone).with("Europe/Kiev")
+        get :index, params: { assigned_date: "29-10-2019", current_timezone: "Europe/Kiev", format: :json }
       end
 
       it "should return weekly user's time records in the right order" do
@@ -114,7 +114,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
       it "should set start time if param with this key was passed info" do
         travel_to Time.zone.local(2019, 10, 28)
 
-        post :create, params: time_record_params.merge({ start_task: true })
+        post :create, params: time_record_params.merge({ start_task: true, current_timezone: "Europe/Kiev" })
         expect(TimeRecord.last.time_start).to be_present
 
         travel_back
@@ -180,7 +180,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
       it "should set start time if param with this key was passed info" do
         travel_to Time.zone.local(2019, 10, 28)
 
-        put :update, params: { id: time_record.id, start_task: true, format: :json }
+        put :update, params: { id: time_record.id, start_task: true, format: :json, current_timezone: "Europe/Kiev" }
         expect(TimeRecord.last.time_start).to be_present
 
         travel_back

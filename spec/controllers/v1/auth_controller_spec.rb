@@ -9,21 +9,7 @@ RSpec.describe V1::AuthController, type: :controller do
 
       it "should return user's info" do
         get :index, format: :json
-        expect(response.body).to eq({
-          id: @current_user.id,
-          email: @current_user.email,
-          name: @current_user.name,
-          role: @current_user.role,
-          locale: @current_user.locale,
-          active_workspace_id: @current_user.active_workspace_id,
-          notification_settings: user.notification_settings,
-          workspaces: [
-            {
-              id: @current_user.workspaces.first.id,
-              name: @current_user.workspaces.first.name
-            }
-          ]
-        }.to_json)
+        expect(response.body).to eq(user_info_with_workspaces(@current_user).to_json)
       end
     end
 
@@ -56,21 +42,7 @@ RSpec.describe V1::AuthController, type: :controller do
       allow(User).to receive(:find_by).with({ email: "example@gmail.com" }) { user }
       allow(user).to receive(:authenticate) { user }
       post :create, params: { email: "example@gmail.com", password: "1111", format: :json }
-      expect(response.body).to eq({
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        locale: user.locale,
-        active_workspace_id: user.active_workspace_id,
-        notification_settings: user.notification_settings,
-        workspaces: [
-          {
-            id: user.workspaces.first.id,
-            name: user.workspaces.first.name
-          }
-        ]
-      }.to_json)
+      expect(response.body).to eq(user_info_with_workspaces(user).to_json)
     end
 
     it "should set token if user was authorized" do
@@ -115,21 +87,7 @@ RSpec.describe V1::AuthController, type: :controller do
 
       it "should return user's info" do
         delete :destroy, params: { format: :json }
-        expect(response.body).to eq({
-          id: @current_user.id,
-          email: @current_user.email,
-          name: @current_user.name,
-          role: @current_user.role,
-          locale: @current_user.locale,
-          active_workspace_id: @current_user.active_workspace_id,
-          notification_settings: user.notification_settings,
-          workspaces: [
-            {
-              id: @current_user.workspaces.first.id,
-              name: @current_user.workspaces.first.name
-            }
-          ]
-        }.to_json)
+        expect(response.body).to eq(user_info_with_workspaces(@current_user).to_json)
       end
     end
 
