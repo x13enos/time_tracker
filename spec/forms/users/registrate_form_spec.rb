@@ -5,8 +5,6 @@ RSpec.describe Users::RegistrateForm, type: :model do
     let!(:user_form) { Users::RegistrateForm.new(attributes_for(:user)) }
     subject { user_form }
 
-    it { should validate_presence_of(:timezone) }
-
     describe 'email_is_unique?' do
       let(:workspace) { create(:workspace) }
 

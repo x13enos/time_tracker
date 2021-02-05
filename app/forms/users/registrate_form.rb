@@ -2,7 +2,6 @@ module Users
   class RegistrateForm < Users::BaseForm
     prepend TimeTrackerExtension::Users::CreateFormExtension if EXTENSION_ENABLED
     validate :email_is_unique?
-    validates :timezone, presence: true
 
     def initialize(attributes)
       super(attributes)
