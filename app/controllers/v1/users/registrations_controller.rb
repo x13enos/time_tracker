@@ -14,6 +14,6 @@ class V1::Users::RegistrationsController < V1::Users::BaseController
   private
 
   def user_params
-    params.permit(:email, :password, :locale)
+    params.permit(:email, :password, :locale).merge({ timezone: params["current_timezone"] })
   end
 end

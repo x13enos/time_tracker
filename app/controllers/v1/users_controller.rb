@@ -34,6 +34,7 @@ class V1::UsersController < V1::BaseController
       :email,
       :password,
       :locale,
+      :timezone,
       notification_rules: []
     )
   end

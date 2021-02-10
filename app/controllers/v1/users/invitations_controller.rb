@@ -10,6 +10,6 @@ class V1::Users::InvitationsController < V1::Users::BaseController
   end
 
   def user_params
-    params.permit(:name, :password)
+    params.permit(:name, :password).merge({ timezone: params["current_timezone"] })
   end
 end

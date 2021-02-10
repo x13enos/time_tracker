@@ -82,7 +82,6 @@ class V1::BaseController < ApplicationController
   end
 
   def set_time_zone
-    timezone = ActiveSupport::TimeZone[params["timezone_offset"].to_i]
-    Time.use_zone(timezone) { yield }
+    Time.use_zone(params["current_timezone"]) { yield }
   end
 end
