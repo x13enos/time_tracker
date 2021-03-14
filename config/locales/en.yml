@@ -54,6 +54,7 @@ en:
     project: "Project"
     date: "Date"
     employee: "Employee"
+    tags: "Tags"
     description: "Description"
     total: "TOTAL"
   mailer:

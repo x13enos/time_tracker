@@ -60,6 +60,7 @@ ru:
     date: "Дата"
     employee: "Работник"
     description: "Описание"
+    tags: "Метки"
     total: "ВСЕГО"
   mailer:
     hello: "Здравствуйте!"

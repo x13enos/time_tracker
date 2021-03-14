@@ -24,6 +24,21 @@ RSpec.describe TimeRecord, type: :model do
     end
   end
 
+  describe '.by_tags' do
+    it "should return list of time records selected by passed tags ids" do
+      tag1 = create(:tag)
+      tag2 = create(:tag)
+
+      time_record1 = create(:time_record, tags: [tag1])
+      time_record2 = create(:time_record, tags: [tag2])
+      time_record3 = create(:time_record, tags: [tag1, tag2])
+
+      filtered_timre_records = TimeRecord.by_tags([tag1.id])
+      expect(filtered_timre_records).to include(time_record1, time_record3)
+      expect(filtered_timre_records.count).to eq(2)
+    end
+  end
+
   describe '.active' do
     let!(:inactive_time_record) { create(:time_record, time_start: nil) }
     let!(:active_time_record) { create(:time_record, time_start: Time.now) }

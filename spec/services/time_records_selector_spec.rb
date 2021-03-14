@@ -5,10 +5,10 @@ RSpec.describe TimeRecordsSelector do
     travel_to Time.zone.local(2019, 10, 29)
 
     @time_record = create(:time_record, user: user, description: "TT-88: first", assigned_date: Date.today, spent_time: 0.45, project: project)
-    @time_record_2 = create(:time_record, user: user, description: "TT-78: second", created_at: Time.now - 2.hour, assigned_date: Date.today, spent_time: 1.44, project: project_2)
+    @time_record_2 = create(:time_record, user: user, description: "TT-78: second", created_at: Time.now - 2.hour, assigned_date: Date.today, spent_time: 2, project: project_2)
     @time_record_3 = create(:time_record, user: create(:user), assigned_date: Time.zone.today, project: project)
     @time_record_4 = create(:time_record, user: user, description: "TT-88: third", created_at: Time.now - 1.hour, assigned_date: Date.today - 10.days, spent_time: 3.5, project: project_3)
-    @time_record_5 = create(:time_record, user: user, description: "TL-89: test-description", assigned_date: Date.today, spent_time: 0.45, project: project_2)
+    @time_record_5 = create(:time_record, user: user, description: "TL-89: test-description", assigned_date: Date.today, spent_time: 0.5, project: project_2)
     @time_record_6 = create(:time_record, user: user, description: "TKL-199: test-description", assigned_date: Date.today, spent_time: 0.45, project: project_2)
 
     travel_back
@@ -62,7 +62,7 @@ RSpec.describe TimeRecordsSelector do
     it "shold return total spent time for selected time records" do
       create_time_records(user)
       result = TimeRecordsSelector.new(params, user).perform
-      expect(result[:total_spent_time]).to eq(6.29)
+      expect(result[:total_spent_time]).to eq(6.9)
     end
 
     it "should return time records in the right order" do
@@ -74,6 +74,26 @@ RSpec.describe TimeRecordsSelector do
       result = TimeRecordsSelector.new(params, user).perform
       time_record_ids = result[:grouped_time_records].flatten.map(&:id)
       expect(time_record_ids).to eql([@time_record_1.id, @time_record.id])
+    end
+
+    it "should return time records which were filtered by tags" do
+      travel_to Time.zone.local(2019, 10, 29)
+      tag = create(:tag)
+      tag_1 = create(:tag)
+      tag_2 = create(:tag)
+      time_record = create(:time_record, user: user, created_at: Time.now - 1.hour, assigned_date: Date.today, project: project_3)
+      time_record_1 = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
+      time_record_2 = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
+      travel_back
+
+      tag.time_records << [time_record, time_record_1]
+      tag_1.time_records << [time_record_1]
+      tag_2.time_records << [time_record_2]
+
+      params.merge!(tags_ids: [tag.id, tag_1.id])
+      result = TimeRecordsSelector.new(params, user).perform
+      time_record_ids = result[:grouped_time_records].flatten.map(&:id)
+      expect(time_record_ids).to eql([time_record_1.id, time_record.id])
     end
 
     it "should use passed workspace id for selecting time records" do
