@@ -4,6 +4,10 @@ class TimeRecordPolicy < ApplicationPolicy
     user?
   end
 
+  def active?
+    user?
+  end
+
   def create?
     user?
   end
