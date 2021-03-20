@@ -30,10 +30,12 @@ class TimeRecordsSelector
 
   def get_time_records
     user.time_records
-      .by_workspace(params[:workspace_id] || user.active_workspace_id)
-      .joins(:user)
-      .where("assigned_date BETWEEN ? AND ?", converted_dates[:from], converted_dates[:to])
-      .order(assigned_date: :desc, created_at: :desc)
+        .where('assigned_date BETWEEN ? AND ?', converted_dates[:from], converted_dates[:to])
+        .by_workspace(params[:workspace_id] || user.active_workspace_id)
+        .by_tags(params[:tags_ids] || [])
+        .joins(:user)
+        .distinct
+        .order(assigned_date: :desc, created_at: :desc)
   end
 
   def group_time_records

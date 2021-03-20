@@ -41,10 +41,16 @@ class TimeRecord < ApplicationRecord
   end
 
   def self.total_time
-    total_time = all.sum(:spent_time)
-    if active_task = all.find_by("time_start IS NOT NULL")
+    total_time = all.map(&:spent_time).inject(0, :+)
+    if (active_task = all.find_by('time_start IS NOT NULL'))
       total_time += active_task.passed_time
     end
-    return total_time.round(2)
+    total_time.round(2)
+  end
+
+  def self.by_tags(tags_ids)
+    return all if tags_ids.empty?
+
+    joins(:tags).where('tags.id IN (?)', tags_ids)
   end
 end
