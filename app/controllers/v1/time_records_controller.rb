@@ -10,6 +10,14 @@ class V1::TimeRecordsController < V1::BaseController
       .order(created_at: :asc)
   end
 
+  def active
+    authorize TimeRecord
+    time_record = current_user.time_records.by_workspace(current_workspace_id).active.first
+    if time_record
+      render partial: '/v1/time_records/show.json.jbuilder', locals: { time_record: time_record }
+    end
+  end
+
   def create
     authorize TimeRecord
     handle_form(TimeRecords::CreateForm.new(prepared_params, current_user))

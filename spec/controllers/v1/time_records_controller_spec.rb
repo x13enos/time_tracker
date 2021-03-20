@@ -77,6 +77,46 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
 
   end
 
+  describe "GET #active" do
+    login_user(:staff)
+
+    it "should return active time record for current user" do
+
+      travel_to Time.zone.local(2019, 10, 29)
+
+      project = create(:project, workspace: @current_user.active_workspace)
+      time_record = create(:time_record, user: @current_user,  assigned_date: Date.today, project: project)
+      time_record_2 = create(:time_record, user: @current_user, assigned_date: Date.today.beginning_of_week, project: project, time_start: Time.now - 1.hour)
+      get :active, params: { format: :json }
+
+      expect(response.body).to eql({
+        "id" => time_record_2.id,
+        "description" => time_record_2.description,
+        "project_id" => time_record_2.project_id,
+        "tag_ids" => time_record_2.tag_ids,
+        "time_start" => time_record_2.time_start_as_epoch,
+        "spent_time" => 1.0,
+        "assigned_date" => time_record_2.assigned_date.strftime("%d/%m/%Y")
+      }.to_json)
+
+      travel_back
+    end
+
+    it "should nothing in case of active time record absence" do
+
+      travel_to Time.zone.local(2019, 10, 29)
+
+      project = create(:project, workspace: @current_user.active_workspace)
+      time_record = create(:time_record, user: @current_user,  assigned_date: Date.today, project: project)
+      time_record_2 = create(:time_record, user: @current_user, assigned_date: Date.today.beginning_of_week, project: project)
+      get :active, params: { format: :json }
+
+      expect(response.body).to be_empty
+
+      travel_back
+    end
+  end
+
   describe "POST #create" do
     login_user(:staff)
 

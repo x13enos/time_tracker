@@ -11,7 +11,9 @@ Rails.application.routes.draw do
     resources :auth, only: [:create, :index] do
       delete :destroy, on: :collection
     end
-    resources :time_records, only: [:index, :create, :update, :destroy]
+    resources :time_records, only: [:index, :create, :update, :destroy] do
+      get :active, on: :collection
+    end
     resources :reports, only: :index
     resources :projects, only: [:index, :create, :update, :destroy] do
       resources :project_users, only: [:create, :destroy]

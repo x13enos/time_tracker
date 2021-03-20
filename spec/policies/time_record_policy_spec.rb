@@ -7,7 +7,7 @@ describe TimeRecordPolicy do
 
     subject { described_class.new(user, TimeRecord) }
 
-    it { is_expected.to permit_actions([:index, :create]) }
+    it { is_expected.to permit_actions([:index, :create, :active]) }
   end
 
   context 'user was found and record belongs to user' do
