@@ -8,7 +8,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails'
 gem 'jwt'
 gem 'pg'
-gem 'puma', '~> 3.12'
+gem 'puma'
 gem 'rails', '~> 6.0'
 gem 'pundit'
 gem 'wicked_pdf'

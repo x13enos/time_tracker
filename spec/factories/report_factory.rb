@@ -4,7 +4,7 @@ FactoryBot.define do
     association :user
 
     uuid     { SecureRandom.uuid }
-    file     { fixture_file_upload("#{Rails.root}/spec/support/files/sample.pdf") }
+    file     { Rack::Test::UploadedFile.new("#{Rails.root}/spec/support/files/sample.pdf") }
   end
 
 end
