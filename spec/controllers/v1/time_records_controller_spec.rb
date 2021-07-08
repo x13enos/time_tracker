@@ -42,10 +42,11 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
         travel_to Time.zone.local(2019, 10, 29)
         time_start = Time.now - 1.hour
 
-        project = create(:project, workspace: @current_user.active_workspace)
-        time_record = create(:time_record, user: @current_user, time_start: time_start, assigned_date: Date.today, project: project)
-        time_record_2 = create(:time_record, user: @current_user, created_at: Time.now + 1.hour, assigned_date: Date.today.beginning_of_week, project: project)
-        time_record_3 = create(:time_record, assigned_date: Date.today + 1.week, project: project)
+        workspace = @current_user.active_workspace
+        project = create(:project, workspace: workspace)
+        time_record = create(:time_record, user: @current_user, time_start: time_start, assigned_date: Date.today, project: project, workspace: workspace)
+        time_record_2 = create(:time_record, user: @current_user, created_at: Time.now + 1.hour, assigned_date: Date.today.beginning_of_week, project: project, workspace: workspace)
+        time_record_3 = create(:time_record, assigned_date: Date.today + 1.week, project: project, workspace: workspace)
 
         get :index, params: { assigned_date: "29-10-2019", format: :json }
         expect(response.body).to eql({
@@ -83,10 +84,10 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
     it "should return active time record for current user" do
 
       travel_to Time.zone.local(2019, 10, 29)
-
-      project = create(:project, workspace: @current_user.active_workspace)
-      time_record = create(:time_record, user: @current_user,  assigned_date: Date.today, project: project)
-      time_record_2 = create(:time_record, user: @current_user, assigned_date: Date.today.beginning_of_week, project: project, time_start: Time.now - 1.hour)
+      workspace = @current_user.active_workspace
+      project = create(:project, workspace: workspace)
+      time_record = create(:time_record, user: @current_user,  assigned_date: Date.today, project: project, workspace: workspace)
+      time_record_2 = create(:time_record, user: @current_user, assigned_date: Date.today.beginning_of_week, project: project, time_start: Time.now - 1.hour, workspace: workspace)
       get :active, params: { format: :json }
 
       expect(response.body).to eql({
@@ -106,9 +107,10 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
 
       travel_to Time.zone.local(2019, 10, 29)
 
-      project = create(:project, workspace: @current_user.active_workspace)
-      time_record = create(:time_record, user: @current_user,  assigned_date: Date.today, project: project)
-      time_record_2 = create(:time_record, user: @current_user, assigned_date: Date.today.beginning_of_week, project: project)
+      workspace = @current_user.active_workspace
+      project = create(:project, workspace: workspace)
+      time_record = create(:time_record, user: @current_user,  assigned_date: Date.today, project: project, workspace: workspace)
+      time_record_2 = create(:time_record, user: @current_user, assigned_date: Date.today.beginning_of_week, project: project, workspace: workspace)
       get :active, params: { format: :json }
 
       expect(response.body).to be_empty
@@ -166,7 +168,6 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
         {
           assigned_date: "29-10-2019",
           description: "",
-          spent_time: "0.0",
           project_id: project.id,
           format: :json
         }
@@ -178,7 +179,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
 
       it "should return error message" do
         post :create, params: time_record_params
-        expect(response.body).to eq({ errors: { description: ["can't be blank"]} }.to_json)
+        expect(response.body).to eq({ errors: { spent_time: ["can't be blank"]} }.to_json)
       end
     end
   end
@@ -186,7 +187,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
   describe "PUT #update" do
     login_user(:staff)
     let(:project) { create(:project, workspace: @current_user.active_workspace )}
-    let(:time_record) { create(:time_record, user: @current_user, project: project) }
+    let(:time_record) { create(:time_record, user: @current_user, project: project, workspace: @current_user.active_workspace ) }
 
     context "params are valid" do
       let(:time_record_params) do
@@ -248,7 +249,7 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
       let(:time_record_params) do
         {
           id: time_record.id,
-          description: "",
+          spent_time: nil,
           format: :json
         }
       end
@@ -259,15 +260,16 @@ RSpec.describe V1::TimeRecordsController, type: :controller do
 
       it "should return error message" do
         put :update, params: time_record_params
-        expect(response.body).to eq({ errors: { description: ["can't be blank"] } }.to_json)
+        expect(response.body).to eq({ errors: { spent_time: ["can't be blank"] } }.to_json)
       end
     end
   end
 
   describe "DELETE #destroy" do
     login_user(:staff)
-    let!(:project) { create(:project, workspace: @current_user.active_workspace )}
-    let!(:time_record) { create(:time_record, user: @current_user, project: project) }
+    let(:workspace) { @current_user.active_workspace }
+    let!(:project) { create(:project, workspace: workspace )}
+    let!(:time_record) { create(:time_record, user: @current_user, project: project, workspace: workspace) }
 
     it "should delete time record" do
       expect{ delete :destroy, params: { id: time_record.id, format: :json } }.to change{ TimeRecord.count }.from(1).to(0)
