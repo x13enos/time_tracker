@@ -7,7 +7,6 @@ RSpec.describe TimeRecords::BaseForm, type: :model do
 
     subject { time_record_form }
 
-    it { is_expected.to validate_presence_of(:description) }
     it { is_expected.to validate_presence_of(:spent_time) }
     it { is_expected.to validate_presence_of(:assigned_date) }
   end

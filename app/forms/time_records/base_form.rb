@@ -3,10 +3,10 @@ module TimeRecords
     include ActiveModel::Model
     include TimeTrackerExtension::TimeRecords::BaseFormExtension if EXTENSION_ENABLED
 
-    validates :description, :spent_time, :assigned_date, presence: true
+    validates :workspace_id, :spent_time, :assigned_date, presence: true
 
     ATTRIBUTES = %w[name spent_time time_start description assigned_date
-                 project_id user_id created_at updated_at tag_ids]
+                 project_id user_id created_at updated_at tag_ids workspace_id]
 
     attr_accessor *ATTRIBUTES
     attr_accessor :id, :user, :time_record, :start_task

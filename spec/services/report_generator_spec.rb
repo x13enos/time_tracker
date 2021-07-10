@@ -2,8 +2,9 @@ require "rails_helper"
 
 RSpec.describe ReportGenerator do
   let(:user) { create(:user) }
+  let(:workspace) { user.active_workspace }
   let(:time_records) { [
-    create(:time_record, project: project, user: user, assigned_date: Time.zone.today, spent_time: 0.45)
+    create(:time_record, workspace: workspace, user: user, assigned_date: Time.zone.today, spent_time: 0.45)
   ] }
   let(:time_records_data) {
     {

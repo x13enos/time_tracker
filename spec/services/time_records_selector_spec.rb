@@ -3,13 +3,13 @@ require "rails_helper"
 RSpec.describe TimeRecordsSelector do
   def create_time_records(user)
     travel_to Time.zone.local(2019, 10, 29)
-
-    @time_record = create(:time_record, user: user, description: "TT-88: first", assigned_date: Date.today, spent_time: 0.45, project: project)
-    @time_record_2 = create(:time_record, user: user, description: "TT-78: second", created_at: Time.now - 2.hour, assigned_date: Date.today, spent_time: 2, project: project_2)
-    @time_record_3 = create(:time_record, user: create(:user), assigned_date: Time.zone.today, project: project)
-    @time_record_4 = create(:time_record, user: user, description: "TT-88: third", created_at: Time.now - 1.hour, assigned_date: Date.today - 10.days, spent_time: 3.5, project: project_3)
-    @time_record_5 = create(:time_record, user: user, description: "TL-89: test-description", assigned_date: Date.today, spent_time: 0.5, project: project_2)
-    @time_record_6 = create(:time_record, user: user, description: "TKL-199: test-description", assigned_date: Date.today, spent_time: 0.45, project: project_2)
+    workspace = user.active_workspace
+    @time_record = create(:time_record, user: user, description: "TT-88: first", assigned_date: Date.today, spent_time: 0.45, project: project, workspace: workspace )
+    @time_record_2 = create(:time_record, user: user, description: "TT-78: second", created_at: Time.now - 2.hour, assigned_date: Date.today, spent_time: 2, project: project_2, workspace: workspace)
+    @time_record_3 = create(:time_record, user: create(:user), assigned_date: Time.zone.today, project: project, workspace: workspace)
+    @time_record_4 = create(:time_record, user: user, description: "TT-88: third", created_at: Time.now - 1.hour, assigned_date: Date.today - 10.days, spent_time: 3.5, project: project_3, workspace: workspace)
+    @time_record_5 = create(:time_record, user: user, description: "TL-89: test-description", assigned_date: Date.today, spent_time: 0.5, project: project_2, workspace: workspace)
+    @time_record_6 = create(:time_record, user: user, description: "TKL-199: test-description", assigned_date: Date.today, spent_time: 0.45, project: project_2, workspace: workspace)
 
     travel_back
   end
@@ -19,6 +19,7 @@ RSpec.describe TimeRecordsSelector do
   let(:project_3) { create(:project, workspace: user.active_workspace) }
   let(:project_with_regexp) { create(:project, regexp_of_grouping: '\ATT-\d+:', workspace: user.active_workspace) }
   let(:user) { create(:user) }
+  let(:workspace) { user.active_workspace }
   let(:params) {
     {
       from_date: "15-10-2019",
@@ -67,8 +68,8 @@ RSpec.describe TimeRecordsSelector do
 
     it "should return time records in the right order" do
       travel_to Time.zone.local(2019, 10, 29)
-      @time_record = create(:time_record, user: user, created_at: Time.now - 1.hour, assigned_date: Date.today, project: project_3)
-      @time_record_1 = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
+      @time_record = create(:time_record, user: user, created_at: Time.now - 1.hour, assigned_date: Date.today, workspace: workspace)
+      @time_record_1 = create(:time_record, user: user, assigned_date: Date.today, workspace: workspace)
       travel_back
 
       result = TimeRecordsSelector.new(params, user).perform
@@ -81,9 +82,9 @@ RSpec.describe TimeRecordsSelector do
       tag = create(:tag)
       tag_1 = create(:tag)
       tag_2 = create(:tag)
-      time_record = create(:time_record, user: user, created_at: Time.now - 1.hour, assigned_date: Date.today, project: project_3)
-      time_record_1 = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
-      time_record_2 = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
+      time_record = create(:time_record, user: user, created_at: Time.now - 1.hour, assigned_date: Date.today, workspace: workspace)
+      time_record_1 = create(:time_record, user: user, assigned_date: Date.today, workspace: workspace)
+      time_record_2 = create(:time_record, user: user, assigned_date: Date.today, workspace: workspace)
       travel_back
 
       tag.time_records << [time_record, time_record_1]
@@ -98,15 +99,15 @@ RSpec.describe TimeRecordsSelector do
 
     it "should use passed workspace id for selecting time records" do
       travel_to Time.zone.local(2019, 10, 29)
-      another_project = create(:project)
+      another_workspace = create(:workspace)
 
-      @time_record = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
-      @time_record_1 = create(:time_record, user: user, assigned_date: Date.today, project: project_3)
-      @time_record_2 = create(:time_record, user: user, assigned_date: Date.today, project: another_project)
+      @time_record = create(:time_record, user: user, assigned_date: Date.today, workspace: workspace)
+      @time_record_1 = create(:time_record, user: user, assigned_date: Date.today, workspace: workspace)
+      @time_record_2 = create(:time_record, user: user, assigned_date: Date.today, workspace: another_workspace)
 
       travel_back
 
-      params[:workspace_id] = another_project.workspace_id
+      params[:workspace_id] = another_workspace.id
       result = TimeRecordsSelector.new(params, user).perform
       time_record_ids = result[:grouped_time_records].flatten.map(&:id)
       expect(time_record_ids).to eql([@time_record_2.id])

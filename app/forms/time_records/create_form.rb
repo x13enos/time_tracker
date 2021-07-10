@@ -5,6 +5,7 @@ module TimeRecords
 
     def initialize(attributes, user)
       @user = user
+      attributes.merge!(workspace_id: user.active_workspace_id)
       super(attributes)
     end
 

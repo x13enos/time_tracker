@@ -2,11 +2,11 @@ class TimeRecord < ApplicationRecord
   scope :active, -> { where("time_start IS NOT NULL") }
 
   belongs_to :user
-  belongs_to :project
-  has_one :workspace, through: :project
+  belongs_to :project, optional: true
+  belongs_to :workspace
   has_and_belongs_to_many :tags, -> { distinct }
 
-  scope :by_workspace, ->(workspace_id) { joins(:project).where("projects.workspace_id = ?", workspace_id) }
+  scope :by_workspace, ->(workspace_id) { where("time_records.workspace_id = ?", workspace_id) }
 
   def stop
     time_passed = ((Time.now - time_start) / 3600).round(2)

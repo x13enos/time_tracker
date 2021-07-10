@@ -18,4 +18,10 @@ namespace :one_time do
   task "2020_08_09_create_roles_in_accociated_table" => :environment do
     UsersWorkspace.update_all(role: "staff")
   end
+
+  task "2021_06_07_update_workspace_id_for_time_records" => :environment do
+    TimeRecord.where.not(project_id: nil).each do |time_record|
+      time_record.update_column(:workspace_id, time_record.project.workspace_id)
+    end
+  end
 end

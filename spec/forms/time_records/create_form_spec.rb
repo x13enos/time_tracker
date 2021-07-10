@@ -69,6 +69,13 @@ RSpec.describe TimeRecords::CreateForm, type: :model do
     end
   end
 
+  describe "initialize" do
+    it 'should assign user\'s active workspace id for new time record' do
+      time_record_form = TimeRecords::CreateForm.new(attributes_for(:time_record), user)
+      expect(time_record_form.workspace_id).to eq(user.active_workspace_id)
+    end
+  end
+
   describe "save" do
     let(:project) { create(:project) }
     let!(:time_record_form) { TimeRecords::CreateForm.new(attributes_for(:time_record), user) }
