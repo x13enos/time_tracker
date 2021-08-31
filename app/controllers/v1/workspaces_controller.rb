@@ -6,19 +6,18 @@ class V1::WorkspacesController < V1::BaseController
 
   def create
     authorize Workspace
-    @workspace = Workspace.new(workspace_params)
-    if @workspace.save
-      assign_user_as_owner
-      render partial: '/v1/workspaces/show.json.jbuilder'
+    form = Workspaces::CreateForm.new(workspace_params, current_user)
+    if form.save
+      render partial: '/v1/workspaces/show.json.jbuilder', locals: { workspace: form.workspace }
     else
-      render json: { errors: @workspace.errors }, status: 400
+      render json: { errors: form.errors }, status: 400
     end
   end
 
   def update
     authorize workspace
     if @workspace.update(workspace_params)
-      render partial: '/v1/workspaces/show.json.jbuilder'
+      render partial: '/v1/workspaces/show.json.jbuilder', locals: { workspace: @workspace }
     else
       render json: { errors: workspace.errors }, status: 400
     end
@@ -41,10 +40,5 @@ class V1::WorkspacesController < V1::BaseController
 
   def workspace
     @workspace ||= current_user.workspaces.find(params[:id])
-  end
-
-  def assign_user_as_owner
-    @workspace.users << current_user
-    current_user.users_workspaces.find_by(workspace_id: @workspace.reload.id).update(role: "owner")
   end
 end

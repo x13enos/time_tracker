@@ -52,6 +52,7 @@ ru:
     errors:
       user_was_not_invited: "Не удалось пригласить пользователя"
       user_was_not_removed: "Не удалось удалить пользователя из рабочего пространства"
+      can_not_more_workspaces: "Вы не можете быть владельцем более чем 3 рабочих пространств"
   reports:
     title: "Сводный отчет"
     for_user_by_period: "Для %{user}, за следующий период: %{from} - %{to}"

@@ -11,4 +11,5 @@ class Workspace < ApplicationRecord
   def belongs_to_user?(user_id)
     self.user_ids.include?(user_id)
   end
+
 end
