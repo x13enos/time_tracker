@@ -11,12 +11,14 @@ module Workspaces
     end
 
     def save
-      if valid?
-        create_workspace
-        assign_user_to_workspace_as_owner
-        true
-      else
-        false
+      user.with_lock do
+        if valid?
+          create_workspace
+          assign_user_to_workspace_as_owner
+          true
+        else
+          false
+        end
       end
     end
 

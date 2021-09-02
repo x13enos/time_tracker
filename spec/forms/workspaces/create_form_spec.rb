@@ -17,6 +17,20 @@ RSpec.describe Workspaces::CreateForm, type: :model do
     end
 
     describe 'number_of_user_workspaces' do
+      context "having two parallel requests" do
+        let(:request_threads) do
+          2.times.map { |_| Thread.new { Workspaces::CreateForm.new(attributes_for(:workspace), user).save } }
+        end
+
+        it 'should prevent race condition and create only one worskpace' do
+          2.times { |_| create(:users_workspace, user: user, role: UsersWorkspace.roles["owner"]) }
+
+          expect do
+            request_threads.each(&:join)
+          end.to change { Workspace.count }.by(1)
+        end
+      end
+
       it 'should add error in case of having 3 or more personal workspaces for user' do
         3.times { |_| create(:users_workspace, user: user, role: UsersWorkspace.roles["owner"]) }
         workspace_form.valid?
