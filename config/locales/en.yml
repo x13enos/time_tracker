@@ -47,6 +47,7 @@ en:
     errors:
       user_was_not_invited: "User wasn't invited to this workspace."
       user_was_not_removed: "User wasn't removed from this workspace."
+      can_not_more_workspaces: "You cannot be owner for more than 3 workspaces"
   reports:
     title: "Summary report"
     for_user_by_period: "For %{user}, by next period: %{from} - %{to}"

@@ -38,16 +38,6 @@ RSpec.describe V1::WorkspacesController, type: :controller do
       }.to_json)
     end
 
-    it "should create workspace and add current user to that" do
-      post :create, params: { name: "test-workspace", format: :json }
-      expect(Workspace.last.user_ids).to eq([@current_user.id])
-    end
-
-    it "should assign user as owner to new workspace" do
-      post :create, params: { name: "test-workspace", format: :json }
-      expect(@current_user.users_workspaces.last.owner?).to be_truthy
-    end
-
     it "should return error message if workspace wasn't created" do
       post :create, params: { name: "", format: :json }
       expect(response.body).to eq({ errors: { name: ["can't be blank"] } }.to_json)
