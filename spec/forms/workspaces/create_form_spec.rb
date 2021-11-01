@@ -32,13 +32,13 @@ RSpec.describe Workspaces::CreateForm, type: :model do
       end
 
       it 'should add error in case of having 3 or more personal workspaces for user' do
-        3.times { |_| create(:users_workspace, user: user, role: UsersWorkspace.roles["owner"]) }
+        3.times { create(:users_workspace, user: user, role: UsersWorkspace.roles["owner"]) }
         workspace_form.valid?
         expect(workspace_form.errors[:base].join).to eq(I18n.t("workspaces.errors.can_not_more_workspaces"))
       end
 
       it 'should not add error in case of having 2 or less personal workspaces for user' do
-        2.times { |_| create(:users_workspace, user: user, role: UsersWorkspace.roles["owner"]) }
+        2.times { create(:users_workspace, user: user, role: UsersWorkspace.roles["owner"]) }
         workspace_form.valid?
         expect(workspace_form.errors[:base]).to be_empty
       end
