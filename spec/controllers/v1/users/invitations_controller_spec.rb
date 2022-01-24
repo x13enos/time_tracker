@@ -5,19 +5,19 @@ RSpec.describe V1::Users::InvitationsController, type: :controller do
   describe "PUT #update" do
     it "should return error in case of empty passed token" do
       put :update, params: { token: "", name: "", password: "", format: :json }
-      expect(response.body).to eq({ error: I18n.t("passwords.token_does_not_present") }.to_json)
+      expect(response.body).to eq({ errors: { base: [I18n.t("passwords.token_does_not_present")] } }.to_json)
       expect(response.status).to eq(400)
     end
 
     it "should return error in case of empty passed name" do
       put :update, params: { token: "222", name: "", password: "", format: :json }
-      expect(response.body).to eq({ error: I18n.t("passwords.name_does_not_present") }.to_json)
+      expect(response.body).to eq({ errors: { base: [I18n.t("passwords.name_does_not_present")] } }.to_json)
       expect(response.status).to eq(400)
     end
 
     it "should return error in case of empty passed password" do
       put :update, params: { token: "222", name: "test", password: "", format: :json }
-      expect(response.body).to eq({ error: I18n.t("passwords.password_does_not_present") }.to_json)
+      expect(response.body).to eq({ errors: { base: [I18n.t("passwords.password_does_not_present")] } }.to_json)
       expect(response.status).to eq(400)
     end
 
@@ -40,22 +40,31 @@ RSpec.describe V1::Users::InvitationsController, type: :controller do
           put :update, params: request_params
         end
 
-        it "should set name for user" do
-          allow(User).to receive(:find_by) { user }
-          put :update, params: request_params
-          expect(user.reload.name == 'John Doe').to be_truthy
-        end
+        context "user was succesfully invited" do
+          def make_request
+            allow(User).to receive(:find_by) { user }
+            put :update, params: request_params
+          end
 
-        it "should set password for user" do
-          allow(User).to receive(:find_by) { user }
-          put :update, params: request_params
-          expect(user.reload.password == '8932479238').to be_truthy
-        end
+          it "should set name for user" do
+            make_request
+            expect(user.reload.name == 'John Doe').to be_truthy
+          end
 
-        it "should return 200 status" do
-          allow(User).to receive(:find_by) { user }
-          put :update, params: request_params
-          expect(response.status).to eq(200)
+          it "should set password for user" do
+            make_request
+            expect(user.reload.password == '8932479238').to be_truthy
+          end
+
+          it "should return 200 status" do
+            
+            expect(response.status).to eq(200)
+          end
+
+          it 'should set token for user' do
+            expect(controller).to receive(:set_token).with(user)
+            make_request
+          end
         end
 
         it "should return 422 status if user's password wasn't updated" do
@@ -70,7 +79,7 @@ RSpec.describe V1::Users::InvitationsController, type: :controller do
           allow(user).to receive(:save!) { false }
           user.errors.add(:base, "error")
           put :update, params: request_params
-          expect(response.body).to eq({ error: ["error"] }.to_json)
+          expect(response.body).to eq({ errors: { base: ["error"] } }.to_json)
         end
       end
 
