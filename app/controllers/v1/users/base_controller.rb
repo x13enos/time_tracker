@@ -15,19 +15,20 @@ class V1::Users::BaseController < V1::BaseController
     if user
       user.assign_attributes(user_params)
       if user.save!
+        set_token(user)
         render json: { status: 'ok' }, status: 200
       else
         render json: { errors: user.errors }, status: 422
       end
     else
-      render json: { errors: { base: I18n.t("passwords.invalid_token") } }, status: 404
+      render json: { errors: { base: [I18n.t("passwords.invalid_token")] } }, status: 404
     end
   end
 
   def validate_attribute_on_presence(attribute)
     return false if params[attribute.to_sym].present?
     render(
-      json: { errors: { base: I18n.t("passwords.#{attribute}_does_not_present") } },
+      json: { errors: { base: [I18n.t("passwords.#{attribute}_does_not_present")] } },
       status: 400
     )
   end
