@@ -7,10 +7,10 @@
 
 # Rails.application.config.middleware.insert_before 0, Rack::Cors do
 #   allow do
-#     origins 'example.com'
-#
+#     origins ENV["FRONTEND_HOST"]
 #     resource '*',
 #       headers: :any,
-#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
+#       methods: [:get, :post, :put, :patch, :delete, :options, :head],
+#       credentials: true
 #   end
 # end

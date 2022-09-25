@@ -63,7 +63,7 @@ class V1::BaseController < ApplicationController
   def set_cookie(key, value)
     cookies[key] = {
       value: value,
-      secure: Rails.env.production?,
+      secure: false,
       httponly: true
     }
   end

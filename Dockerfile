@@ -10,7 +10,8 @@ RUN apk add --no-cache \
   build-base \
   tzdata \
   postgresql-dev \
-  wkhtmltopdf
+  wkhtmltopdf \
+  shared-mime-info
 
 ENV RAILS_ROOT /var/www/time_tracker
 RUN mkdir -p $RAILS_ROOT
