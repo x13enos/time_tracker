@@ -21,7 +21,7 @@ class ReportGenerator
 
   def render_report_from_template
     ActionController::Base.render(
-      file: "pdfs/report", locals: {
+      partial: "pdfs/report", locals: {
         user: user,
         time_records: time_records_data[:grouped_time_records],
         from_date: time_records_data[:converted_dates][:from],

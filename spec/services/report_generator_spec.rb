@@ -24,7 +24,7 @@ RSpec.describe ReportGenerator do
     it "should render partial and pass time records in locals" do
       allow_any_instance_of(WickedPdf).to receive(:pdf_from_string)
       expect(ActionController::Base).to receive(:render).with({
-        file: "pdfs/report",
+        partial: "pdfs/report",
         locals: {
           time_records: [time_records],
           projects: [project],
