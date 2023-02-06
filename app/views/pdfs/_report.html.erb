@@ -116,7 +116,7 @@
 
             <% time_records_pack.each do |time_record| %>
               <tr>
-                <td><%= time_record.project.name %></td>
+                <td><%= time_record.project&.name %></td>
                 <td><%= time_record.assigned_date %></td>
                 <td><%= time_record.user.name %></td>
                 <td class="<%= 'grouped-description' if time_records_pack.size > 1 %>"><%= time_record.description %></td>

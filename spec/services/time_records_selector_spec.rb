@@ -43,6 +43,17 @@ RSpec.describe TimeRecordsSelector do
         expect(result[:grouped_time_records].size).to eq(4)
         expect(result[:grouped_time_records]).to include([@time_record_5], [@time_record_6], [@time_record, @time_record_4], [@time_record_2])
       end
+
+      it "shouldn't raise error in case of having tasks w/o project" do
+        create_time_records(user)
+
+        travel_to Time.zone.local(2019, 10, 29)
+        workspace = user.active_workspace
+        @time_record = create(:time_record, user: user, description: "TT-88: first", assigned_date: Date.today, spent_time: 0.45, project: nil, workspace: workspace)
+        travel_back
+
+        expect { TimeRecordsSelector.new(params, user).perform }.not_to raise_error
+      end
     end
 
     it "should return list of projects" do
